@@ -1,0 +1,91 @@
+<app-lazy-table
+    tableTitle=""
+    [tableData]="data"
+    [rows]="rows"
+    [columns]="7"
+    [first]="first"
+    [totalRecords]="totalRecords"
+    [headerSchema]="tableHeaderSchema"
+    [loading]="loading"
+    dataKey="id"
+    (onLazyLoad)="loadTable($event)"
+>
+    @if (!viewOnly) {
+        <ng-template #buttons>
+            <app-button
+                [autofocus]="true"
+                label="Thêm người dùng"
+                icon="ti ti-plus"
+                (onClick)="handleAddToGroup()"
+            ></app-button>
+        </ng-template>
+    }
+    <ng-template #body let-data let-rowIndex="rowIndex">
+        <tr>
+            <td class="text-center">{{ rowIndex + 1 }}</td>
+            <td>{{ data.username }}</td>
+            <td>{{ data.fullName }}</td>
+            <td>{{ data.phone }}</td>
+            <td>{{ data.email }}</td>
+            <td>{{ data.isActive ? "Đang hoạt động" : "Đang bị khoá" }}</td>
+            @if (!viewOnly) {
+                <td>
+                    <div
+                        class="flex gap-2 justify-content-center align-items-center"
+                    >
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="handleConfirmDelete(data)"
+                        ></app-button>
+                    </div>
+                </td>
+            }
+        </tr>
+    </ng-template>
+</app-lazy-table>
+@if (!viewOnly) {
+    <app-dialog [(visible)]="showDialog" (onHide)="resetDialog()">
+        <ng-template #header>
+            <span class="text-xl font-bold text-center w-full">
+                Thêm người dùng vào nhóm
+            </span>
+        </ng-template>
+        <ng-template #content>
+            <div class="grid">
+                <div class="col-12">
+                    <app-multi-select
+                        [autofocus]="true"
+                        label="Người dùng"
+                        [options]="users"
+                        [selectedOption]="selectedUsers"
+                        [required]="true"
+                        optionLabel="username"
+                        (onChange)="handleSelectedUsersChange($event)"
+                        [error]="errorSelectedUsers"
+                        placeholder="Chọn người dùng"
+                    >
+                    </app-multi-select>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #footer>
+            <div class="flex justify-content-center gap-2">
+                <app-button iocVariant="close" (onClick)="showDialog = false">
+                </app-button>
+                <app-button
+                    [loading]="dialogLoading"
+                    icon="ti ti-plus"
+                    label="Thêm"
+                    (onClick)="handleDialogButtonClick()"
+                ></app-button>
+            </div>
+        </ng-template>
+    </app-dialog>
+}
+<div class="flex justify-content-center align-items-center gap-2 mt-4">
+    <app-button
+        iocVariant="close"
+        [autofocus]="viewOnly"
+        (onClick)="handleClose()"
+    ></app-button>
+</div>

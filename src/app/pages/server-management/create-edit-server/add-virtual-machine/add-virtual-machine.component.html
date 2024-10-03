@@ -1,0 +1,124 @@
+<app-card-layout styleClass="border-none p-1">
+    <ng-template #body>
+        <form [formGroup]="addVirtualMachineForm">
+            <div class="grid">
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-input
+                        label="Tên máy ảo"
+                        [maxLength]="100"
+                        [required]="true"
+                        [error]="
+                            submitted &&
+                            getErrorMsg(addVirtualMachineForm, 'name')
+                        "
+                        placeholder="Nhập tên máy ảo"
+                        [control]="getControl(addVirtualMachineForm, 'name')"
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md:col-6">
+                    <app-reactive-input-number
+                        label="Số vCPU (vCPU)"
+                        [required]="true"
+                        [error]="getErrorMsg(addVirtualMachineForm, 'vCPU')"
+                        placeholder="Nhập số vCPU"
+                        [control]="getControl(addVirtualMachineForm, 'vCPU')"
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md:col-6">
+                    <app-reactive-input-number
+                        label="Số RAM (GB)"
+                        [required]="true"
+                        placeholder="Nhập số ram"
+                        [error]="getErrorMsg(addVirtualMachineForm, 'ram')"
+                        [control]="getControl(addVirtualMachineForm, 'ram')"
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md:col-6">
+                    <app-reactive-input-number
+                        label="Số ssd (GB)"
+                        [required]="true"
+                        [error]="getErrorMsg(addVirtualMachineForm, 'ssd')"
+                        placeholder="Nhập số ssd"
+                        [control]="getControl(addVirtualMachineForm, 'ssd')"
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md:col-6">
+                    <app-reactive-input-number
+                        label="Số hdd (GB)"
+                        [required]="true"
+                        [error]="getErrorMsg(addVirtualMachineForm, 'hdd')"
+                        placeholder="Nhập số hdd"
+                        [control]="getControl(addVirtualMachineForm, 'hdd')"
+                    ></app-reactive-input-number>
+                </div>
+
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-input
+                        label="Địa chỉ IP"
+                        [maxLength]="50"
+                        [required]="true"
+                        [error]="
+                            submitted &&
+                            getErrorMsg(addVirtualMachineForm, 'ipAddress')
+                        "
+                        placeholder="Nhập địa chỉ IP"
+                        [control]="
+                            getControl(addVirtualMachineForm, 'ipAddress')
+                        "
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-input
+                        label="Link giám sát"
+                        [maxLength]="255"
+                        [error]="
+                            submitted &&
+                            getErrorMsg(addVirtualMachineForm, 'monitorLink')
+                        "
+                        placeholder="Nhập link giám sát"
+                        [control]="
+                            getControl(addVirtualMachineForm, 'monitorLink')
+                        "
+                    ></app-reactive-input>
+                </div>
+
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-select
+                        label="Trạng thái"
+                        [options]="listStatus"
+                        [required]="true"
+                        [error]="
+                            submitted &&
+                            getErrorMsg(addVirtualMachineForm, 'status')
+                        "
+                        [control]="getControl(addVirtualMachineForm, 'status')"
+                        optionLabel="name"
+                        placeholder="Chọn Trạng thái"
+                    ></app-reactive-select>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                [loading]="isLoading"
+                icon="pi pi-times"
+                label="Đóng"
+                styleClass="p-button-outlined"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [loading]="isLoading"
+                icon="pi pi-check"
+                [label]="
+                    config.data.action === DIALOG_ACTION.CREATE
+                        ? 'Thêm mới'
+                        : 'Cập nhật'
+                "
+                (onClick)="handleSave()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

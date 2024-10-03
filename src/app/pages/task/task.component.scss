@@ -1,0 +1,42 @@
+.task-code {
+    font-size: 1rem;
+}
+
+.workflowTypeName {
+    color: var(--text-color-secondary);
+}
+
+#task-detail > .task-detail-wrapper {
+    background-color: var(--surface-card);
+    border-radius: 12px;
+    margin-top: 15px;
+    min-height: 78vh;
+    overflow: hidden;
+}
+
+:host {
+    ::ng-deep {
+        #filter-task .p-tabview .p-tabview-panels {
+            padding: 0 !important;
+        }
+        .task-list .p-paginator {
+            justify-content: space-between;
+            padding: 0 15px 5px 15px;
+        }
+    }
+}
+.paginator-count {
+    background: var(--surface-card);
+    color: var(--text-color-secondary);
+}
+
+::ng-deep .task-list .p-listbox-list-wrapper {
+    height: 59vh !important;
+    max-height: fit-content !important;
+}
+
+@media only screen and (max-width: 1600px) {
+    .search-task {
+        width: 60%;
+    }
+}

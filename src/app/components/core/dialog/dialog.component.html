@@ -1,0 +1,17 @@
+<p-dialog
+    #dialog
+    [(visible)]="visible"
+    [modal]="modal"
+    [styleClass]="styleClass"
+    (onHide)="handleHide()"
+>
+    <ng-template pTemplate="header">
+        <ng-container [ngTemplateOutlet]="header"></ng-container>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <ng-container [ngTemplateOutlet]="content"></ng-container>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <ng-container [ngTemplateOutlet]="footer"></ng-container>
+    </ng-template>
+</p-dialog>

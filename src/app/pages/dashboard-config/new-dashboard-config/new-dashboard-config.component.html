@@ -1,0 +1,136 @@
+<app-card-layout
+    [cardTitle]="cardTitle"
+    cdkTrapFocus
+    [cdkTrapFocusAutoCapture]="true"
+>
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    [autofocus]="true"
+                    label="Tên cấu hình"
+                    [value]="name"
+                    [error]="errorName"
+                    [required]="true"
+                    maxLength="255"
+                    (onChange)="handleDataChange($event, 'name')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-multi-select
+                    label="Dịch vụ"
+                    [selectedOption]="service"
+                    [options]="services"
+                    optionLabel="name"
+                    placeholder="Chọn dịch vụ"
+                    [required]="true"
+                    [error]="errorService"
+                    (onChange)="handleDataChange($event, 'service')"
+                ></app-multi-select>
+            </div>
+        </div>
+        <app-lazy-table
+            tableTitle="Danh sách phòng ban"
+            [tableData]="departmentData"
+            [rows]="rows"
+            [columns]="4"
+            [first]="first"
+            [lazy]="false"
+            [totalRecords]="totalRecords"
+            [useTrapFocus]="false"
+            dataKey="id"
+        >
+            <ng-template #buttons>
+                <app-button
+                    iocVariant="create"
+                    (onClick)="this.visible = true"
+                ></app-button>
+            </ng-template>
+            <ng-template #header>
+                <tr>
+                    <th style="min-width: 3rem" class="text-center">STT</th>
+                    <th style="min-width: 12rem">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            Tên phòng ban
+                        </div>
+                    </th>
+                    <th style="min-width: 6rem">
+                        <div
+                            class="flex justify-content-between align-items-center"
+                        >
+                            Đơn vị hành chính
+                        </div>
+                    </th>
+                    <th style="min-width: 10rem" class="text-center">
+                        Thao tác
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-data let-rowIndex="rowIndex">
+                <tr>
+                    <td class="text-center">{{ rowIndex + 1 }}</td>
+                    <td>{{ data.name }}<br /></td>
+                    <td>{{ getAUColumn(data) }}</td>
+                    <td>
+                        <div
+                            class="flex gap-2 justify-content-center align-items-center"
+                        >
+                            <app-button
+                                iocVariant="idelete"
+                                (onClick)="confirmDelete(data)"
+                            ></app-button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </app-lazy-table>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [iocVariant]="pageType"
+                [loading]="loading"
+                (onClick)="handleDashboardConfigForm()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>
+
+<app-dialog [(visible)]="visible">
+    <ng-template #header>
+        <span class="text-xl font-bold text-center w-full">
+            Thêm phòng ban
+        </span>
+    </ng-template>
+    <ng-template #content>
+        <app-multi-select
+            [autofocus]="true"
+            label="Danh sách phòng ban"
+            [options]="departments"
+            [selectedOption]="department"
+            optionLabel="name"
+            placeholder="Chọn phòng ban"
+            (onChange)="handleDepartmentChange($event)"
+        ></app-multi-select>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="visible = false"
+            ></app-button>
+            <app-button
+                label="Chọn phòng ban"
+                (onClick)="handleAddDepartment()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-dialog>

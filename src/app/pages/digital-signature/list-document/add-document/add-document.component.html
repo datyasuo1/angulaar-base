@@ -1,0 +1,31 @@
+<app-card-layout styleClass="border-none p-1">
+    <ng-template #body>
+        <div>
+            <app-file
+                label="Tài liệu"
+                [file]="file"
+                [size]="5"
+                accept=".pdf"
+                (onChange)="handleFileUpload($event)"
+                [required]="true"
+                [error]="errUploadFile"
+            ></app-file>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-5 gap-2">
+            <app-button
+                icon="pi pi-times"
+                label="Đóng"
+                styleClass="p-button-outlined"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [loading]="isLoading"
+                icon="pi pi-check"
+                label="Đăng tải"
+                (onClick)="handleSave()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

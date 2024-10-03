@@ -1,0 +1,189 @@
+<app-card-layout [cardTitle]="cardTitle">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    [autofocus]="true"
+                    label="Tên loại tài nguyên"
+                    [value]="name"
+                    maxLength="255"
+                    [required]="true"
+                    [error]="errorName"
+                    (onChange)="handleDataChange($event, 'name')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-file
+                    label="Icon hiển thị trạng thái khả dụng"
+                    accept=".jpg, .jpeg, .png, .svg"
+                    [file]="activeFile"
+                    [error]="errorActiveFile"
+                    [autoUpload]="true"
+                    service="resources-type"
+                    [required]="true"
+                    (onChange)="handleFileChange($event)"
+                ></app-file>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Phân loại">
+                    <div class="flex align-items-center gap-4">
+                        <app-radio-button
+                            name="type"
+                            value="Tài nguyên thông thường"
+                            [(ngModel)]="resourceTypeRadio"
+                            label="Tài nguyên thông thường"
+                        ></app-radio-button>
+
+                        <app-radio-button
+                            name="type"
+                            value="Camera"
+                            [(ngModel)]="resourceTypeRadio"
+                            label="Camera"
+                        ></app-radio-button>
+                        <app-radio-button
+                            name="type"
+                            value="IOT"
+                            [(ngModel)]="resourceTypeRadio"
+                            label="IOT"
+                        ></app-radio-button>
+                    </div>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                @if (!(resourceTypeRadio === "Tài nguyên thông thường")) {
+                    <app-file
+                        label="Icon hiển thị trạng thái không khả dụng "
+                        accept=".jpg, .jpeg, .png, .svg"
+                        [file]="inactiveFile"
+                        [error]="errorInactiveFile"
+                        [required]="true"
+                        [autoUpload]="true"
+                        service="resources-type"
+                        (onChange)="handleFileChangeInActive($event)"
+                    ></app-file>
+                }
+            </div>
+            <div class="col-12 md:col-6">
+                <app-au-tree-select
+                    [(administrativeUnit)]="administrativeUnit"
+                    [codes]="auCodes"
+                    [required]="true"
+                    [errorAdministrativeUnit]="errorAdministrativeUnit"
+                    (onChange)="handleDataChange($event, 'administrativeUnit')"
+                ></app-au-tree-select>
+            </div>
+            <div class="col-12 md:col-6"></div>
+            <div class="col-12 md:col-6">
+                @if (resourceTypeRadio === "Camera") {
+                    <app-select
+                        label="Hệ thống quản lý video"
+                        [options]="vmsTypes"
+                        [selectedOption]="vmsType"
+                        [required]="true"
+                        [error]="errorVmsType"
+                        (onChange)="handleDataChange($event, 'vmsType')"
+                        placeholder="Chọn hệ thống quản lý video"
+                    ></app-select>
+                }
+            </div>
+            <div class="col-12 md:col-6"></div>
+            <div class="col-12 md:col-6">
+                <div class="flex align-items-center gap-4">
+                    <p-checkbox
+                        name="group1"
+                        label="Dùng chung"
+                        [binary]="true"
+                        [(ngModel)]="isPublic"
+                    ></p-checkbox>
+                    <p-checkbox
+                        name="group2"
+                        label="Hiển thị mặc định"
+                        [binary]="true"
+                        [(ngModel)]="isDefaultOnMap"
+                    ></p-checkbox>
+                </div>
+            </div>
+        </div>
+        <app-button
+            styleClass="p-button-outlined my-4"
+            icon="ti ti-plus"
+            label="Thêm thuộc tính dùng chung"
+            (onClick)="handleAddCommonProperties()"
+        ></app-button>
+        @if (commonProperties.length > 0) {
+            <p-table
+                [value]="commonProperties"
+                styleClass="p-datatable-gridlines p-datatable-striped"
+            >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Tên thuộc tính</th>
+                        <th>Loại giá trị</th>
+                        <th class="text-center">Trường bắt buộc</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-data let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            <app-input
+                                [autoTrim]="true"
+                                [value]="data.name"
+                                maxLength="255"
+                                [required]="true"
+                                [error]="data.errorPropertiesName"
+                                (onChange)="
+                                    handlePropertiesName($event, rowIndex)
+                                "
+                            ></app-input>
+                        </td>
+                        <td>
+                            <app-select
+                                [options]="valueType"
+                                [selectedOption]="data.valueType"
+                                optionLabel="value"
+                                [required]="true"
+                                [error]="data.errorValueType"
+                                (onChange)="handleValueType($event, rowIndex)"
+                                placeholder="Lựa chọn"
+                            ></app-select>
+                        </td>
+                        <td class="text-center">
+                            <p-checkbox
+                                name="group3"
+                                value="true"
+                                [binary]="true"
+                                [(ngModel)]="data.required"
+                            ></p-checkbox>
+                        </td>
+                        <td>
+                            <div
+                                class="flex justify-content-center align-items-center gap-2"
+                            >
+                                <app-button
+                                    iocVariant="idelete"
+                                    (onClick)="deleteProperties(rowIndex)"
+                                ></app-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        }
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center gap-2 mt-4">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleCloseCreateResourceType()"
+            ></app-button>
+            <app-button
+                [iocVariant]="pageType"
+                [loading]="loading"
+                (onClick)="handleCreateOrUpdateResourceType()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

@@ -1,0 +1,65 @@
+.focus-none:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.task-delete {
+    background-color: var(--header);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+.task-detail {
+    background-color: var(--surface-a);
+}
+.note-container {
+    position: relative;
+}
+.task-handle {
+    background-color: var(--header);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
+.p-inputtextarea {
+    min-height: 60vh;
+}
+
+:host {
+    ::ng-deep {
+        .p-listbox .p-listbox-list .p-listbox-item {
+            margin: 0 !important;
+            background-color: var(--surface-card);
+        }
+        .p-listbox {
+            background-color: var(--surface-a);
+            border-radius: 1rem;
+        }
+        .p-listbox .p-listbox-list .p-listbox-item:hover {
+            background-color: var(--header);
+        }
+        .p-listbox .p-listbox-list .p-listbox-item.p-highlight {
+            background: #2f4f6b !important;
+        }
+    }
+}
+
+.task--detail__context {
+    height: 60vh;
+}
+.action-group {
+    background: var(--header);
+}
+
+.line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+.time {
+    color: var(--text-color-secondary);
+}
+.list-item-content {
+    color: var(--primary-color);
+}

@@ -1,0 +1,45 @@
+<div class="content-wrapper">
+    <div class="flex justify-content-between px-4 pt-4">
+        <h4>Danh sách tài nguyên ứng dụng ({{ totalCount }})</h4>
+        <app-button
+            (onClick)="handleNavigateCreate()"
+            label="Thêm mới ứng dụng"
+            icon="pi pi-plus"
+        >
+        </app-button>
+    </div>
+
+    <app-loading [loading]="isLoading"></app-loading>
+    <p-tree
+        [value]="listResource"
+        class="w-full md:w-30rem"
+        [styleClass]="'my-tree'"
+    >
+        <ng-template let-node pTemplate="default">
+            <div class="flex justify-content-between align-items-center w-full">
+                <div>
+                    <b>{{ node.label }}</b>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template let-node pTemplate="url">
+            <div class="flex justify-content-between align-items-center w-full">
+                <div>
+                    <b>{{ node.label }}</b>
+                </div>
+                <div class="action-buttons center-cell mr-2">
+                    <app-button
+                        iocVariant="iupdate"
+                        (onClick)="handleNavigateUpdate(node)"
+                    ></app-button>
+
+                    <app-button
+                        iocVariant="idelete"
+                        (onClick)="handleDelete(node)"
+                    ></app-button>
+                </div>
+            </div>
+        </ng-template>
+    </p-tree>
+</div>

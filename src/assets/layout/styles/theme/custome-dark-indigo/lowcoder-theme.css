@@ -1,0 +1,32 @@
+.ant-select-selection-item .option-label {
+    color: var(--text-color);
+}
+
+.ant-select-dropdown {
+    background: var(--header);
+}
+.ant-select-item-option-selected {
+    background: var(--focus) !important;
+}
+
+.ant-select-item-option-active {
+    background: var(--primary-1000) !important;
+}
+
+.ant-select-item {
+    color: var(--text-color) !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+.ant-modal-close-x {
+    color: var(--text-color);
+}
+
+.ant-tabs-tab-btn {
+    font-weight: 600 !important;
+    color: var(--text-color) !important;
+}
+
+.ant-tabs-tab-active > .ant-tabs-tab-btn {
+    color: var(--blue-300) !important;
+}

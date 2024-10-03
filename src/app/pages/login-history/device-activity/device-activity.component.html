@@ -1,0 +1,68 @@
+<app-lazy-table
+    rowGroupMode="subheader"
+    groupRowsBy="representative"
+    tableTitle="Phiên đăng nhập"
+    [tableData]="data"
+    [rows]="rows"
+    [columns]="5"
+    [first]="first"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    dataKey="id"
+    (onLazyLoad)="loadTable($event)"
+>
+    <ng-template #buttons>
+        <app-button
+            [autofocus]="true"
+            label="Đăng xuất tất cả thiết bị"
+            icon="ti ti-logout"
+            (onClick)="handleSignOutAll()"
+        ></app-button>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th class="text-center">Thiết bị</th>
+            <th class="text-center">Trình duyệt</th>
+            <th class="text-center">Thời gian đăng nhập</th>
+            <th class="text-center">Thời gian truy cập</th>
+            <th class="text-center">Thời gian hết hạn</th>
+            <th class="text-center">Địa chỉ IP</th>
+            <th class="text-center">Thao tác</th>
+        </tr>
+    </ng-template>
+    <ng-template #groupheader let-data>
+        <tr pRowGroupHeader>
+            <td colspan="7">
+                <span class="font-bold">{{ data.representative }}</span>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template #body let-data let-rowIndex="rowIndex">
+        <tr>
+            <td class="text-center">{{ data.os }}</td>
+            <td class="text-center">{{ data.browser }}</td>
+            <td class="text-center">
+                {{ data.started * 1000 | dateTimeConverter: "DATE_TIME" }}
+            </td>
+            <td class="text-center">
+                {{ data.lastAccess * 1000 | dateTimeConverter: "DATE_TIME" }}
+            </td>
+            <td class="text-center">
+                {{ data.expires * 1000 | dateTimeConverter: "DATE_TIME" }}
+            </td>
+            <td class="text-center">{{ data.ipAddress }}</td>
+            <td>
+                <div
+                    class="flex gap-2 justify-content-center align-items-center"
+                >
+                    <app-button
+                        iocVariant="icon"
+                        icon="ti ti-logout text-red-700"
+                        (onClick)="handleSignOut(data)"
+                        tooltip="Đăng xuất khỏi thiết bị"
+                    ></app-button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</app-lazy-table>

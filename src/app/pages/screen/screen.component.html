@@ -1,0 +1,189 @@
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách màn hình"
+        [tableData]="data"
+        [rows]="rows"
+        [columns]="6"
+        [first]="first"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <div class="flex gap-2">
+                <app-button
+                    label="Tải lên"
+                    styleClass="p-button-outlined"
+                    icon="ti ti-upload"
+                    (onClick)="handleImport()"
+                    permissionCode="upload-screen"
+                ></app-button>
+                <app-button
+                    iocVariant="create"
+                    (onClick)="handleAdd()"
+                    permissionCode="create-screen"
+                ></app-button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 3rem" class="text-center">App ID</th>
+                <th style="min-width: 12rem">Tên màn hình</th>
+                <th style="min-width: 14rem">Mô tả</th>
+                <th style="min-width: 12rem" class="text-center">
+                    Ngày chỉnh sửa
+                </th>
+                <th style="min-width: 12rem" class="text-center">Ngày tạo</th>
+                <th style="min-width: 8rem" class="text-center">Thao tác</th>
+            </tr>
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [autofocus]="true"
+                        [value]="searchText"
+                        maxLength="255"
+                        placeholder="Nhập tên màn hình"
+                        (onChange)="handleInputChange($event)"
+                        iconClass="ti ti-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-data let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td class="text-center">{{ data.appId }}</td>
+                <td>{{ data.title }}</td>
+                <td>{{ data.description }}</td>
+                <td class="text-center">
+                    {{ data.updatedAt | dateTimeConverter: "DATE_TIME" }}
+                </td>
+                <td class="text-center">
+                    {{ data.createdAt | dateTimeConverter: "DATE_TIME" }}
+                </td>
+                <td>
+                    <div
+                        class="flex gap-2 justify-content-center align-items-center"
+                    >
+                        <app-button
+                            iocVariant="iconfig"
+                            (onClick)="handleConfig(data?.appId)"
+                            permissionCode="config-screen"
+                        ></app-button>
+                        <app-button
+                            iocVariant="icon"
+                            icon="ti ti-copy"
+                            (onClick)="handleCopy(data)"
+                            tooltip="Sao chép"
+                            permissionCode="copy-screen"
+                        ></app-button>
+                        <app-button
+                            iocVariant="icon"
+                            icon="ti ti-download"
+                            (onClick)="confirmDownloadScreen(data)"
+                            tooltip="Tải màn hình"
+                            permissionCode="download-screen"
+                        ></app-button>
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="confirmDeleteScreen(data)"
+                            permissionCode="delete-screen"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>
+
+<app-dialog [(visible)]="showDialog" (onHide)="resetDialog()">
+    <ng-template #header>
+        <span class="text-xl font-bold w-full text-center">
+            {{ dialogTitle }}
+        </span>
+    </ng-template>
+    <ng-template #content>
+        @if (!import) {
+            <div class="grid">
+                <div class="col-12 lg:col-6">
+                    <app-input
+                        [autoTrim]="true"
+                        [autofocus]="true"
+                        label="Tên"
+                        [value]="screenName"
+                        maxLength="255"
+                        [required]="true"
+                        [error]="errorScreenName"
+                        (onChange)="handleScreenNameChange($event)"
+                    ></app-input>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <app-text-area
+                        label="Mô tả"
+                        [(ngModel)]="screenDescription"
+                        [rows]="3"
+                        [required]="true"
+                        [error]="errorDescription"
+                        maxLength="1000"
+                        (ngModelChange)="errorDescription = ''"
+                    ></app-text-area>
+                </div>
+            </div>
+        }
+        @if (import) {
+            <div class="grid">
+                <div class="col-12">
+                    <app-file
+                        [autofocus]="true"
+                        label="Tệp tin JSON"
+                        accept=".json"
+                        [file]="file"
+                        [error]="errorFile"
+                        [required]="true"
+                        (onChange)="handleFileChange($event)"
+                    ></app-file>
+                </div>
+            </div>
+        }
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="showDialog = false"
+            ></app-button>
+            @if (dialogTitle === "Tải lên màn hình") {
+                <app-button
+                    label="Tải lên"
+                    icon="ti ti-upload"
+                    (onClick)="handleDialogButtonClick()"
+                    [loading]="dialogLoading"
+                ></app-button>
+            }
+            @if (dialogTitle === "Sao chép màn hình") {
+                <app-button
+                    label="Sao chép"
+                    icon="ti ti-copy"
+                    (onClick)="handleDialogButtonClick()"
+                    [loading]="dialogLoading"
+                ></app-button>
+            }
+            @if (dialogTitle === "Thêm mới màn hình") {
+                <app-button
+                    iocVariant="create"
+                    (onClick)="handleDialogButtonClick()"
+                    [loading]="dialogLoading"
+                ></app-button>
+            }
+        </div>
+    </ng-template>
+</app-dialog>

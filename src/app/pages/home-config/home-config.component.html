@@ -1,0 +1,150 @@
+<app-card-layout cardTitle="Thông tin ứng dụng">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-6">
+                <div class="col-12">
+                    <app-input
+                        [autofocus]="true"
+                        label="Tên ứng dụng"
+                        [value]="title"
+                        [required]="true"
+                        maxLength="100"
+                        [error]="errorTitle"
+                        (onChange)="handleTitleChange($event)"
+                        placeholder="Nhập tên ứng dụng"
+                    ></app-input>
+                </div>
+                <div class="col-12">
+                    <app-editor
+                        label="Giới thiệu"
+                        [text]="description"
+                        [error]="errorDescription"
+                        [required]="true"
+                        maxLength="2000"
+                        (onTextChange)="handleTextChange($event)"
+                    ></app-editor>
+                </div>
+
+                <div class="col-12">
+                    <p-checkbox
+                        name="isReport"
+                        label="Hiển thị thông tin giới thiệu"
+                        [(ngModel)]="displayContent"
+                        [binary]="true"
+                    ></p-checkbox>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="col-12">
+                    <app-input
+                        label="Tên hệ thống"
+                        [value]="systemName"
+                        [required]="true"
+                        placeholder="Nhập tên hệ thống"
+                        maxLength="255"
+                        [error]="errorSystemName"
+                        (onChange)="handleSystemNameChange($event)"
+                    ></app-input>
+                </div>
+
+                <div class="col-12">
+                    <app-file
+                        label="Ảnh giới thiệu"
+                        accept=".jpg, .jpeg, .png"
+                        [multiple]="true"
+                        [files]="files"
+                        [imageHost]="homeConfigData.imageHost"
+                        (onChange)="handleFileChange($event)"
+                        [getInternalError]="true"
+                    ></app-file>
+                </div>
+            </div>
+        </div>
+        <div class="xs:col-12 md:col-12 flex justify-content-between p-0 mt-5">
+            <h5>Phiên bản ứng dụng</h5>
+            <app-button
+                (onClick)="handleAddVersion()"
+                icon="pi pi-plus"
+                label="Thêm phiên bản"
+            >
+            </app-button>
+        </div>
+        <div class="mt-2">
+            <p-table
+                [value]="listAppVersion"
+                [rowHover]="true"
+                styleClass="p-datatable-gridlines p-datatable-striped mt-1"
+            >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>STT</th>
+                        <th>Phiên bản</th>
+                        <th>Mô tả</th>
+                        <th style="min-width: 10rem">Ngày cập nhật</th>
+                        <th style="width: 20rem" class="text-center">
+                            Phiên bản hiện tại
+                        </th>
+                        <th style="width: 15rem" class="text-center">
+                            Thao tác
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template
+                    pTemplate="body"
+                    let-version
+                    let-rowIndex="rowIndex"
+                >
+                    <tr>
+                        <td>{{ rowIndex + 1 }}</td>
+                        <td>{{ version.version }}</td>
+                        <td>{{ version.description }}</td>
+                        <td>
+                            {{
+                                version.createdAt
+                                    | dateTimeConverter: "DATE_TIME"
+                            }}
+                        </td>
+                        <td class="text-center">
+                            <p-radioButton
+                                name="version"
+                                [(ngModel)]="version.isCurrent"
+                                [disabled]="
+                                    isUpdatingVersion || version.isCurrent
+                                "
+                                [value]="true"
+                                (onClick)="handleSetCurrentVersion(version)"
+                            ></p-radioButton>
+                        </td>
+                        <td>
+                            <div class="center-cell">
+                                <app-button
+                                    iocVariant="idelete"
+                                    (onClick)="handleRemoveVersion(version)"
+                                ></app-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td [attr.colspan]="3">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                label="Hủy"
+                styleClass="p-button-outlined"
+                (onClick)="handleCloseHomeConfig()"
+            ></app-button>
+            <app-button
+                [loading]="isLoading"
+                label="Lưu thông tin"
+                (onClick)="handleSaveHomeConfig()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

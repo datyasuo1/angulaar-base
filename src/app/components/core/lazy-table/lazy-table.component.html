@@ -1,0 +1,130 @@
+<div [cdkTrapFocus]="useTrapFocus" [cdkTrapFocusAutoCapture]="true">
+    <div class="flex justify-content-between mb-3">
+        @if (tableTitle.length > 0) {
+            <h5>
+                {{
+                    tableTitle + (totalRecords ? " (" + totalRecords + ")" : "")
+                }}
+            </h5>
+        } @else {
+            <div></div>
+        }
+        <!-- Buttons come here -->
+        <ng-container *ngTemplateOutlet="buttons"></ng-container>
+    </div>
+
+    <div class="mb-3">
+        <ng-container *ngTemplateOutlet="container"></ng-container>
+    </div>
+    <p-table
+        #table
+        [value]="tableData"
+        [dataKey]="dataKey"
+        [loading]="loading"
+        [rowGroupMode]="rowGroupMode"
+        [groupRowsBy]="groupRowsBy"
+        [rows]="rows"
+        [first]="first"
+        [totalRecords]="totalRecords"
+        [rowHover]="true"
+        styleClass="p-datatable-gridlines p-datatable-striped"
+        [paginator]="totalRecords > 0"
+        responsiveLayout="scroll"
+        (onLazyLoad)="loadTable($event)"
+        (onSort)="handleSort($event)"
+        [lazy]="lazy"
+        [rowsPerPageOptions]="[1, 5, 10, 15]"
+        [showJumpToPageDropdown]="showJumpToPageDropdown"
+        [showJumpToPageInput]="showJumpToPageInput"
+    >
+        @if (caption) {
+            <ng-template pTemplate="caption">
+                <ng-container [ngTemplateOutlet]="caption"></ng-container>
+            </ng-template>
+        }
+
+        @if (headerSchema.length === 0) {
+            <ng-template pTemplate="header">
+                <ng-container [ngTemplateOutlet]="header"></ng-container>
+            </ng-template>
+        } @else {
+            <ng-template pTemplate="header">
+                <tr>
+                    @for (
+                        header of headerSchema;
+                        track header;
+                        let i = $index
+                    ) {
+                        @if (header.show === undefined ? true : header.show) {
+                            <th
+                                [style]="{
+                                    minWidth: header.minWidth ?? '15rem',
+                                    maxWidth: header.maxWidth ?? '20rem'
+                                }"
+                                [pSortableColumn]="header.sortableColumn"
+                                [pSortableColumnDisabled]="
+                                    !header.sortableColumn
+                                "
+                            >
+                                <div class="flex">
+                                    <span
+                                        [class]="
+                                            'w-full text-' +
+                                            (header.align ?? 'left')
+                                        "
+                                    >
+                                        {{ header.label }}
+                                    </span>
+                                    @if (header.sortableColumn) {
+                                        <p-sortIcon
+                                            [field]="header.sortableColumn"
+                                            class="ml-auto"
+                                        />
+                                    }
+                                </div>
+                            </th>
+                        }
+                    }
+                </tr>
+                <ng-container [ngTemplateOutlet]="header"></ng-container>
+            </ng-template>
+        }
+        <ng-template pTemplate="groupheader" let-data>
+            <ng-container
+                [ngTemplateOutlet]="groupheader"
+                [ngTemplateOutletContext]="{ $implicit: data }"
+            ></ng-container>
+        </ng-template>
+        <ng-template pTemplate="body" let-data let-rowIndex="rowIndex">
+            <ng-container
+                [ngTemplateOutlet]="body"
+                [ngTemplateOutletContext]="{
+                    $implicit: data,
+                    rowIndex: rowIndex
+                }"
+            ></ng-container>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            @if (lazy) {
+                <div>
+                    Hiển thị {{ first + 1 }}-{{
+                        first + rows < totalRecords
+                            ? first + rows
+                            : totalRecords
+                    }}
+                    / {{ totalRecords }} bản ghi
+                </div>
+            }
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td [attr.colspan]="columns">Không có dữ liệu.</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="loadingbody">
+            <tr>
+                <td [attr.colspan]="columns">Đang tải dữ liệu...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

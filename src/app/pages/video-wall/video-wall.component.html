@@ -1,0 +1,30 @@
+<div
+    [ngStyle]="{
+        height: 'calc(100vh - 120px)',
+        width: '100%'
+    }"
+>
+    <div class="relative">
+        <div id="main-view" [style]="{ minHeight: 'calc(100vh - 120px)' }">
+            <canvas id="canvas" v-if="reload" #canvas></canvas>
+            <div id="grid-view" class="grid-view"></div>
+        </div>
+    </div>
+
+    @if (totalRecords > 0) {
+        <app-paginator
+            class="relative"
+            (onPageChange)="handlePageChange($event)"
+            [first]="first"
+            [rows]="rows"
+            [totalRecords]="totalRecords"
+            [rowsPerPageOptions]="[4, 16, 25]"
+        >
+        </app-paginator>
+    }
+</div>
+<app-loading
+    [loading]="loading"
+    width="100vw"
+    height="calc(100vh - 70px)"
+></app-loading>

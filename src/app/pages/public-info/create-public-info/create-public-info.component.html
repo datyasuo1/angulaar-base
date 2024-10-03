@@ -1,0 +1,109 @@
+<app-card-layout [cardTitle]="cardTitle">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-4">
+                <div class="grid">
+                    <div class="col-12">
+                        <app-input
+                            [autoTrim]="true"
+                            [autofocus]="true"
+                            label="Tên thông tin công cộng"
+                            [value]="name"
+                            maxLength="255"
+                            [required]="true"
+                            [error]="errorName"
+                            (onChange)="handleDataChange($event, 'name')"
+                        ></app-input>
+                    </div>
+                    <div class="col-12">
+                        <app-select
+                            label="Loại thông tin công cộng"
+                            [options]="types"
+                            [selectedOption]="type"
+                            [required]="true"
+                            [error]="errorType"
+                            (onChange)="handleDataChange($event, 'type')"
+                            placeholder="Lựa chọn"
+                        ></app-select>
+                    </div>
+                    <div class="col-12">
+                        <app-au-tree-select
+                            [(administrativeUnit)]="administrativeUnit"
+                            [codes]="auCodes"
+                            [errorAdministrativeUnit]="errorAdministrativeUnit"
+                            [required]="true"
+                            (onChange)="
+                                handleDataChange($event, 'administrativeUnit')
+                            "
+                        ></app-au-tree-select>
+                    </div>
+                    <div class="col-12">
+                        <app-calendar
+                            label="Thời gian bắt đầu - kết thúc"
+                            [(ngModel)]="rangeDates"
+                            [error]="errorRangeDates"
+                            (ngModelChange)="errorRangeDates = ''"
+                            [required]="true"
+                            selectionMode="range"
+                            placeholder="Chọn thời gian bắt đầu - kết thúc"
+                            [keepInvalid]="true"
+                        ></app-calendar>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-8">
+                <app-map
+                    label="Địa điểm bắt đầu - kết thúc"
+                    [error]="errorAddressStart"
+                    [required]="true"
+                    [viewOnly]="true"
+                    [useDirection]="true"
+                    (onStartAddressChange)="handleStartAddressChange($event)"
+                    (onEndAddressChange)="handleEndAddressChange($event)"
+                >
+                    <ng-template #content>
+                        @if (addressStart?.address?.length > 0) {
+                            <div class="w-full p-input-icon-right">
+                                <div>
+                                    <i class="ti ti-map-pin"></i>
+                                    Từ: {{ addressStart?.address }}
+                                </div>
+
+                                <i
+                                    class="ti ti-x cursor-pointer"
+                                    (click)="addressStart = null"
+                                ></i>
+                            </div>
+                        }
+                        @if (addressEnd?.address?.length > 0) {
+                            <div class="w-full p-input-icon-right">
+                                <div>
+                                    <i class="ti ti-map-pin"></i>
+                                    Đến: {{ addressEnd?.address }}
+                                </div>
+
+                                <i
+                                    class="ti ti-x cursor-pointer"
+                                    (click)="addressEnd = null"
+                                ></i>
+                            </div>
+                        }
+                    </ng-template>
+                </app-map>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center mt-4 gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [loading]="loading"
+                [iocVariant]="pageType"
+                (onClick)="handleAddOrUpdatePublicInfo()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

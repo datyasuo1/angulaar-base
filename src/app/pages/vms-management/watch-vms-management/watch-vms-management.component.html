@@ -1,0 +1,75 @@
+<app-card-layout cardTitle="Xem chi tiết VMS">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12">
+                <app-label label="Tên VMS">
+                    <b>{{ data?.name | dataValidator }}</b>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Loại VMS">
+                    <b>{{ data?.vmsCategoryName | dataValidator }}</b>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Đơn vị hành chính">
+                    <b>{{
+                        (data?.wardName
+                            ? data?.wardName
+                            : data?.districtName
+                              ? data?.districtName
+                              : data?.provinceName
+                        ) | dataValidator
+                    }}</b>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Đường dẫn">
+                    <b>{{ data?.url | dataValidator }}</b>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Trạng thái">
+                    <b>
+                        @if (data?.status === "ACTIVE") {
+                            Đang hoạt động
+                        } @else {
+                            Không hoạt động
+                        }
+                    </b>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Tên tài khoản">
+                    <b>{{ data?.username | dataValidator }}</b>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Mật khẩu">
+                    <b>{{ hiddenPassword | dataValidator }}</b>
+                </app-label>
+            </div>
+            <div class="col-12">
+                <p-checkbox
+                    name="group1"
+                    value="Dùng chung"
+                    label="Dùng chung"
+                    inputId="dc"
+                    [disabled]="true"
+                    [(ngModel)]="isPublic"
+                    [binary]="true"
+                    (click)="toggleCheckbox($event)"
+                ></p-checkbox>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center gap-3">
+            <app-button
+                iocVariant="close"
+                [autofocus]="true"
+                (onClick)="handleCloseOneVms()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

@@ -1,0 +1,12 @@
+<app-label
+    [inputId]="inputId"
+    [label]="label"
+    [required]="required"
+    [error]="error"
+>
+    <p-inputSwitch
+        [inputId]="inputId"
+        [(ngModel)]="switchValue"
+        (onChange)="handleChange($event)"
+    ></p-inputSwitch>
+</app-label>

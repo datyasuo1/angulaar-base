@@ -1,0 +1,87 @@
+<div class="card">
+    <app-loading [loading]="isOpeningPDF"></app-loading>
+    <app-lazy-table
+        tableTitle="Danh sách tài liệu ký số"
+        [tableData]="listDocument"
+        [rows]="rows"
+        [columns]="5"
+        [first]="first"
+        [totalRecords]="totalRecord"
+        [loading]="isLoading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <div class="flex gap-2">
+                <app-button
+                    label="Đăng tải tài liệu"
+                    icon="pi pi-plus"
+                    (onClick)="handleAddDocument()"
+                ></app-button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th>Tên tài liệu</th>
+                <th>Ngày tạo</th>
+                <th>Ngày ký</th>
+                <th style="min-width: 6rem" class="center-cell">Thao tác</th>
+            </tr>
+
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['name']"
+                        maxLength="255"
+                        placeholder="Nhập tên tài liệu"
+                        (onChange)="handleSearch($event, 'name')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-document let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>
+                    <span
+                        (click)="previewPDF(document)"
+                        class="link cursor-pointer"
+                    >
+                        {{ document.path.fileName }}</span
+                    >
+                </td>
+                <td>
+                    {{ document.createdAt | date: "dd/MM/yyyy HH:mm" }}
+                </td>
+                <td>
+                    {{ document.updatedAt | date: "dd/MM/yyyy HH:mm" }}
+                </td>
+                <td>
+                    <div class="action-buttons center-cell mr-2">
+                        @if (!document.updatedAt) {
+                            <app-button
+                                tooltip="Ký tài liệu"
+                                iocVariant="icon"
+                                icon="ti ti-writing-sign"
+                                (onClick)="navigateSignDocument(document)"
+                            ></app-button>
+                        }
+
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="handleDeleteDocument(document)"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>

@@ -1,0 +1,6 @@
+<screen-renderer
+    [appId]="appId"
+    [baseUrl]="screenBuilderURL"
+    [input]="screenRendererInput | json"
+    (moduleEventTriggered)="onScreenRendererEvent($event)"
+></screen-renderer>

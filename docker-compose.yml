@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+    app:
+        image: 10.60.156.72/xap/iocv3-webapp:0.0.2
+        environment:
+            - MAP_ACCESS_TOKEN=acfda3fa21ccc80fc6946681c4d6729f
+            - MODELER_URL=https://modeler.smartcity-cloud.org
+            - SCREEN_BUILDER_URL=http://127.0.0.1:8080
+            - TENANT=danang
+            - BASE_URL=https://ioc.smartcity-cloud.org
+            - CITYOS_BASE_URL=https://cityos.smartcity-cloud.org
+        ports:
+            - "4200:80"
+        restart: unless-stopped

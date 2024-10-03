@@ -1,0 +1,65 @@
+<p-dialog
+    [(visible)]="show"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+    (onHide)="resetDialog()"
+>
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold text-center w-full">
+            {{ dialogTitle }}
+        </span>
+    </ng-template>
+    <div class="grid">
+        <div class="xs:col-12">
+            <app-input
+                label="Tên loại công việc"
+                placeholder="Nhập tên loại công việc"
+                id="group-name"
+                [value]="taskName"
+                maxLength="100"
+                [required]="true"
+                [error]="errorTaskName"
+                (onChange)="handleTaskNameChange($event)"
+            ></app-input>
+        </div>
+        <div class="xs:col-12">
+            <app-text-area
+                id="description"
+                placeholder="Nhập mô tả"
+                label="Mô tả"
+                [(ngModel)]="description"
+                [rows]="3"
+                maxLength="1000"
+            ></app-text-area>
+        </div>
+        <div class="xs:col-12">
+            <app-input-number
+                label="Thứ tự hiển thị"
+                placeholder="Nhập thứ tự hiển thị"
+                maxLength="50"
+                id="sort-order"
+                [value]="sortOrder"
+                (onChange)="handleSortOrderChange($event)"
+            ></app-input-number>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-center gap-3">
+            <app-button
+                iocVariant="close"
+                (onClick)="show = false"
+                [disabled]="dialogLoading"
+            ></app-button>
+            <app-button
+                (onClick)="
+                    dialogTitle === 'Thêm mới loại công việc'
+                        ? handleAddTaskClassification()
+                        : handleUpdateTaskClassification()
+                "
+                [loading]="dialogLoading"
+                icon="pi pi-check"
+                [label]="dialogButtonText"
+            ></app-button>
+        </div>
+    </ng-template>
+</p-dialog>

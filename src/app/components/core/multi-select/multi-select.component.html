@@ -1,0 +1,33 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <p-multiSelect
+        pAutoFocus
+        [autofocus]="autofocus"
+        styleClass="w-full"
+        [defaultLabel]="defaultLabel"
+        [options]="options"
+        [(ngModel)]="selectedOption"
+        [optionLabel]="optionLabel"
+        (onClear)="handleClear()"
+        (ngModelChange)="handleNgModelChange($event)"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [maxSelectedLabels]="options.length"
+        [showToggleAll]="showToggleAll"
+        [appendTo]="appendTo"
+        display="chip"
+        [emptyFilterMessage]="emptyFilterMessage"
+        [emptyMessage]="emptyMessage"
+        [resetFilterOnHide]="true"
+        [showClear]="showClear"
+        [filter]="true"
+        filterMatchMode="contains"
+        [ngClass]="{ 'ng-invalid ng-dirty': error }"
+    ></p-multiSelect>
+</app-label>
+<!-- (onChange)="handleChange($event)" -->

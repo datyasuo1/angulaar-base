@@ -1,0 +1,118 @@
+:host {
+    ::ng-deep {
+        .p-dataview-content {
+            border-radius: 6px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--surface-border);
+        }
+        .p-skeleton {
+            border-radius: 10px;
+        }
+        .p-galleria.p-galleria-indicator-onitem .p-galleria-indicators {
+            background: none !important;
+        }
+    }
+}
+.app-support .p-autocomplete-input {
+    width: 350px;
+}
+.bg-default {
+    background-image: url("/assets/images/bg-default.png");
+    background-size: cover;
+    height: 100vh;
+}
+.bg-none {
+    background-size: cover;
+    // background-color: #161c25;
+}
+
+img {
+    border-radius: 0 !important;
+}
+
+.p-galleria.p-galleria-indicator-onitem .p-galleria-indicators {
+    background: none !important;
+}
+
+.home-intro {
+    position: relative;
+    overflow: hidden;
+    animation: fromRight 1s;
+    overflow-y: auto;
+}
+@keyframes fromRight {
+    from {
+        right: -100%;
+    }
+    to {
+        right: 0;
+    }
+}
+
+.item {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.item-normal {
+    transform: scale(1);
+}
+
+.item-hovered {
+    transform: scale(1.1);
+}
+
+.app-support {
+    background: url("/assets/images/bg-app.png");
+    background-size: cover;
+}
+
+.default-background {
+    background: url("/assets/images/bg-default.png");
+    background-size: cover;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.banner-container {
+    height: 81vh;
+    padding: 50px;
+    border-radius: 12px;
+}
+.gallery-container {
+    background: var(--surface-ground);
+}
+
+.gallery-image {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    height: 81vh;
+}
+#scroll-button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 100%;
+    text-align: center;
+}
+
+.scroll-btn {
+    width: 30px !important;
+}
+
+@keyframes moveUpDown {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(5px);
+    }
+}
+
+.scroll-btn {
+    animation: moveUpDown 1s infinite;
+    display: inline-block;
+    font-size: 24px;
+}

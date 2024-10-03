@@ -1,0 +1,69 @@
+<app-card-layout cardTitle="Xem chi tiết thông tin cấu hình dịch vụ">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <app-label label="Tên cấu hình hiển thị">
+                    <b>{{ data?.configName | dataValidator }}</b>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Thời gian tạo">
+                    <b>
+                        {{
+                            data?.createdAt
+                                | dateTimeConverter: "DATE_TIME"
+                                | dataValidator
+                        }}
+                    </b>
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Danh sách dịch vụ">
+                    @for (
+                        dashboard of data?.dashboards;
+                        track dashboard;
+                        let i = $index
+                    ) {
+                        <b>
+                            @if (dashboard?.name) {
+                                <i
+                                    class="ti ti-circle-filled mr-2"
+                                    style="font-size: 0.4rem"
+                                ></i>
+                            }
+                            {{ dashboard?.name }}<br />
+                        </b>
+                    }
+                </app-label>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Danh sách phòng ban">
+                    @for (
+                        agencies of data?.agencies;
+                        track agencies;
+                        let i = $index
+                    ) {
+                        <b>
+                            @if (agencies?.name) {
+                                <i
+                                    class="ti ti-circle-filled mr-2"
+                                    style="font-size: 0.4rem"
+                                ></i>
+                            }
+                            {{ agencies?.name }}<br />
+                        </b>
+                    }
+                </app-label>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center mt-4 gap-2">
+            <app-button
+                iocVariant="close"
+                [autofocus]="true"
+                (onClick)="handleCloseOnePublicInfo()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

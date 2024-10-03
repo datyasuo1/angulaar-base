@@ -1,0 +1,30 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <p-dropdown
+        pAutoFocus
+        [autofocus]="autofocus"
+        styleClass="w-full"
+        [options]="options"
+        [(ngModel)]="selectedOption"
+        [optionLabel]="optionLabel"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [filter]="filter"
+        [filterBy]="optionLabel"
+        [resetFilterOnHide]="resetFilterOnHide"
+        [showClear]="showClear"
+        [filterMatchMode]="filterMatchMode"
+        [emptyFilterMessage]="emptyFilterMessage"
+        [emptyMessage]="emptyMessage"
+        [ngClass]="error ? 'ng-dirty ng-invalid' : ''"
+        [appendTo]="appendTo"
+        (onChange)="handleChange($event)"
+        (onClear)="handleClear($event)"
+        [ngClass]="{ 'ng-invalid ng-dirty': error }"
+    ></p-dropdown>
+</app-label>

@@ -1,0 +1,27 @@
+<app-tree-checkbox
+    [autofocus]="!viewOnly"
+    label="Danh sách phân quyền chức năng"
+    [loading]="treeLoading"
+    [value]="features"
+    [draggableNodes]="true"
+    [droppableNodes]="true"
+    [selection]="selectedFeatures"
+    [disabled]="viewOnly"
+    (onSelectChange)="handleSelectChange($event)"
+    (onNodeDrop)="handleNodeDrop($event)"
+></app-tree-checkbox>
+
+<div class="flex justify-content-center align-items-center gap-2 mt-4">
+    <app-button
+        iocVariant="close"
+        [autofocus]="viewOnly"
+        (onClick)="handleClose()"
+    ></app-button>
+    @if (!viewOnly) {
+        <app-button
+            iocVariant="update"
+            [loading]="loading"
+            (onClick)="handleUpdate()"
+        ></app-button>
+    }
+</div>

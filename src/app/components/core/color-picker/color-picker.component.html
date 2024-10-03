@@ -1,0 +1,15 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <ngx-colors
+        ngx-colors-trigger
+        [(ngModel)]="value"
+        [format]="format"
+        (change)="handleChange($event)"
+    >
+    </ngx-colors>
+</app-label>

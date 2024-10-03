@@ -1,0 +1,18 @@
+<p-sidebar
+    [(visible)]="visible"
+    (visibleChange)="handleVisibleChange($event)"
+    position="left"
+    [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
+    styleClass="layout-config-sidebar w-25rem"
+>
+    <ul class="layout-menu">
+        @for (item of navItems; track item; let i = $index) {
+            @if (!item.separator) {
+                <li app-menuitem [item]="item" [index]="i" [root]="true"></li>
+            }
+            @if (item.separator) {
+                <li class="menu-separator"></li>
+            }
+        }
+    </ul>
+</p-sidebar>

@@ -1,0 +1,31 @@
+export const environment = {
+    production: false,
+    mapAccessToken: 'acfda3fa21ccc80fc6946681c4d6729f',
+    tenant: 'haiphong',
+    modelerURL: 'http://127.0.0.1:8081',
+    appChatURL: 'https://chat.smartcity-cloud.org',
+    screenBuilderURL: 'https://screenbuilder.smartcity-cloud.org',
+    screenBuilderAuthId: 'ecbbdfd9387a484780b6fd0f85c7898b',
+    screenBuilderRedirectURL:
+        'https%3A%2F%2Fscreenbuilder.smartcity-cloud.org%2Fuser%2Fauth%2Foauth%2Fredirect',
+    screenBuilderOrgId: '65783670b242472f88a81743',
+    baseURL: 'https://ioc.smartcity-cloud.org',
+    cityOSURL: 'https://cityos.smartcity-cloud.org',
+    kpiURL: 'https://kpi-config.smartcity-cloud.org',
+    supersetURL: 'https://superset.smartcity-cloud.org',
+    tableauURL: 'https://tbl.ioc-cloud.com',
+    ssoURL: 'https://sso.smartcity-cloud.org/',
+    ssoRealm: 'HAI_PHONG',
+    ssoClientId: 'ioc-haiphong-public-client',
+    firebase: {
+        apiKey: 'AIzaSyDa3LkC9KpKWLIRsED_Eqt0tBW8ZFlsOmE',
+        authDomain: 'ioc-notification.firebaseapp.com',
+        projectId: 'ioc-notification',
+        storageBucket: 'ioc-notification.appspot.com',
+        messagingSenderId: '45183912364',
+        appId: '1:45183912364:web:b49a36e7f8f830e2a0d209',
+        measurementId: 'G-GWXPDMKGE1',
+        vapidKey:
+            'BB2DLT4MKKDo2CGCf8PUUI_9Cdzxhn6LLYLXJV1gD8Gqm7XhSKUd9DOF0qzAIm_jal-63FumsJLFwbTCwfDKqUI',
+    },
+};

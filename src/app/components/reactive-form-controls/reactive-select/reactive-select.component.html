@@ -1,0 +1,18 @@
+<app-label [label]="label" [required]="required" [error]="error">
+    <p-dropdown
+        styleClass="w-full"
+        [options]="options"
+        [optionLabel]="optionLabel"
+        [placeholder]="placeholder"
+        [filter]="filter"
+        [filterBy]="optionLabel"
+        [resetFilterOnHide]="resetFilterOnHide"
+        [showClear]="showClear"
+        [filterMatchMode]="filterMatchMode"
+        [emptyFilterMessage]="emptyFilterMessage"
+        [emptyMessage]="emptyMessage"
+        [formControl]="control"
+        [ngClass]="error ? 'ng-dirty ng-invalid' : ''"
+        appendTo="body"
+    ></p-dropdown>
+</app-label>

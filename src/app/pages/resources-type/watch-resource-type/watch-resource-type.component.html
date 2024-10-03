@@ -1,0 +1,130 @@
+<app-card-layout cardTitle="Xem chi tiết loại tài nguyên">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <div class="grid">
+                    <div class="col-12">
+                        <app-label label="Tên loại tài nguyên">
+                            <b>{{ data?.name | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Phân loại">
+                            <b>{{ data?.type | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Đơn vị hành chính">
+                            <b>{{
+                                (data?.wardName
+                                    ? data?.wardName
+                                    : data?.districtName
+                                      ? data?.districtName
+                                      : data?.provinceName
+                                ) | dataValidator
+                            }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Hệ thống quản lí Camera">
+                            <b>{{ data?.vmsName | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Dùng chung">
+                            <b>
+                                {{ isPublic ? "Có" : "Không" }}
+                            </b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Hiển thị mặc định">
+                            <b>
+                                {{ isDefaultOnMap ? "Có" : "Không" }}
+                            </b>
+                        </app-label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="grid">
+                    <div class="col-12">
+                        <app-label label="Icon hiển thị trạng thái khả dụng">
+                            <img
+                                [src]="
+                                    data?.activeImage
+                                        | objToLink: data?.imageHost
+                                "
+                                style="width: 30px; height: 30px"
+                            />
+                        </app-label>
+                        @if (data?.passiveImage !== null) {
+                            <app-label
+                                label="Icon hiển thị trạng thái không khả dụng"
+                            >
+                                <img
+                                    [src]="
+                                        data?.passiveImage
+                                            | objToLink: data?.imageHost
+                                    "
+                                    style="width: 30px; height: 30px"
+                                />
+                            </app-label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                @if (commonProperties.length > 0) {
+                    <app-label label="Thuộc tính dùng chung">
+                        <p-table
+                            [value]="commonProperties"
+                            styleClass="p-datatable-gridlines p-datatable-striped"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Tên thuộc tính</th>
+                                    <th>Loại giá trị</th>
+                                    <th class="text-center">Trường bắt buộc</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template
+                                pTemplate="body"
+                                let-data
+                                let-rowIndex="rowIndex"
+                            >
+                                <tr>
+                                    <td>
+                                        {{ data?.name }}
+                                    </td>
+                                    <td>
+                                        {{ data?.valueType?.value }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ data?.required ? "Có" : "Không" }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td [attr.colspan]="3">
+                                        Không có dữ liệu.
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </app-label>
+                }
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center mt-4">
+            <app-button
+                iocVariant="close"
+                [autofocus]="true"
+                (onClick)="handleCloseOneResourceType()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

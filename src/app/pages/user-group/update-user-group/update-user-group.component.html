@@ -1,0 +1,88 @@
+<app-card-layout cardTitle="Cập nhật nhóm người dùng">
+    <ng-template #body>
+        <p-tabView>
+            <p-tabPanel header="Thông tin chung">
+                <ng-template pTemplate="content">
+                    <div class="grid">
+                        <div class="col-12 md:col-6">
+                            <app-input
+                                [autoTrim]="true"
+                                [autofocus]="true"
+                                label="Tên"
+                                [value]="groupName"
+                                maxLength="255"
+                                [required]="true"
+                                [error]="errorGroupName"
+                                (onChange)="
+                                    handleDataChange($event, 'groupName')
+                                "
+                            ></app-input>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <app-department-tree-select
+                                [(department)]="department"
+                                [selectedDepartmentId]="departmentId"
+                                [required]="true"
+                                [errorDepartment]="errorDepartment"
+                                (departmentChange)="
+                                    handleDepartmentChange($event)
+                                "
+                                (onChange)="handleDepartmentChange($event)"
+                            ></app-department-tree-select>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-tree-select
+                                label="Nhóm cha"
+                                [selectedOption]="parentGroup"
+                                [options]="parentGroups"
+                                placeholder="Chọn nhóm cha"
+                                [disabled]="!_department"
+                                caption="Vui lòng chọn phòng ban trước"
+                                [showCaption]="!_department"
+                                (onChange)="
+                                    handleDataChange($event, 'parentGroup')
+                                "
+                            ></app-tree-select>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-select
+                                label="Vai trò"
+                                [options]="roles"
+                                [selectedOption]="role"
+                                [required]="true"
+                                [error]="errorRole"
+                                (onChange)="handleDataChange($event, 'role')"
+                                placeholder="Chọn vai trò"
+                            ></app-select>
+                        </div>
+                        <div class="col-12">
+                            <app-text-area
+                                label="Mô tả"
+                                [(ngModel)]="description"
+                                [rows]="3"
+                                maxLength="1000"
+                            ></app-text-area>
+                        </div>
+                    </div>
+                    <div class="flex justify-content-center gap-2 mt-4">
+                        <app-button
+                            iocVariant="close"
+                            (onClick)="handleClose()"
+                        ></app-button>
+                        <app-button
+                            iocVariant="update"
+                            (onClick)="handleUserGroupForm()"
+                            [loading]="loading"
+                        ></app-button>
+                    </div>
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="Thành viên nhóm">
+                <ng-template pTemplate="content">
+                    <app-group-group></app-group-group>
+                </ng-template>
+            </p-tabPanel>
+        </p-tabView>
+    </ng-template>
+</app-card-layout>

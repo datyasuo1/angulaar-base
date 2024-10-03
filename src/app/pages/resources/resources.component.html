@@ -1,0 +1,154 @@
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách tài nguyên"
+        [tableData]="data"
+        [rows]="rows"
+        [columns]="8"
+        [first]="first"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <div class="flex gap-2">
+                <app-button
+                    label="Tải lên"
+                    styleClass="p-button-outlined"
+                    icon="ti ti-upload"
+                    (onClick)="handleImport()"
+                ></app-button>
+                <app-button
+                    iocVariant="create"
+                    permissionCode="create-resources"
+                    (onClick)="handleCreateResources()"
+                ></app-button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 12rem">Tên tài nguyên</th>
+                <th style="min-width: 14rem">Địa chỉ</th>
+                <th style="min-width: 10rem">Loại tài nguyên</th>
+                <th style="min-width: 12rem">Đơn vị hành chính</th>
+                <th style="min-width: 8rem" class="text-center">Thao tác</th>
+            </tr>
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [autofocus]="true"
+                        [value]="searchText"
+                        maxLength="255"
+                        placeholder="Nhập tên tài nguyên"
+                        (onChange)="handleInputChange($event)"
+                        iconClass="ti ti-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-select
+                        [selectedOption]="resourceType"
+                        [options]="resourceTypes"
+                        (onChange)="handleResourceTypeFindChange($event)"
+                        [hasFilter]="true"
+                    >
+                    </app-select>
+                </th>
+                <th class="border-top-none">
+                    <app-au-tree-select
+                        [showLabel]="false"
+                        [hasFilter]="true"
+                        [administrativeUnit]="administrativeUnit"
+                        (onChange)="handleAUFilterChange($event)"
+                    ></app-au-tree-select>
+                </th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-data let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ data?.name }}</td>
+                <td>{{ data?.address }}</td>
+                <td>{{ data?.resourceTypeName }}</td>
+                <td>
+                    {{
+                        data?.wardName
+                            ? data?.wardName
+                            : data?.districtName
+                              ? data?.districtName
+                              : data?.provinceName
+                    }}
+                </td>
+                <td>
+                    <div
+                        class="flex gap-2 justify-content-center align-items-center"
+                    >
+                        <app-button
+                            iocVariant="iview"
+                            (onClick)="watchResources(data?.id)"
+                            permissionCode="detail-resources"
+                        ></app-button>
+                        <app-button
+                            iocVariant="iupdate"
+                            (onClick)="updateResources(data?.id)"
+                            permissionCode="update-resources"
+                        ></app-button>
+                        <app-button
+                            iocVariant="idelete"
+                            permissionCode="delete-resources"
+                            (onClick)="confirmDeleteResources(data)"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>
+<app-dialog [(visible)]="showDialog" (onHide)="resetDialog()">
+    <ng-template #header>
+        <span class="text-xl font-bold text-center w-full">
+            Tải lên danh sách tài nguyên
+        </span>
+    </ng-template>
+    <ng-template #content>
+        <div class="grid">
+            <div class="col-12">
+                <app-file
+                    [autofocus]="true"
+                    label="Tệp tin Excel"
+                    accept=".xlsx, .xlsm"
+                    [file]="file"
+                    [error]="errorFile"
+                    (onChange)="handleFileChange($event)"
+                ></app-file>
+            </div>
+        </div>
+        <div class="flex justify-content-end">
+            <app-button
+                label="Tải file Danh sách tài nguyên mẫu"
+                [link]="true"
+                icon="ti ti-download"
+                (onClick)="handleDownloadTemplate()"
+            >
+            </app-button>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="showDialog = false"
+            ></app-button>
+            <app-button
+                label="Tải lên"
+                icon="ti ti-upload"
+                [loading]="dialogLoading"
+                (onClick)="handleImportResources()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-dialog>

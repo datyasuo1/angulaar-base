@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+    name: ioc-management-system-ingress
+    labels:
+        app: ioc-management-system
+    namespace: ioc-management-system
+spec:
+    rules:
+        - host: admin.ioc-cloud.com
+          http:
+              paths:
+                  - backend:
+                        serviceName: ioc-management-system-fe-svc
+                        servicePort: 8502
+                    path: /
+                    pathType: Prefix
+        - host: admin-api.ioc-cloud.com
+          http:
+              paths:
+                  - backend:
+                        serviceName: ioc-management-system-be-svc
+                        servicePort: 8512
+                    path: /
+                    pathType: Prefix
+    tls:
+        - hosts:
+              - admin.ioc-cloud.com
+              - admin-api.ioc-cloud.com
+          # secretName: ioc-cloud

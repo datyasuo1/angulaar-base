@@ -1,0 +1,165 @@
+<app-card-layout
+    [cardTitle]="
+        disabled ? 'Thông tin tài khoản' : 'Cập nhật thông tin tài khoản'
+    "
+>
+    <ng-template #body>
+        @if (disabled) {
+            <div class="grid">
+                <div class="col-12 lg:col-6">
+                    <app-label label="Tên đăng nhập">
+                        <b>{{ username | dataValidator }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <app-label label="Họ và tên">
+                        <b>{{ fullName | dataValidator }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <app-label label="Số điện thoại">
+                        <b>{{ phoneNumber | dataValidator }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <app-label label="Email">
+                        <b>{{ email | dataValidator }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <app-label label="Số CCCD">
+                        <b>{{ cccd | dataValidator }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <app-label label="Ngày sinh">
+                        <b>{{
+                            date | dateTimeConverter: "DATE" | dataValidator
+                        }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <app-label label="Giới tính">
+                        <b>{{ getSex(gentle) | dataValidator }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <app-label label="Địa chỉ">
+                        <b>{{ address | dataValidator }}</b>
+                    </app-label>
+                </div>
+            </div>
+        } @else {
+            <div class="grid">
+                <div class="col-12 md:col-6">
+                    <app-input
+                        [autoTrim]="true"
+                        label="Tên đăng nhập"
+                        [value]="username"
+                        maxLength="50"
+                        [required]="true"
+                        [disabled]="true"
+                    ></app-input>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-input
+                        [autoTrim]="true"
+                        [autofocus]="true"
+                        label="Họ và tên"
+                        [value]="fullName"
+                        [required]="true"
+                        [error]="errorFullName"
+                        maxLength="255"
+                        (onChange)="handleDataChange($event, 'fullName')"
+                    ></app-input>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-input
+                        [autoTrim]="true"
+                        label="Số điện thoại"
+                        [value]="phoneNumber"
+                        [required]="true"
+                        [error]="errorPhoneNumber"
+                        maxLength="10"
+                        (onChange)="handleDataChange($event, 'phoneNumber')"
+                    >
+                    </app-input>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-input
+                        [autoTrim]="true"
+                        label="Email"
+                        [value]="email"
+                        maxLength="100"
+                        [required]="true"
+                        [error]="errorEmail"
+                        (onChange)="handleDataChange($event, 'email')"
+                    ></app-input>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-input
+                        [autoTrim]="true"
+                        label="Số CCCD"
+                        [value]="cccd"
+                        type="number"
+                        maxLength="12"
+                        [required]="true"
+                        [error]="errorCccd"
+                        (onChange)="handleDataChange($event, 'cccd')"
+                    >
+                    </app-input>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-calendar
+                        label="Ngày sinh"
+                        [(ngModel)]="date"
+                        placeholder="Chọn ngày sinh"
+                        [keepInvalid]="true"
+                    ></app-calendar>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-select
+                        label="Giới tính"
+                        [options]="gentles"
+                        [selectedOption]="gentle"
+                        optionLabel="label"
+                        (onChange)="handleDataChange($event, 'gentle')"
+                        placeholder="Chọn giới tính"
+                    ></app-select>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-input
+                        [autoTrim]="true"
+                        label="Địa chỉ"
+                        [value]="address"
+                        maxLength="255"
+                        [error]="errorAddress"
+                        (onChange)="handleDataChange($event, 'address')"
+                    ></app-input>
+                </div>
+            </div>
+        }
+    </ng-template>
+    <ng-template #footer>
+        @if (disabled) {
+            <div class="flex justify-content-center mt-4 gap-2">
+                <app-button
+                    iocVariant="update"
+                    (onClick)="handleEdit()"
+                ></app-button>
+            </div>
+        }
+        @if (!disabled) {
+            <div class="flex justify-content-center mt-4 gap-2">
+                <app-button
+                    iocVariant="close"
+                    (onClick)="handleCancel()"
+                ></app-button>
+                <app-button
+                    label="Lưu lại"
+                    (onClick)="handleSave()"
+                ></app-button>
+            </div>
+        }
+    </ng-template>
+</app-card-layout>

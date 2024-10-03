@@ -1,0 +1,21 @@
+<app-card-layout cardTitle="Cập nhật người dùng">
+    <ng-template #body>
+        <p-tabView>
+            <p-tabPanel header="Thông tin">
+                <ng-template pTemplate="content">
+                    <app-information></app-information>
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="Nhóm">
+                <ng-template pTemplate="content">
+                    <app-group></app-group>
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="Phân quyền">
+                <ng-template pTemplate="content">
+                    <app-decentralization></app-decentralization>
+                </ng-template>
+            </p-tabPanel>
+        </p-tabView>
+    </ng-template>
+</app-card-layout>

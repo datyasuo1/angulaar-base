@@ -1,0 +1,341 @@
+.tab-buttons {
+    z-index: 9999;
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    .first {
+        border-top-left-radius: 9px !important;
+        border-bottom-left-radius: 9px !important;
+    }
+    .active {
+        background-color: #0f73c9;
+    }
+}
+
+.btn {
+    padding: 6px 20px !important;
+    border-radius: 0px !important;
+}
+
+.btn:focus {
+    box-shadow: none !important;
+}
+
+.btn-left {
+    border-top-left-radius: 9px !important;
+    border-bottom-left-radius: 9px !important;
+}
+
+.btn-right {
+    border-top-right-radius: 9px !important;
+    border-bottom-right-radius: 9px !important;
+}
+
+.btn-center {
+    border-radius: 0px !important;
+}
+
+.button-bar {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // height: 100%;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+// css for marker point
+::ng-deep .custom-marker {
+    cursor: pointer;
+    text-align: center;
+}
+
+::ng-deep .custom-marker img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+::ng-deep .vtmapgl-ctrl-bottom-right {
+    right: 25vw !important;
+    bottom: 0;
+}
+
+::ng-deep .vtmapgl-popup {
+    max-width: unset !important;
+}
+
+::ng-deep .vtmapgl-popup-content {
+    background: none !important;
+    box-shadow: none !important;
+    width: 320px !important;
+    .vtmapgl-popup-close-button {
+        top: 15px !important;
+        right: 15px !important;
+        color: #dcdfe6;
+        z-index: 10;
+        background-color: transparent;
+    }
+}
+
+::ng-deep .customMarkerPopup {
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-between;
+    position: relative;
+    overflow-y: scroll;
+    height: 150px;
+    background: rgba(24, 37, 70, 0.8);
+    border: 0.5px solid #8ca7eb;
+    border-radius: 10px;
+    color: #dcdfe6;
+    padding: 10px 20px;
+
+    &.popupAlert {
+        height: fit-content;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .markerIcon {
+        position: absolute;
+        width: 50px;
+        left: -15px;
+        top: -15px;
+    }
+
+    // css for marker point
+    .custom-marker {
+        cursor: pointer;
+    }
+
+    .content {
+        height: 100%;
+        padding-top: 5%;
+        .contentRow {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+
+            img {
+                width: 12px;
+                margin-right: 5px;
+            }
+
+            .statusTag {
+                padding: 5px;
+                border-radius: 5px;
+                color: white;
+                font-weight: 600;
+                margin-left: 5px;
+            }
+
+            .redLevel {
+                background: red;
+            }
+
+            .orangeLevel {
+                background: orange;
+            }
+        }
+
+        .contentFullRow {
+            justify-content: space-between;
+        }
+    }
+
+    .markerLink {
+        color: lime;
+        text-decoration: underline;
+        font-style: italic;
+    }
+
+    .imgExpand {
+        width: 350px;
+        height: 200px;
+        position: absolute;
+        right: -360px;
+        top: 0;
+        border-radius: 10px;
+    }
+}
+
+::ng-deep .customMarker {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow-y: scroll;
+    width: 300px;
+    background: rgba(24, 37, 70, 0.8);
+    border: 0.5px solid #8ca7eb;
+    border-radius: 10px;
+    color: #dcdfe6;
+    padding: 10px 20px;
+
+    &.popupAlert {
+        height: fit-content;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .markerIcon {
+        position: absolute;
+        width: 50px;
+        left: -15px;
+        top: -15px;
+    }
+
+    // css for marker point
+    .custom-marker {
+        cursor: pointer;
+    }
+
+    .vtmapgl-ctrl-bottom-right {
+        right: 25vw !important;
+        bottom: 0;
+    }
+
+    .content {
+        .contentRow {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            img {
+                width: 12px;
+                margin-right: 5px;
+            }
+
+            .statusTag {
+                padding: 5px;
+                border-radius: 5px;
+                color: white;
+                font-weight: 600;
+                margin-left: 5px;
+            }
+
+            .redLevel {
+                background: red;
+            }
+
+            .orangeLevel {
+                background: orange;
+            }
+        }
+
+        .contentFullRow {
+            justify-content: space-between;
+        }
+    }
+
+    .markerLink {
+        color: lime;
+        text-decoration: underline;
+        font-style: italic;
+    }
+
+    .imgExpand {
+        width: 350px;
+        height: 200px;
+        position: absolute;
+        right: -360px;
+        top: 0;
+        border-radius: 10px;
+    }
+}
+
+::ng-deep .customMarkerPopup::-webkit-scrollbar {
+    display: none;
+}
+
+::ng-deep .customMarker::-webkit-scrollbar {
+    display: none;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    border-bottom: none;
+}
+
+::ng-deep .customMarkerPopup::-webkit-scrollbar,
+::ng-deep .customMarker::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+::ng-deep .customMarkerPopup::-webkit-scrollbar-thumb,
+::ng-deep .customMarker::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+::ng-deep .customMarkerPopup::-webkit-scrollbar-track,
+::ng-deep .customMarker::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+:host {
+    ::ng-deep {
+        .p-sidebar {
+            width: 25vw !important;
+            position: absolute;
+            opacity: 0.95;
+            z-index: 2;
+            overflow: scroll;
+        }
+        .p-multiselect-items-wrapper {
+            max-height: unset !important;
+        }
+        .p-sidebar-content {
+            overflow-y: visible !important ;
+        }
+    }
+}
+
+.scrollable-table {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.vtmapgl-ctrl-bottom-right {
+    right: 25vw !important;
+    bottom: 0;
+}
+.vtmapgl-popup-content {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.right-panel {
+    height: 100%;
+}
+
+:host {
+    ::ng-deep {
+        .p-datatable.app-custom-table .p-datatable-thead > tr > th {
+            border-width: 1px 0px 0px 0px;
+        }
+    }
+}

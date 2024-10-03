@@ -1,0 +1,62 @@
+<div [ngClass]="!isPublicPage ? 'hidden md:block' : ''">
+    <router-outlet></router-outlet>
+    <p-toast></p-toast>
+    <p-confirmDialog styleClass="md:w-7 lg:w-5 xl:w-4 xxl:w-3" #cd>
+        <ng-template pTemplate="headless" let-message>
+            <div class="surface-card block border-round">
+                <div
+                    class="flex justify-content-between align-items-center p-4"
+                >
+                    <span class="font-semibold text-xl w-full text-center">
+                        {{ message.header }}
+                    </span>
+                    <p-button
+                        size="small"
+                        icon="ti ti-x text-color-secondary"
+                        [rounded]="true"
+                        [text]="true"
+                        (onClick)="cd.reject()"
+                    ></p-button>
+                </div>
+                <div
+                    class="flex justify-content-start align-items-center gap-2 p-4 pb-5 pt-0"
+                >
+                    <i [class]="message.icon" style="font-size: 1.5rem"></i>
+                    <p
+                        class="mb-0 overflow-hidden text-overflow-ellipsis"
+                        [innerHTML]="message.message"
+                    ></p>
+                </div>
+
+                <div
+                    class="flex justify-content-center align-items-center gap-3 p-4 pt-0"
+                >
+                    <app-button
+                        [autofocus]="true"
+                        [label]="message.rejectLabel"
+                        icon="ti ti-x"
+                        (onClick)="cd.reject()"
+                        styleClass="p-button-outlined"
+                    ></app-button>
+                    <!-- acceptButtonStyleClass will be severity of button -->
+                    <app-button
+                        [label]="message.acceptLabel"
+                        [icon]="
+                            message.acceptButtonStyleClass === 'danger'
+                                ? 'ti ti-trash'
+                                : null
+                        "
+                        [severity]="message.acceptButtonStyleClass ?? null"
+                        (onClick)="cd.accept()"
+                    ></app-button>
+                </div>
+            </div>
+        </ng-template>
+    </p-confirmDialog>
+</div>
+@if (!isPublicPage) {
+    <h6 class="block md:hidden p-4">
+        Please use screens with a minimum width of 768px for optimal website
+        viewing. Thank you.
+    </h6>
+}

@@ -1,0 +1,63 @@
+@if (!isAllow && !loading) {
+    <div class="card">
+        <div class="flex flex-column align-items-center justify-content-center">
+            <div
+                style="
+                    border-radius: 56px;
+                    padding: 0.3rem;
+                    background: linear-gradient(
+                        180deg,
+                        var(--primary-color) 10%,
+                        rgba(33, 150, 243, 0) 30%
+                    );
+                "
+            >
+                <div
+                    class="w-full surface-card py-8 px-5 sm:px-8"
+                    style="border-radius: 53px"
+                >
+                    <div class="text-center mb-5">
+                        <img
+                            src="assets/images/logo-white.svg"
+                            alt="Image"
+                            height="50"
+                            class="mb-3"
+                        />
+                        <div
+                            class="text-900 text-xl font-medium mb-3 uppercase"
+                        >
+                            Cấp quyền truy cập IOC
+                        </div>
+                        <div class="text-500">
+                            Bạn sẽ được cấp quyền đăng nhập vào IOC
+                        </div>
+                        <div class="text-500 mt-1">
+                            Bạn có chắc chắn muốn tiếp tục? Nếu không, bạn hãy
+                            chọn huỷ
+                        </div>
+                    </div>
+                    <div class="flex justify-content-between gap-7">
+                        <button
+                            pButton
+                            label="Huỷ"
+                            class="w-full"
+                            (click)="handleClickCancel()"
+                        ></button>
+                        <button
+                            pButton
+                            label="Truy cập"
+                            class="w-full"
+                            (click)="handleClickAccess()"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (isAllow && !loading) {
+    <div><router-outlet></router-outlet></div>
+}
+@if (loading) {
+    <div></div>
+}

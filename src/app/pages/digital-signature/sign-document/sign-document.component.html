@@ -1,0 +1,122 @@
+<app-loading [loading]="isLoading"></app-loading>
+<div cdkDropListGroup class="page-container">
+    <div class="container-left">
+        <div>
+            <h5>Loại chữ ký</h5>
+            <hr />
+        </div>
+        <div
+            [cdkDropListData]="listSignature"
+            cdkDropList
+            (cdkDropListDropped)="drop($event)"
+            #signatureOptions="cdkDropList"
+            cdkDropListSortingDisabled
+            class="signature_list"
+            [cdkDropListConnectedTo]="dropList"
+        >
+            <div
+                *ngFor="let item of listSignature"
+                [cdkDropListData]="item"
+                class="signature_list--item"
+                cdkDrag
+                [data]="item.id"
+            >
+                <div class="flex signature-item w-full m-0">
+                    <div class="signature-icon center-cell m-0">
+                        <i class="ti ti-signature text-2xl"></i>
+                    </div>
+                    <div class="center-cell">
+                        <strong
+                            [ngClass]="draggedToContainer ? 'tex-dark' : ''"
+                        >
+                            {{ item.label }}
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-center">
+        <div id="pdf-container">
+            <div
+                id="pdf-dropZone"
+                class="mx-auto"
+                style="position: relative"
+                *ngFor="let document of listDocument; let i = index"
+                [ngStyle]="{
+                    width: document.width + 'px',
+                    height: document.height + 'px',
+                }"
+            >
+                <div
+                    #dropZone="cdkDropList"
+                    #page
+                    cdkDropList
+                    [cdkDropListConnectedTo]="[signatureOptions]"
+                    (cdkDropListDropped)="drop($event)"
+                    [ngClass]="i > 0 ? 'mt-5' : ''"
+                    [id]="document.page"
+                >
+                    <img class="pdf-page" [src]="document.fileBase64" />
+                </div>
+                <div *ngFor="let signature of document.signatureSettings">
+                    <app-signature
+                        (updatePositionSignature)="
+                            handleUpdateSignature($event)
+                        "
+                        (onRemoveSignature)="
+                            handleRemoveSignature($event, signature.page)
+                        "
+                        [focusSignatureId]="focusSignatureId"
+                        [signatureProperties]="signature"
+                        [signatureDefaultImg]="defaultSignaturePath"
+                        [itemBounds]="itemBounds"
+                        [containerBounds]="containerBounds"
+                    >
+                    </app-signature>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-right">
+        <div class="contract_design--page">
+            <header>
+                <h5 class="mt-2">{{ documentName }}</h5>
+                <p class="mt-3">Pages: {{ listDocument?.length }}</p>
+            </header>
+
+            <div class="mt-1 overflow-auto">
+                <div
+                    (click)="handleScrollPage(document.page)"
+                    *ngFor="let document of listDocument; let i = index"
+                    class="page cursor-pointer"
+                    [ngClass]="{
+                        page_active: document.page === currentDocumentPage,
+                    }"
+                >
+                    <img [src]="document.fileBase64" alt="pdf-page" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="flex justify-content-center gap-2">
+        <app-button
+            [disabled]="isSigning || isLoading"
+            icon="pi pi-times"
+            label="Hủy"
+            styleClass="p-button-outlined"
+            (onClick)="handleClose()"
+        ></app-button>
+        <app-button
+            [disabled]="isLoading || !hasSignature"
+            [loading]="isSigning"
+            icon="pi pi-check"
+            [label]="'Ký tài liệu'"
+            (onClick)="handleSignDocument()"
+        ></app-button>
+    </div>
+</div>

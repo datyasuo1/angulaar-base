@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: ioc-haiphong-fe
+    labels:
+        app: ioc-haiphong-fe
+    namespace: ioc20productv3
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: ioc-haiphong-fe
+    template:
+        metadata:
+            labels:
+                name: ioc-haiphong-fe
+                app: ioc-haiphong-fe
+        spec:
+            containers:
+                - name: ioc-haiphong-fe
+                  image: harbor.smartcity-cloud.org/ioc/iocv3-webapp-hp:08072024v1
+                  env:
+                      - name: MAP_ACCESS_TOKEN
+                        value: acfda3fa21ccc80fc6946681c4d6729f
+                      - name: BASE_URL
+                        value: /api-ioc
+                      - name: MODELER_URL
+                        value: http://cityos.smartcity-cloud.org/cityos-modeler
+                      - name: APP_CHAT_URL
+                        value: /api-chat
+                      - name: SCREEN_BUILDER_URL
+                        value: https://screenbuilder.smartcity-cloud.org
+                      - name: SCREEN_BUILDER_AUTH_ID
+                        value: 1e6389211fa94ce4ba60c7a6b5367991
+                      - name: SCREEN_BUILDER_REDIRECT_URL
+                        value: https%3A%2F%2Fscreenbuilder.smartcity-cloud.org%2Fuser%2Fauth%2Foauth%2Fredirect
+                      - name: SCREEN_BUILDER_ORG_ID
+                        value: 6615fa0125134a50417805f8
+                      - name: TENANT
+                        value: haiphong
+                      - name: CITYOS_URL
+                        value: /api-cityos
+                      - name: KPI_URL
+                        value: /api-kpi-config
+                      - name: SUPERSET_URL
+                        value: https://superset.smartcity-cloud.org
+                      - name: TABLEAU_URL
+                        value: https://tbl.ioc-cloud.com
+                      - name: SSO_URL
+                        value: https://sso.smartcity-cloud.org/
+                      - name: SSO_REALM
+                        value: HAI_PHONG
+                      - name: SSO_CLIENT_ID
+                        value: ioc-haiphong-public-client
+                  ports:
+                      - containerPort: 80
+                        protocol: TCP
+                  volumeMounts:
+                      - mountPath: /etc/nginx/conf.d
+                        subPath: nginx
+                        name: ioc-v3-fe-storage
+            restartPolicy: Always
+            volumes:
+                - name: ioc-v3-fe-storage
+                  persistentVolumeClaim:
+                      claimName: ioc-v3-fe-pvc

@@ -1,0 +1,10 @@
+<div
+    class="card"
+    [ngClass]="styleClass"
+    cdkTrapFocus
+    [cdkTrapFocusAutoCapture]="true"
+>
+    <h5>{{ cardTitle }}</h5>
+    <ng-container [ngTemplateOutlet]="body"></ng-container>
+    <ng-container [ngTemplateOutlet]="footer"></ng-container>
+</div>

@@ -1,0 +1,81 @@
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách nhóm công việc"
+        [tableData]="listTakGroup"
+        [rows]="rows"
+        [columns]="6"
+        [first]="first"
+        [totalRecords]="totalRecord"
+        [loading]="isLoading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <div class="flex gap-2">
+                <app-button
+                    label="Thêm nhóm công việc"
+                    icon="pi pi-plus"
+                    (onClick)="handleCreateUpdate(null, DIALOG_ACTION.CREATE)"
+                ></app-button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th>Tên nhóm công việc</th>
+                <th>Mô tả</th>
+                <th class="text-center">Thứ tự hiển thị</th>
+                <th style="min-width: 6rem" class="center-cell">Thao tác</th>
+            </tr>
+
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['name']"
+                        maxLength="100"
+                        placeholder="Nhập tên nhóm công việc"
+                        (onChange)="handleSearch($event, 'name')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['description']"
+                        maxLength="1000"
+                        placeholder="Nhập mô tả"
+                        (onChange)="handleSearch($event, 'description')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-group let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ group.name }}</td>
+                <td class="max-line-clamp-5">{{ group.description }}</td>
+                <td class="text-center">{{ group.sortOrder }}</td>
+                <td>
+                    <div class="action-buttons center-cell mr-2">
+                        <app-button
+                            iocVariant="iupdate"
+                            (onClick)="
+                                handleCreateUpdate(group, DIALOG_ACTION.UPDATE)
+                            "
+                        ></app-button>
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="handleDeleteGroup(group)"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>

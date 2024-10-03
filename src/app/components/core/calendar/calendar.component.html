@@ -1,0 +1,29 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <p-calendar
+        styleClass="w-full"
+        [(ngModel)]="value"
+        [selectionMode]="selectionMode"
+        [readonlyInput]="readonlyInput"
+        [placeholder]="placeholder"
+        [showIcon]="showIcon"
+        [minDate]="minDate"
+        [maxDate]="maxDate"
+        [showClear]="showClear"
+        [keepInvalid]="keepInvalid"
+        [dateFormat]="dateFormat"
+        [showOnFocus]="showOnFocus"
+        [appendTo]="appendTo"
+        [disabled]="disabled"
+        [required]="required"
+        [showTime]="showTime"
+        [hourFormat]="hourFormat"
+        (ngModelChange)="handleInput($event)"
+        [ngClass]="{ 'ng-invalid ng-dirty': error }"
+    ></p-calendar>
+</app-label>

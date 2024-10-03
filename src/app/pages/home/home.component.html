@@ -1,0 +1,136 @@
+<app-loading [loading]="isLoading"></app-loading>
+@if (homeConfigData?.isShowDescription) {
+    <div
+        style="top: 20px; background: transparent; height: 95vh"
+        id="firstSectionId"
+    >
+        <div class="grid nested-grid">
+            <div
+                class="mt-5 py-0 col-12 flex justify-content-center align-items-center"
+            >
+                <h4 class="uppercase home-title text-center mb-0 pt-4">
+                    {{ homeConfigData.title }}
+                </h4>
+            </div>
+
+            <div class="col-12 pt-6 banner-container">
+                @if (showImage(homeConfigData?.image)) {
+                    <div
+                        class="grid flex flex-row h-100 default-background h-100"
+                        [ngClass]="{
+                            'bg-default': !homeConfigData.image,
+                            'bg-none': homeConfigData.image,
+                        }"
+                    >
+                        <div
+                            class="col-7 p-0 flex flex-column justify-content-center gallery-container"
+                        >
+                            <p-galleria
+                                [(value)]="homeConfigData.image"
+                                [showItemNavigators]="true"
+                                [showThumbnails]="false"
+                                [showIndicators]="true"
+                                [showIndicatorsOnItem]="true"
+                                [responsiveOptions]="responsiveOptions"
+                                [autoPlay]="true"
+                                [numVisible]="1"
+                                [numScroll]="1"
+                                [circular]="true"
+                                [autoplayInterval]="3000"
+                            >
+                                <ng-template pTemplate="item" let-item>
+                                    <img
+                                        [src]="
+                                            homeConfigData?.imageHost +
+                                            item?.path
+                                        "
+                                        class="gallery-image"
+                                    />
+                                </ng-template>
+                                <ng-template pTemplate="thumbnail" let-item>
+                                    <div
+                                        class="grid grid-nogutter justify-content-center"
+                                    >
+                                        <img
+                                            [src]="
+                                                homeConfigData.imageHost +
+                                                item.path
+                                            "
+                                            style="display: block"
+                                        />
+                                    </div>
+                                </ng-template>
+                            </p-galleria>
+                        </div>
+
+                        <div class="col px-5 py-2">
+                            <div
+                                class="home-intro text-base text-justify pr-2 pt-6"
+                                [innerHTML]="homeConfigData.description"
+                            ></div>
+                        </div>
+                    </div>
+                }
+                @if (!showImage(homeConfigData?.image)) {
+                    <div
+                        style="height: 81vh"
+                        class="grid flex flex-row h-100 default-background"
+                        [ngClass]="{
+                            'bg-default': !homeConfigData.image,
+                            'bg-none': homeConfigData.image,
+                        }"
+                    >
+                        <div class="col-7"></div>
+                        <div class="col px-6 py-2">
+                            <div
+                                class="home-intro text-justify pr-2 pt-6"
+                                style="overflow-y: scroll; color: #e1e2e3"
+                                [innerHTML]="homeConfigData.description"
+                            ></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<div class="app-support py-5" id="secondSectionId">
+    <div class="flex justify-content-end pr-4">
+        <p-autoComplete
+            [(ngModel)]="selectedSearchApplication"
+            [suggestions]="data"
+            placeholder="Nhập tên ứng dụng"
+            (completeMethod)="handleInputChange($event)"
+            (onSelect)="handleSelectFunction($event)"
+            field="name"
+            emptyMessage="Không có dữ liệu"
+        >
+        </p-autoComplete>
+    </div>
+    <br />
+
+    <div *ngFor="let groupApplication of groupApplicationData" class="mb-2">
+        <app-list-app
+            [groupId]="groupApplication.id"
+            [groupName]="groupApplication.name"
+        >
+        </app-list-app>
+    </div>
+</div>
+<div id="scroll-button-container">
+    <div>
+        <div class="scroll-btn">
+            <app-button
+                iocVariant="icon"
+                icon="ti ti-chevrons-down text-3xl"
+                (onClick)="scrollToBottom()"
+            ></app-button>
+        </div>
+        <div>
+            <span class="cursor-pointer" (click)="scrollToBottom()"
+                >Danh sách ứng dụng</span
+            >
+        </div>
+    </div>
+</div>

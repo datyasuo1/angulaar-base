@@ -1,0 +1,107 @@
+.page-container {
+    width: 100%;
+    display: flex;
+    height: 80vh;
+    overflow: hidden;
+    position: relative;
+}
+.signature_list {
+    margin-top: 20px;
+    font-weight: 300;
+    list-style-type: none;
+    gap: 0 10px;
+}
+.signature_list--item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 10px;
+
+    div {
+        margin-left: 10px;
+        font-weight: 700;
+    }
+}
+.signature-item {
+    &:hover {
+        background-color: var(--primary-1000);
+    }
+}
+.container-center {
+    width: 82%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+    padding: 45px;
+    background-color: var(--surface-a);
+    overflow: auto;
+}
+.container-left {
+    padding: 20px;
+    width: 15%;
+    margin-right: 25px;
+    background-color: var(--surface-a);
+    overflow: hidden;
+}
+.container-right {
+    position: relative;
+    padding: 20px;
+    width: 15%;
+    background-color: var(--surface-a);
+    margin-left: 25px;
+    max-height: 100%;
+    overflow: auto;
+}
+.pdf-page {
+    &:not(:first-child) {
+        margin-top: 20px;
+    }
+}
+#pdf-container {
+    img {
+        width: fit-content;
+        object-fit: cover;
+    }
+}
+.page {
+    &:not(:first-child) {
+        margin-top: 15px;
+        position: relative;
+    }
+    img {
+        border: 3px solid;
+        width: 100%;
+        &:hover {
+            border: 4px var(--blue-1000) solid;
+        }
+    }
+}
+.page_active {
+    img {
+        border: 4px var(--blue-1000) solid;
+    }
+}
+.page_view--index {
+    font-size: 13px;
+    padding: 8px;
+}
+.signature-icon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--blue-300);
+}
+.footer {
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #181f27;
+}
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow:
+        0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    color: var(--primary-1000);
+}

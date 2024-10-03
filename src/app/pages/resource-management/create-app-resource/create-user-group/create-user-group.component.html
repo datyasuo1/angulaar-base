@@ -1,0 +1,51 @@
+<app-card-layout styleClass="border-none">
+    <ng-template #body>
+        <div class="grid">
+            <div class="xs:col-12 md:col-12">
+                <app-select
+                    label="Phòng ban"
+                    id="agency"
+                    [options]="listAgency"
+                    [selectedOption]="selectedAgency"
+                    [required]="true"
+                    [error]="errSelectAgency"
+                    optionLabel="name"
+                    placeholder="Chọn Phòng ban"
+                    (onChange)="onSelectAgency($event)"
+                    (onClear)="onClearAgency()"
+                ></app-select>
+            </div>
+            <div class="xs:col-12 md:col-12">
+                <app-select
+                    label="nhóm người dùng"
+                    id="group"
+                    [options]="listGroup"
+                    [selectedOption]="selectedGroup"
+                    [required]="true"
+                    [error]="errSelectGroup"
+                    optionLabel="name"
+                    placeholder="Chọn nhóm người dùng"
+                    (onChange)="onSelectGroup($event)"
+                ></app-select>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                [loading]="loading"
+                icon="pi pi-times"
+                label="Đóng"
+                styleClass="p-button-outlined"
+                (onClick)="onCloseClick()"
+            ></app-button>
+            <app-button
+                [loading]="loading"
+                icon="pi pi-check"
+                [label]="data?.id ? 'Cập nhật' : 'Thêm mới'"
+                (onClick)="onSaveClick()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

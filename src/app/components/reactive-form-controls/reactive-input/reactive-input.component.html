@@ -1,0 +1,24 @@
+<app-label [label]="label" [required]="required" [error]="error">
+    <span
+        [ngClass]="{
+            'p-input-icon-left': iconClass.length > 0,
+            'p-input-icon-right': showClear && value?.length > 0
+        }"
+    >
+        @if (iconClass.length > 0) {
+            <i [class]="iconClass"></i>
+        }
+        <input
+            class="w-full"
+            [type]="type"
+            pInputText
+            [placeholder]="placeholder"
+            [ngClass]="error ? 'ng-invalid ng-dirty' : ''"
+            [formControl]="control"
+            [maxlength]="maxLength"
+        />
+        @if (showClear && value?.length > 0) {
+            <i class="pi pi-times cursor-pointer"></i>
+        }
+    </span>
+</app-label>

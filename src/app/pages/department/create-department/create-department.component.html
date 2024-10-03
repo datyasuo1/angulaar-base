@@ -1,0 +1,71 @@
+<app-card-layout [cardTitle]="cardTitle">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    [autofocus]="true"
+                    label="Tên phòng ban"
+                    [value]="departmentName"
+                    maxLength="255"
+                    [required]="true"
+                    [error]="errorDepartmentName"
+                    (onChange)="handleDataChange($event, 'departmentName')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-au-tree-select
+                    [(administrativeUnit)]="administrativeUnit"
+                    [codes]="auCodes"
+                    [errorAdministrativeUnit]="errorAdministrativeUnit"
+                    [required]="true"
+                    (onChange)="handleAUChange($event)"
+                ></app-au-tree-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-tree-select
+                    label="Phòng ban cha"
+                    [options]="parents"
+                    [selectedOption]="parent"
+                    optionLabel="name"
+                    [error]="errorParent"
+                    [disabled]="!administrativeUnit"
+                    caption="Vui lòng chọn Đơn vị hành chính trước"
+                    [showCaption]="!administrativeUnit"
+                    (onChange)="handleDataChange($event, 'parent')"
+                    placeholder="Lựa chọn"
+                ></app-tree-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-text-area
+                    label="Mô tả"
+                    [(ngModel)]="description"
+                    [rows]="3"
+                    maxLength="1000"
+                >
+                </app-text-area>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center mt-4 gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleCloseCreateDepartment()"
+            ></app-button>
+            @if (cardTitle !== "Cập nhật phòng ban") {
+                <app-button
+                    iocVariant="create"
+                    [loading]="loading"
+                    (onClick)="handleDepartmentForm()"
+                ></app-button>
+            } @else {
+                <app-button
+                    iocVariant="update"
+                    [loading]="loading"
+                    (onClick)="handleDepartmentForm()"
+                ></app-button>
+            }
+        </div>
+    </ng-template>
+</app-card-layout>

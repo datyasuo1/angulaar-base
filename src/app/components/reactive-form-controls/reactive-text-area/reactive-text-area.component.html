@@ -1,0 +1,12 @@
+<app-label [label]="label" [required]="required" [error]="error">
+    <textarea
+        pInputTextarea
+        [autoResize]="autoResize"
+        [cols]="cols"
+        [rows]="rows"
+        [placeholder]="placeholder"
+        [maxlength]="maxLength"
+        [ngClass]="error ? 'ng-invalid ng-dirty' : ''"
+        [formControl]="control"
+    ></textarea>
+</app-label>

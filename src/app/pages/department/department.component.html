@@ -1,0 +1,209 @@
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách phòng ban"
+        [tableData]="data"
+        [rows]="rows"
+        [columns]="7"
+        [first]="first"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <app-button
+                iocVariant="create"
+                (onClick)="handleAddDepartment()"
+                permissionCode="create-department"
+            ></app-button>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 12rem">Tên phòng ban</th>
+                <th style="min-width: 10rem">Loại cảnh báo</th>
+                <th style="min-width: 10rem">Phòng ban cha</th>
+                <th style="min-width: 10rem">Đơn vị hành chính</th>
+                <th style="min-width: 10rem">Mô tả</th>
+                <th style="min-width: 8rem" class="text-center">Thao tác</th>
+            </tr>
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [autofocus]="true"
+                        [value]="searchText"
+                        maxLength="255"
+                        placeholder="Tên phòng ban"
+                        (onChange)="handleInputChange($event)"
+                        iconClass="ti ti-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-au-tree-select
+                        [showLabel]="false"
+                        [hasFilter]="true"
+                        [administrativeUnit]="administrativeUnit"
+                        (onChange)="handleAUFilterChange($event)"
+                    ></app-au-tree-select>
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-data let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ data.name }}</td>
+                <td>
+                    @for (
+                        field of data?.agencyFields;
+                        track field;
+                        let last = $last
+                    ) {
+                        {{ field?.name }}{{ !last ? "," : "" }}
+                    }
+                </td>
+                <td>{{ data?.parentName }}</td>
+                <td>
+                    {{
+                        data?.wardName
+                            ? data?.wardName
+                            : data?.districtName
+                              ? data?.districtName
+                              : data?.provinceName
+                    }}
+                </td>
+                <td>{{ data.description }}</td>
+                <td>
+                    <div
+                        class="flex gap-2 justify-content-center align-items-center"
+                    >
+                        <app-button
+                            iocVariant="iview"
+                            (onClick)="handleViewDetail(data)"
+                        ></app-button>
+                        <app-button
+                            iocVariant="iupdate"
+                            (onClick)="handleUpdateDepartment(data?.id)"
+                            permissionCode="update-department"
+                        ></app-button>
+                        <app-button
+                            iocVariant="iconfig"
+                            (onClick)="handleConfig(data)"
+                        ></app-button>
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="handleConfirmDelete(data)"
+                            permissionCode="delete-department"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>
+
+<app-dialog [(visible)]="showDialog" (onHide)="resetDialog()">
+    <ng-template #header>
+        <span class="text-xl font-bold text-center w-full">
+            {{
+                isViewDetail
+                    ? "Chi tiết phòng ban"
+                    : "Cấu hình loại dịch vụ cho phòng ban " +
+                      clickedDepartment?.name
+            }}
+        </span>
+    </ng-template>
+    <ng-template #content>
+        <div class="grid">
+            @if (isViewDetail) {
+                <div class="col-12 md:col-6">
+                    <app-label label="Tên phòng ban">
+                        <b>{{ clickedDepartment.name | dataValidator }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-label label="Đơn vị hành chính">
+                        <b>
+                            {{
+                                (clickedDepartment?.wardName
+                                    ? clickedDepartment?.wardName
+                                    : clickedDepartment?.districtName
+                                      ? clickedDepartment?.districtName
+                                      : clickedDepartment?.provinceName
+                                ) | dataValidator
+                            }}
+                        </b>
+                    </app-label>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-label label="Phòng ban cha">
+                        <b>
+                            {{ clickedDepartment?.parentName | dataValidator }}
+                        </b>
+                    </app-label>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-label label="Mô tả">
+                        <b>{{
+                            clickedDepartment.description | dataValidator
+                        }}</b>
+                    </app-label>
+                </div>
+                <div class="col-12 md:col-6">
+                    <app-label label="Loại cảnh báo">
+                        <b>
+                            @for (
+                                field of clickedDepartment?.agencyFields;
+                                track field;
+                                let last = $last
+                            ) {
+                                {{ field?.name }}{{ !last ? "," : "" }}
+                            }
+                        </b>
+                    </app-label>
+                </div>
+            } @else {
+                <div class="col-12">
+                    <app-multi-select
+                        [autofocus]="true"
+                        label="Loại dịch vụ"
+                        [options]="services"
+                        [selectedOption]="selectedServices"
+                        [required]="true"
+                        optionLabel="name"
+                        (onChange)="handleServiceChange($event)"
+                        [error]="errorService"
+                        placeholder="Chọn loại dịch vụ"
+                    >
+                    </app-multi-select>
+                </div>
+            }
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            @if (isViewDetail) {
+                <app-button
+                    iocVariant="close"
+                    [autofocus]="true"
+                    (onClick)="showDialog = false"
+                ></app-button>
+            } @else {
+                <app-button
+                    iocVariant="close"
+                    (onClick)="showDialog = false"
+                ></app-button>
+                <app-button
+                    [loading]="dialogLoading"
+                    iocVariant="update"
+                    (onClick)="handleDialogButtonClick()"
+                ></app-button>
+            }
+        </div>
+    </ng-template>
+</app-dialog>

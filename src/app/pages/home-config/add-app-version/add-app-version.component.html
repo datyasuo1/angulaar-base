@@ -1,0 +1,56 @@
+<app-card-layout styleClass="border-none p-1">
+    <ng-template #body>
+        <form [formGroup]="appVersionForm">
+            <div class="grid">
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-input
+                        label="Tên phiên bản"
+                        [error]="
+                            isSubmitted &&
+                            getErrorMsg(appVersionForm, 'version')
+                        "
+                        [required]="true"
+                        placeholder="Nhập tên phiên bản"
+                        [control]="getControl(appVersionForm, 'version')"
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-text-area
+                        label="Mô tả"
+                        [rows]="3"
+                        [control]="getControl(appVersionForm, 'description')"
+                        placeholder="Nhập mô tả thông tin phiên bản"
+                    >
+                    </app-reactive-text-area>
+                </div>
+
+                <div class="xs:col-12 md:col-6">
+                    <app-reactive-checkbox
+                        label="Phiên bản hiện tại"
+                        [control]="getControl(appVersionForm, 'isCurrent')"
+                        [binary]="true"
+                    >
+                    </app-reactive-checkbox>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                [disabled]="isLoading"
+                icon="pi pi-times"
+                label="Đóng"
+                styleClass="p-button-outlined"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [loading]="isLoading"
+                icon="pi pi-check"
+                label="Thêm mới"
+                (onClick)="handleSave()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

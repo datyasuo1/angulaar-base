@@ -1,0 +1,15 @@
+:host {
+    ::ng-deep {
+        .p-button.p-button-text:enabled:hover {
+            color: var(--text-color);
+        }
+
+        .p-button.p-button-text {
+            color: var(--text-color);
+        }
+
+        .p-button:focus {
+            box-shadow: none;
+        }
+    }
+}

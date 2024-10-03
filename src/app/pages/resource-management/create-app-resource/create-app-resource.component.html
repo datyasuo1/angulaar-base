@@ -1,0 +1,396 @@
+<app-card-layout
+    cardTitle="{{
+        currentAppResouceId ? 'Cập nhật' : 'Thêm mới'
+    }} tài nguyên ứng dụng"
+>
+    <ng-template #body>
+        @if (currentAppResouceId) {
+            <h5 class="mt-5">Thông tin chung</h5>
+        }
+
+        <app-loading [loading]="isloading"></app-loading>
+
+        <div class="grid">
+            <div class="xs:col-12 md:col-6">
+                <app-input
+                    label="Tên ứng dụng"
+                    id="resourceName"
+                    [value]="resourceName"
+                    [required]="true"
+                    maxLength="50"
+                    [error]="errAppName"
+                    placeholder="Nhập tên ứng dụng"
+                    (onInput)="handleInputResouceName($event)"
+                ></app-input>
+            </div>
+
+            <div class="xs:col-12 md:col-6">
+                <app-select
+                    label="Nhóm ứng dụng"
+                    id="group"
+                    [options]="listResourceGroup"
+                    [selectedOption]="selectedResouceGroup"
+                    [required]="true"
+                    [error]="errGroup"
+                    optionLabel="name"
+                    placeholder="Chọn nhóm ứng dụng"
+                    (onChange)="handleSelectResouceGroup($event)"
+                ></app-select>
+            </div>
+
+            <div class="xs:col-12 md:col-8">
+                <app-label
+                    label="Giới thiệu"
+                    [required]="true"
+                    [error]="errDescription"
+                >
+                    <p-editor
+                        [(ngModel)]="description"
+                        [style]="{ height: '320px' }"
+                        (onTextChange)="handleTextChange($event)"
+                    ></p-editor>
+                </app-label>
+            </div>
+
+            <div class="md:col-4">
+                <div class="xs:col-12 md:col-12">
+                    <div class="mt-3">
+                        <app-file
+                            label="Ảnh đại diện (app)"
+                            accept=".png, .jpeg, .jpg"
+                            [file]="appImage"
+                            [imageHost]="imageHost"
+                            [size]="5"
+                            (onChange)="handleAppImageChange($event)"
+                        ></app-file>
+                    </div>
+                </div>
+                <div class="xs:col-12 md:col-12">
+                    <div class="mt-3">
+                        <app-file
+                            label="Ảnh đại diện (web)"
+                            accept=".png, .jpeg, .jpg"
+                            [file]="webImage"
+                            [imageHost]="imageHost"
+                            [size]="5"
+                            (onChange)="handleWebImageChange($event)"
+                        ></app-file>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (currentAppResouceId) {
+            <div class="flex justify-content-center mt-4 gap-2">
+                <app-button
+                    [loading]="loading"
+                    icon="pi pi-times"
+                    label="Đóng"
+                    styleClass="p-button-outlined"
+                    (onClick)="handleClose()"
+                ></app-button>
+                <app-button
+                    [loading]="loading"
+                    icon="pi pi-check"
+                    [label]="currentAppResouceId ? 'Cập nhật' : 'Thêm mới'"
+                    (onClick)="handleCreateResources()"
+                ></app-button>
+            </div>
+        }
+        <div class="xs:col-12 md:col-12 flex justify-content-between p-0 mt-5">
+            <h5>Phiên bản ứng dụng mobile</h5>
+            <app-button
+                (onClick)="handleshowCreateMobileVersion()"
+                icon="pi pi-plus"
+                label="Thêm phiên bản"
+            >
+            </app-button>
+        </div>
+        @if (listMobileVersion?.length > 0) {
+            <div class="mt-2">
+                <p-table
+                    [value]="listMobileVersion"
+                    [rowHover]="true"
+                    styleClass="p-datatable-gridlines p-datatable-striped mt-1"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>STT</th>
+                            <th>Phiên bản</th>
+                            <th>Mô tả</th>
+                            <th style="min-width: 20rem">Loại ứng dụng</th>
+                            <th style="min-width: 10rem">URL</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th style="width: 20rem" class="text-center">
+                                Phiên bản hiện tại
+                            </th>
+                            <th style="width: 15rem" class="text-center">
+                                Thao tác
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template
+                        pTemplate="body"
+                        let-data
+                        let-rowIndex="rowIndex"
+                    >
+                        <tr>
+                            <td>{{ rowIndex + 1 }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.description }}</td>
+                            <td>{{ data.categoryName }}</td>
+                            <td>{{ data.url }}</td>
+                            <td class="text-center">
+                                <app-tag
+                                    [value]="data.statusName"
+                                    [severity]="
+                                        getTagServerity(data.appStatusId)
+                                    "
+                                >
+                                </app-tag>
+                            </td>
+                            <td class="text-center">
+                                <p-radioButton
+                                    [disabled]="currentAppResouceId"
+                                    [inputId]="data.id"
+                                    name="mobileVer"
+                                    [value]="data"
+                                    [(ngModel)]="currentMobileVersion"
+                                    (onClick)="handleClickNowVersion(data)"
+                                ></p-radioButton>
+                            </td>
+                            <td>
+                                <div class="center-cell">
+                                    @if (currentAppResouceId) {
+                                        <app-button
+                                            iocVariant="iupdate"
+                                            (onClick)="
+                                                handleUpdateMobileVersionDiglog(
+                                                    data
+                                                )
+                                            "
+                                        ></app-button>
+                                    }
+
+                                    <app-button
+                                        iocVariant="idelete"
+                                        (onClick)="handleDeleteAppVersion(data)"
+                                    ></app-button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td [attr.colspan]="3">Không có dữ liệu.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        }
+
+        <div class="xs:col-12 md:col-12 flex justify-content-between p-0 mt-5">
+            <h5>Phiên bản ứng dụng web</h5>
+            <app-button
+                (onClick)="handleshowCreateWebVersion()"
+                icon="pi pi-plus"
+                label="Thêm phiên bản"
+            >
+            </app-button>
+        </div>
+        @if (listWebVersion?.length > 0) {
+            <div class="mt-2">
+                <p-table
+                    [value]="listWebVersion"
+                    [rowHover]="true"
+                    styleClass="p-datatable-gridlines p-datatable-striped mt-1"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>STT</th>
+                            <th>Phiên bản</th>
+                            <th>Mô tả</th>
+                            <th style="min-width: 20rem">Loại ứng dụng</th>
+                            <th style="min-width: 10rem">URL</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th style="width: 20rem" class="text-center">
+                                Phiên bản hiện tại
+                            </th>
+                            <th style="width: 15rem" class="text-center">
+                                Thao tác
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template
+                        pTemplate="body"
+                        let-data
+                        let-rowIndex="rowIndex"
+                    >
+                        <tr>
+                            <td>{{ rowIndex + 1 }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.description }}</td>
+                            <td>{{ data.categoryName }}</td>
+                            <td>{{ data.url }}</td>
+                            <td class="text-center">
+                                <app-tag
+                                    [value]="data.statusName"
+                                    [severity]="
+                                        getTagServerity(data.appStatusId)
+                                    "
+                                >
+                                </app-tag>
+                            </td>
+                            <td class="text-center">
+                                <p-radioButton
+                                    [disabled]="currentAppResouceId"
+                                    [inputId]="data.id"
+                                    name="webVer"
+                                    [value]="data"
+                                    [(ngModel)]="currentWebVersion"
+                                    (onClick)="handleClickNowVersion(data)"
+                                ></p-radioButton>
+                            </td>
+                            <td>
+                                <div class="center-cell">
+                                    @if (currentAppResouceId) {
+                                        <app-button
+                                            iocVariant="iupdate"
+                                            (onClick)="
+                                                handleUpdateWebVersionDiglog(
+                                                    data
+                                                )
+                                            "
+                                        ></app-button>
+                                    }
+
+                                    <app-button
+                                        iocVariant="idelete"
+                                        (onClick)="handleDeleteWebVersion(data)"
+                                    ></app-button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td [attr.colspan]="3">Không có dữ liệu.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        }
+        <div class="xs:col-12 md:col-12 flex justify-content-between p-0 mt-5">
+            <h5>Danh sách nhóm người dùng</h5>
+            <app-button
+                (onClick)="handleCreateGroupDialog()"
+                icon="pi pi-plus"
+                label="Thêm nhóm người dùng"
+            >
+            </app-button>
+        </div>
+        @if (listGroup?.length > 0) {
+            <div class="mt-2">
+                <p-table
+                    [value]="listGroup"
+                    [rowHover]="true"
+                    styleClass="p-datatable-gridlines p-datatable-striped mt-1"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 10rem">STT</th>
+                            <th>tên nhóm</th>
+                            <th style="width: 15rem" class="text-center">
+                                Thao tác
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template
+                        pTemplate="body"
+                        let-data
+                        let-rowIndex="rowIndex"
+                    >
+                        <tr>
+                            <td>{{ rowIndex + 1 }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>
+                                <div class="center-cell">
+                                    @if (currentAppResouceId) {
+                                        <app-button
+                                            iocVariant="iupdate"
+                                            (onClick)="handleUpdateGroup(data)"
+                                        ></app-button>
+                                    }
+
+                                    <app-button
+                                        iocVariant="idelete"
+                                        (onClick)="handleDeleteGroup(data)"
+                                    ></app-button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td [attr.colspan]="3">Không có dữ liệu.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        }
+    </ng-template>
+    @if (!currentAppResouceId) {
+        <ng-template #footer>
+            <div class="flex justify-content-center mt-4 gap-2">
+                <app-button
+                    [loading]="loading"
+                    icon="pi pi-times"
+                    label="Đóng"
+                    styleClass="p-button-outlined"
+                    (onClick)="handleClose()"
+                ></app-button>
+                <app-button
+                    [loading]="loading"
+                    icon="pi pi-check"
+                    [label]="currentAppResouceId ? 'Cập nhật' : 'Thêm mới'"
+                    (onClick)="handleCreateResources()"
+                ></app-button>
+            </div>
+        </ng-template>
+    }
+</app-card-layout>
+
+@if (showCreateVersionDialog) {
+    <p-dialog
+        header="{{
+            currentDialogMode === 1 ? 'Cập nhật' : 'Thêm'
+        }} phiên bản ứng dụng {{ currentVersionType }}"
+        [modal]="true"
+        [(visible)]="showCreateVersionDialog"
+        [style]="{ width: '30vw' }"
+    >
+        <app-create-resource-version
+            (onSave)="handleSaveCreateVersion($event)"
+            (onClose)="handleCloseCreateVersion()"
+            [versionType]="currentVersionType"
+            [versionToUpdate]="versionToUpdate"
+        ></app-create-resource-version>
+    </p-dialog>
+}
+
+@if (showSelectGroupDialog) {
+    <p-dialog
+        header="{{
+            currentDialogMode === 1 ? 'Cập nhật' : 'Thêm'
+        }} nhóm người dùng"
+        [modal]="true"
+        [(visible)]="showSelectGroupDialog"
+        [style]="{ width: '30vw' }"
+    >
+        <app-create-user-group
+            [data]="updatingGroup"
+            (onSave)="hanldeSaveSelectUserGroup($event)"
+            (onClose)="hanldeCloseSelectUserGroup()"
+        >
+        </app-create-user-group>
+    </p-dialog>
+}

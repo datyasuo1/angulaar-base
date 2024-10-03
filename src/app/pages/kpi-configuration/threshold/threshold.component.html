@@ -1,0 +1,187 @@
+<div class="grid">
+    <div class="col-12 md:col-4">
+        <app-input
+            [autoTrim]="true"
+            [autofocus]="true"
+            label="Tên cấu hình KPI"
+            [value]="name"
+            [error]="errorName"
+            [required]="true"
+            maxLength="255"
+            (onChange)="handleDataChange($event, 'name')"
+        ></app-input>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-select
+            label="Loại dịch vụ"
+            [selectedOption]="serviceType"
+            [options]="serviceTypes"
+            [required]="true"
+            placeholder="Chọn dịch vụ"
+            [error]="errorServiceType"
+            (onChange)="handleServiceTypeChange($event)"
+        ></app-select>
+    </div>
+</div>
+<div class="card">
+    <div class="flex justify-content-end align-items-center gap-2">
+        <app-button (onClick)="addLogic()">Thêm logic</app-button>
+        <app-button (onClick)="addCriteria()"> Thêm tiêu chí </app-button>
+        <app-button (onClick)="addGroup()">Thêm nhóm</app-button>
+    </div>
+    <ng-template #tmplNode let-node="node">
+        <div
+            class="node-item frame-border"
+            [attr.data-id]="node.id"
+            [attr.id]="'node-' + node.id"
+        >
+            <div class="node-title" (click)="handleNodeClick(node)">
+                <div
+                    class="flex justify-content-between align-items-center gap-2 w-full"
+                >
+                    <div
+                        class="flex justify-content-start gap-2 align-items-center"
+                    >
+                        @if (node.children?.length && !node.isExpanded) {
+                            <i class="ti ti-chevron-right"></i>
+                        }
+                        @if (node.children?.length && node.isExpanded) {
+                            <i class="ti ti-chevron-down"></i>
+                        }
+                        <div style="min-width: 100px">
+                            {{
+                                node.type === "condition"
+                                    ? "Phép logic"
+                                    : node.type === "criteria"
+                                      ? "Tiêu chí"
+                                      : "Nhóm"
+                            }}
+                        </div>
+
+                        @if (node.type === "condition") {
+                            <div
+                                class="w-full justify-content-center align-items-center flex"
+                                (click)="handleStopPropagation($event)"
+                            >
+                                <app-select
+                                    style="min-width: 200px"
+                                    label="Phép logic"
+                                    [selectedOption]="node.selectedLogic"
+                                    [options]="logics"
+                                    [required]="true"
+                                    placeholder="Chọn phép logic"
+                                    [error]="node.errorLogic"
+                                    (onChange)="handleLogicChange($event, node)"
+                                ></app-select>
+                            </div>
+                        }
+                        @if (node.type === "criteria") {
+                            <div
+                                class="w-full justify-content-center align-items-center flex gap-2"
+                                (click)="handleStopPropagation($event)"
+                            >
+                                <app-select
+                                    style="min-width: 200px"
+                                    label="Thông số"
+                                    [selectedOption]="node.selectedParameter"
+                                    [options]="parameters"
+                                    placeholder="Chọn thông số"
+                                    [required]="true"
+                                    [error]="node.errorParameter"
+                                    (onChange)="
+                                        handleParameterChange($event, node)
+                                    "
+                                ></app-select>
+                                <app-select
+                                    style="min-width: 200px"
+                                    label="Điều kiện so sánh"
+                                    [selectedOption]="
+                                        node.selectedComparisonCondition
+                                    "
+                                    [options]="node.comparisonConditions"
+                                    [required]="true"
+                                    placeholder="Chọn điều kiện so sánh"
+                                    [error]="node.errorComparisonCondition"
+                                    (onChange)="
+                                        handleConparisonConditionChange(
+                                            $event,
+                                            node
+                                        )
+                                    "
+                                ></app-select>
+                                <app-input-number
+                                    label="Giá trị"
+                                    style="min-width: 200px"
+                                    [value]="node.value"
+                                    [required]="true"
+                                    [error]="node.errorValue"
+                                    (onChange)="handleValueChange($event, node)"
+                                ></app-input-number>
+                            </div>
+                        }
+                    </div>
+                    <app-button
+                        iocVariant="idelete"
+                        (onClick)="handleDeleteRow(node)"
+                    ></app-button>
+                </div>
+            </div>
+
+            @if (node.isExpanded && node.children?.length) {
+                <div
+                    class="node-children"
+                    cdkDropList
+                    [cdkDropListData]="node.children"
+                    [id]="node.id"
+                    [cdkDropListConnectedTo]="dropTargetIds"
+                    (cdkDropListDropped)="drop($event)"
+                    [cdkDropListSortingDisabled]="true"
+                >
+                    @for (child of node.children; track child) {
+                        <div
+                            cdkDrag
+                            [cdkDragData]="child.id"
+                            (cdkDragMoved)="dragMoved($event)"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    tmplNode;
+                                    context: { node: child }
+                                "
+                            ></ng-container>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </ng-template>
+
+    <div
+        cdkDropList
+        [cdkDropListData]="list"
+        [id]="'main'"
+        [cdkDropListConnectedTo]="dropTargetIds"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListSortingDisabled]="true"
+    >
+        @for (node of list; track node) {
+            <div
+                cdkDrag
+                [cdkDragData]="node.id"
+                (cdkDragMoved)="dragMoved($event)"
+            >
+                <ng-container
+                    *ngTemplateOutlet="tmplNode; context: { node: node }"
+                ></ng-container>
+            </div>
+        }
+    </div>
+    <!-- Development Debug Only -->
+    <!-- <p><strong>TREE DATA PREVIEW</strong></p>
+      <pre>{{ list | json }}</pre> -->
+</div>
+
+<div class="flex justify-content-center mt-4 gap-2">
+    <app-button iocVariant="close" (onClick)="handleClose()"></app-button>
+    <app-button label="Tiếp theo" (onClick)="movePage()"></app-button>
+</div>

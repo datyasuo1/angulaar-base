@@ -1,0 +1,106 @@
+<app-loading [loading]="isLoading"></app-loading>
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách máy chủ"
+        [tableData]="listServer"
+        [rows]="rows"
+        [columns]="6"
+        [first]="first"
+        [totalRecords]="totalRecord"
+        [loading]="isLoading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <div class="flex gap-2">
+                <app-button
+                    label="Thêm máy chủ"
+                    icon="pi pi-plus"
+                    (onClick)="handleAddServer()"
+                ></app-button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 12rem">Tên máy chủ</th>
+                <th style="min-width: 14rem">Địa chỉ IP vật lí</th>
+                <th style="min-width: 14rem">Link giám sát</th>
+                <th style="min-width: 10rem" class="text-center">
+                    Số lượng máy ảo
+                </th>
+                <th style="min-width: 10rem" class="text-center">Trạng thái</th>
+                <th style="min-width: 6rem" class="center-cell">Thao tác</th>
+            </tr>
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['name']"
+                        placeholder="Nhập tên phần mềm"
+                        (onChange)="handleSearch($event, 'name')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['ipAddress']"
+                        placeholder="Nhập địa chỉ IP"
+                        (onChange)="handleSearch($event, 'ipAddress')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['monitorLink']"
+                        placeholder="Nhập link giám sát"
+                        (onChange)="handleSearch($event, 'monitorLink')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-server let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ server.name }}</td>
+                <td>{{ server.ipAddressPhysical }}</td>
+                <td>
+                    <a
+                        class="link"
+                        target="_blank"
+                        href="{{ server.monitorLink }}"
+                        >{{ server.monitorLink }}</a
+                    >
+                </td>
+                <td class="text-center">{{ server.virtualMachineQuantity }}</td>
+                <td class="text-center">
+                    <app-tag
+                        [value]="server.statusName"
+                        [severity]="getTagSeverity(server.status)"
+                    >
+                    </app-tag>
+                </td>
+                <td>
+                    <div class="action-buttons center-cell mr-2">
+                        <app-button
+                            iocVariant="iupdate"
+                            (onClick)="handleUpdateServer(server)"
+                        ></app-button>
+
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="handleRemoveServer(server)"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>

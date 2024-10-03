@@ -1,0 +1,16 @@
+<app-label [label]="label" [required]="required" [error]="error">
+    <span>
+        <p-inputNumber
+            class="w-full"
+            styleClass="w-full"
+            [maxlength]="maxLength"
+            [min]="min"
+            [max]="max"
+            [useGrouping]="useGrouping"
+            [formControl]="control"
+            [ngClass]="error ? 'ng-invalid ng-dirty' : ''"
+            [placeholder]="placeholder"
+        >
+        </p-inputNumber>
+    </span>
+</app-label>

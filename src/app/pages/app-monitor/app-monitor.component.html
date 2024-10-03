@@ -1,0 +1,81 @@
+<h4 class="text-center">THÔNG TIN TÀI NGUYÊN CÁC PHẦN MỀM TRIỂN KHAI</h4>
+
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách máy chủ phần mềm triển khai"
+        [tableData]="listSystem"
+        [rows]="rows"
+        [columns]="6"
+        [first]="first"
+        [totalRecords]="totalRecord"
+        [loading]="isLoading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 20rem">Tên phần mềm</th>
+                <th>Link hệ thống</th>
+                <th>Địa chỉ IP</th>
+                <th class="text-center">Thao tác</th>
+            </tr>
+
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['name']"
+                        maxLength="255"
+                        placeholder="Nhập tên phần mềm"
+                        (onChange)="handleSearch($event, 'name')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['domain']"
+                        maxLength="255"
+                        placeholder="Nhập link hệ thống"
+                        (onChange)="handleSearch($event, 'domain')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['ipAddress']"
+                        maxLength="255"
+                        placeholder="Nhập địa chỉ IP"
+                        (onChange)="handleSearch($event, 'ipAddress')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    ></app-input>
+                </th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-system let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ system.name }}</td>
+                <td>
+                    <a target="_blank" class="link" [href]="system.domain">{{
+                        system.domain
+                    }}</a>
+                </td>
+                <td>{{ system.ipAddress }}</td>
+                <td class="text-center">
+                    <app-button
+                        (onClick)="viewMonitorLink(system.monitorAppLink)"
+                        iocVariant="icon"
+                        icon="ti ti-brand-speedtest text-2xl"
+                        tooltip="Xem giám sát tài nguyên hệ thống"
+                    >
+                    </app-button>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>

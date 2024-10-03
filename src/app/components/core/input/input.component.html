@@ -1,0 +1,38 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <span
+        [ngClass]="{
+            'p-input-icon-left': iconClass.length > 0,
+            'p-input-icon-right': showClear && value?.length > 0,
+        }"
+    >
+        @if (iconClass.length > 0) {
+            <i [class]="iconClass"></i>
+        }
+        <input
+            pAutoFocus
+            [autofocus]="autofocus"
+            class="w-full"
+            [type]="type"
+            pInputText
+            [value]="value"
+            [required]="required"
+            [disabled]="disabled"
+            [maxLength]="maxLength"
+            [placeholder]="placeholder"
+            (change)="handleChange($event)"
+            (input)="handleInput($event)"
+            (keydown.enter)="handleEnter()"
+            (blur)="handleBlur($event)"
+            [ngClass]="{ 'ng-invalid ng-dirty': error }"
+        />
+        @if (showClear && value?.length > 0 && !disabled) {
+            <i class="ti ti-x cursor-pointer" (click)="handleClear()"></i>
+        }
+    </span>
+</app-label>

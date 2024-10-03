@@ -1,0 +1,19 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <p-cascadeSelect
+        [(ngModel)]="selectedOption"
+        [options]="options"
+        [optionLabel]="optionLabel"
+        [optionGroupLabel]="optionGroupLabel"
+        [optionGroupChildren]="optionGroupChildren"
+        [placeholder]="placeholder"
+        (onChange)="handleChange($event)"
+        [required]="required"
+        [ngClass]="{ 'ng-invalid ng-dirty': error }"
+    ></p-cascadeSelect>
+</app-label>

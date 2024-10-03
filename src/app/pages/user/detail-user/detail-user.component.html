@@ -1,0 +1,97 @@
+<app-card-layout cardTitle="Chi tiết người dùng">
+    <ng-template #body>
+        <p-tabView>
+            <p-tabPanel header="Thông tin chung">
+                <ng-template pTemplate="content">
+                    <div class="grid">
+                        <div class="col-12 md:col-6">
+                            <app-label label="Tên đăng nhập">
+                                <b>{{ userData?.username | dataValidator }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Họ và tên">
+                                <b>
+                                    {{ userData?.fullName | dataValidator }}
+                                </b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Số điện thoại">
+                                <b>{{ userData?.mainPhone | dataValidator }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Email">
+                                <b>{{ userData?.email | dataValidator }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Số CCCD">
+                                <b>
+                                    {{ userData?.citizenId | dataValidator }}
+                                </b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Ngày sinh">
+                                <b>
+                                    {{
+                                        userData?.birthday
+                                            | dateTimeConverter: "DATE"
+                                            | dataValidator
+                                    }}
+                                </b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Giới tính">
+                                <b>{{
+                                    getSex(userData?.sex) | dataValidator
+                                }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Địa chỉ">
+                                <b>{{ userData?.address | dataValidator }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Phòng ban">
+                                <b>{{
+                                    userData?.agencyName | dataValidator
+                                }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Vai trò">
+                                <b>{{ role | dataValidator }}</b>
+                            </app-label>
+                        </div>
+                    </div>
+                    <div
+                        class="flex justify-content-center align-items-center gap-2 mt-4"
+                    >
+                        <app-button
+                            iocVariant="close"
+                            [autofocus]="true"
+                            (onClick)="handleClose()"
+                        ></app-button>
+                    </div>
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="Nhóm">
+                <ng-template pTemplate="content">
+                    <app-group [viewOnly]="true"></app-group>
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="Phân quyền">
+                <ng-template pTemplate="content">
+                    <app-decentralization
+                        [viewOnly]="true"
+                    ></app-decentralization>
+                </ng-template>
+            </p-tabPanel>
+        </p-tabView>
+    </ng-template>
+</app-card-layout>

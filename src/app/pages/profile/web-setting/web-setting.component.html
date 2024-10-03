@@ -1,0 +1,143 @@
+<app-card-layout cardTitle="Cài đặt giao diện">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <div class="grid">
+                    <div class="col-12">
+                        <app-label label="Kích thước">
+                            <div class="flex align-items-center mt-2">
+                                <app-button
+                                    [autofocus]="true"
+                                    icon="ti ti-minus"
+                                    (onClick)="decrementScale()"
+                                    styleClass="p-button-text p-button-rounded w-2rem h-2rem mr-2"
+                                    [disabled]="scale === scales[0]"
+                                ></app-button>
+                                <div class="flex gap-2 align-items-center">
+                                    @for (s of scales; track s) {
+                                        <i
+                                            class="ti ti-circle-filled text-300"
+                                            [ngClass]="{
+                                                'text-primary-500': s === scale
+                                            }"
+                                        ></i>
+                                    }
+                                </div>
+                                <app-button
+                                    icon="ti ti-plus"
+                                    (onClick)="incrementScale()"
+                                    styleClass="p-button-text p-button-rounded w-2rem h-2rem ml-2"
+                                    [disabled]="
+                                        scale === scales[scales.length - 1]
+                                    "
+                                ></app-button>
+                            </div>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Ngôn ngữ">
+                            <div class="flex gap-4 my-3">
+                                <app-radio-button
+                                    name="language"
+                                    value="vi"
+                                    label="Tiếng Việt"
+                                    [(ngModel)]="language"
+                                ></app-radio-button>
+                                <app-radio-button
+                                    name="language"
+                                    value="en"
+                                    label="Tiếng Anh"
+                                    [(ngModel)]="language"
+                                ></app-radio-button>
+                            </div>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Thanh bên">
+                            <div class="mt-2">
+                                <p-inputSwitch
+                                    [(ngModel)]="menu"
+                                ></p-inputSwitch>
+                            </div>
+                        </app-label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-label label="Chế độ tối">
+                    <div class="mt-2">
+                        <p-inputSwitch
+                            [(ngModel)]="colorScheme"
+                        ></p-inputSwitch>
+                    </div>
+                    <div class="mt-4">
+                        @if (
+                            this.layoutService.config.colorScheme === "light"
+                        ) {
+                            <div class="grid">
+                                @for (item of themeList; track item) {
+                                    <div
+                                        class="col-3 sm:col-2 md:col-2 xl:col-2"
+                                        [hidden]="!(item.mode === 'light')"
+                                    >
+                                        <button
+                                            [ngClass]="{
+                                                'p-link w-3rem h-3rem custom-button ': true,
+                                                'chosen-theme': item.active
+                                            }"
+                                            (click)="
+                                                changeTheme(
+                                                    item.theme,
+                                                    item.mode
+                                                )
+                                            "
+                                            [pTooltip]="item.alt"
+                                            tooltipPosition="top"
+                                        >
+                                            <img
+                                                [src]="item.src"
+                                                class="w-full h-full"
+                                                [alt]="item.alt"
+                                            />
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        @if (this.layoutService.config.colorScheme === "dark") {
+                            <div class="grid">
+                                @for (item of themeList; track item) {
+                                    <div
+                                        class="col-3 sm:col-2 md:col-2 xl:col-2"
+                                        [hidden]="!(item.mode === 'dark')"
+                                    >
+                                        <button
+                                            [ngClass]="{
+                                                'p-link w-3rem h-3rem custom-button ': true,
+                                                'chosen-theme': item.active
+                                            }"
+                                            (click)="
+                                                changeTheme(
+                                                    item.theme,
+                                                    item.mode
+                                                )
+                                            "
+                                            [pTooltip]="item.alt"
+                                            tooltipPosition="top"
+                                        >
+                                            <img
+                                                [src]="item.src"
+                                                class="w-full h-full"
+                                                [alt]="item.alt"
+                                            />
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </app-label>
+            </div>
+        </div>
+    </ng-template>
+</app-card-layout>

@@ -1,0 +1,21 @@
+:host ::ng-deep .my-tree .p-treenode-label {
+    width: 100%;
+}
+:host ::ng-deep .my-tree .p-treenode-content {
+    background: #232d39;
+}
+
+:host ::ng-deep .my-tree.p-tree {
+    border: none;
+}
+.content-wrapper {
+    border-radius: 8px;
+    background-color: #181f27;
+}
+:host ::ng-deep .p-treenode.p-treenode-leaf:hover .action-buttons {
+    visibility: visible;
+}
+
+.action-buttons {
+    visibility: hidden;
+}

@@ -1,0 +1,65 @@
+<app-card-layout styleClass="border-none p-1">
+    <ng-template #body>
+        <form [formGroup]="taskGroupForm">
+            <div class="grid">
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-input
+                        label="Tên nhóm công việc"
+                        maxLength="100"
+                        [required]="true"
+                        [error]="
+                            submitted && getErrorMsg(taskGroupForm, 'name')
+                        "
+                        placeholder="Nhập tên nhóm công việc"
+                        [control]="getControl(taskGroupForm, 'name')"
+                    ></app-reactive-input>
+                </div>
+
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-text-area
+                        label="Mô tả"
+                        maxLength="1000"
+                        [error]="
+                            submitted &&
+                            getErrorMsg(taskGroupForm, 'description')
+                        "
+                        placeholder="Nhập mô tả"
+                        [control]="getControl(taskGroupForm, 'description')"
+                    ></app-reactive-text-area>
+                </div>
+
+                <div class="xs:col-12 md:col-12">
+                    <app-reactive-input-number
+                        label="Thứ tự hiển thị"
+                        maxLength="50"
+                        [error]="getErrorMsg(taskGroupForm, 'sortOrder')"
+                        placeholder="Nhập thứ tự hiển thị"
+                        [control]="getControl(taskGroupForm, 'sortOrder')"
+                    ></app-reactive-input-number>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                [disabled]="isLoading"
+                icon="pi pi-times"
+                label="Đóng"
+                styleClass="p-button-outlined"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [loading]="isLoading"
+                icon="pi pi-check"
+                [label]="
+                    config.data.action === DIALOG_ACTION.CREATE
+                        ? 'Thêm mới'
+                        : 'Cập nhật'
+                "
+                (onClick)="handleSave()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

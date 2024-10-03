@@ -1,0 +1,203 @@
+<app-card-layout [cardTitle]="cardTitle">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-4">
+                <div class="grid">
+                    <div class="col-12">
+                        <app-input
+                            [autoTrim]="true"
+                            [autofocus]="true"
+                            label="Tên tài nguyên"
+                            [value]="name"
+                            maxLength="255"
+                            [required]="true"
+                            [error]="errorName"
+                            (onChange)="handleDataChange($event, 'name')"
+                        ></app-input>
+                    </div>
+                    <div class="col-12">
+                        <app-select
+                            label="Loại tài nguyên"
+                            [options]="types"
+                            [selectedOption]="type"
+                            [required]="true"
+                            [error]="errorType"
+                            (onChange)="handleTypeChange($event)"
+                            placeholder="Lựa chọn"
+                        ></app-select>
+                    </div>
+
+                    <div class="col-12">
+                        <app-input
+                            [autoTrim]="true"
+                            label="Số điện thoại"
+                            [value]="phoneNumber"
+                            [error]="errorPhoneNumber"
+                            maxLength="10"
+                            (onChange)="handleDataChange($event, 'phoneNumber')"
+                        >
+                        </app-input>
+                    </div>
+                    <div class="col-12">
+                        <app-au-tree-select
+                            [(administrativeUnit)]="administrativeUnit"
+                            [codes]="auCodes"
+                            [errorAdministrativeUnit]="errorAdministrativeUnit"
+                            [required]="true"
+                            (onChange)="
+                                handleDataChange($event, 'administrativeUnit')
+                            "
+                        ></app-au-tree-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-8">
+                <app-map
+                    label="Địa điểm"
+                    [useSearch]="true"
+                    (onAddressChange)="handleAddressChange($event)"
+                >
+                    <ng-template #content>
+                        @if (address?.length > 0) {
+                            <div class="w-full p-input-icon-right">
+                                <div>
+                                    <i class="ti ti-map-pin"></i>
+                                    {{ address }}
+                                </div>
+
+                                <i
+                                    class="ti ti-x cursor-pointer"
+                                    (click)="handleClearAddress()"
+                                ></i>
+                            </div>
+                        }
+                    </ng-template>
+                </app-map>
+            </div>
+            <div class="col-12">
+                @if (commonProperties.length > 0) {
+                    <app-label label="Thuộc tính dùng chung">
+                        <p-table
+                            [value]="commonProperties"
+                            styleClass="p-datatable-gridlines p-datatable-striped"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Tên thuộc tính</th>
+                                    <th>Loại giá trị</th>
+                                    <th class="text-center">Trường bắt buộc</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template
+                                pTemplate="body"
+                                let-data
+                                let-rowIndex="rowIndex"
+                            >
+                                <tr>
+                                    <td>
+                                        {{ data?.name }}
+                                    </td>
+                                    <td>
+                                        {{ data?.valueType?.value }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ data?.required ? "Có" : "Không" }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td [attr.colspan]="3">
+                                        Không có dữ liệu.
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </app-label>
+                }
+            </div>
+        </div>
+        <app-button
+            styleClass="p-button-outlined my-4"
+            icon="ti ti-plus"
+            label="Thêm thuộc tính riêng"
+            (onClick)="handleAddProperties()"
+        ></app-button>
+        @if (specialityProperties?.length > 0) {
+            <p-table
+                [value]="specialityProperties"
+                styleClass="p-datatable-gridlines p-datatable-striped"
+            >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 25rem">Tên thuộc tính</th>
+                        <th style="min-width: 25rem">Loại giá trị</th>
+                        <th style="min-width: 25rem">Giá trị</th>
+                        <th style="min-width: 25rem" class="text-center">
+                            Thao tác
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-data let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            <app-input
+                                [autoTrim]="true"
+                                [value]="data.name"
+                                maxLength="255"
+                                [required]="true"
+                                [error]="data.errorName"
+                                (onChange)="handleName($event, rowIndex)"
+                            ></app-input>
+                        </td>
+                        <td>
+                            <app-select
+                                [options]="valueTypes"
+                                [selectedOption]="data.valueType"
+                                optionLabel="value"
+                                [required]="true"
+                                [error]="data.errorValueType"
+                                (onChange)="handleValueType($event, rowIndex)"
+                                placeholder="Lựa chọn"
+                            ></app-select>
+                        </td>
+                        <td>
+                            <app-input
+                                [autoTrim]="true"
+                                [value]="data.value"
+                                maxLength="255"
+                                [required]="true"
+                                [error]="data.errorValue"
+                                (onChange)="handleValue($event, rowIndex)"
+                            ></app-input>
+                        </td>
+                        <td class="text-center">
+                            <div
+                                class="flex justify-content-center align-items-center gap-2"
+                            >
+                                <app-button
+                                    iocVariant="idelete"
+                                    (onClick)="deleteProperties(rowIndex)"
+                                ></app-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        }
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center mt-4 gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [loading]="loading"
+                [iocVariant]="pageType"
+                (onClick)="handleAddResource()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

@@ -1,0 +1,40 @@
+<div id="signature-type">
+    <button
+        #signatureContainer
+        (cdkDragEnded)="dragEnded($event)"
+        cdkDrag
+        cdkDragBoundary="#pdf-dropZone"
+        class="signature_type p-0"
+        tooltipClass="tooltip_signer"
+        [style.width.px]="signatureProperties.width"
+        [style.height.px]="signatureProperties.height"
+    >
+        <div style="position: relative" class="signature_container">
+            <div
+                class="signature_type--delete"
+                (click)="handleDeleteSignature()"
+            >
+                <i class="fa-solid fa-trash"></i>
+            </div>
+            <div class="text-center signature-wrapper">
+                <div class="signature-img center-cell">
+                    <img [src]="signatureDefaultImg" alt="" />
+                </div>
+            </div>
+        </div>
+        <div class="bottom-right" (mousedown)="onResize($event)">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="15"
+                viewBox="0 0 18 18"
+                width="18"
+            >
+                <path
+                    d="m14.228 16.227a1 1 0 0 1 -.707-1.707l1-1a1 1 0 0 1 1.416 1.414l-1 1a1 1 0 0 1 -.707.293zm-5.638 0a1 1 0 0 1 -.707-1.707l6.638-6.638a1 1 0 0 1 1.416 1.414l-6.638 6.638a1 1 0 0 1 -.707.293zm-5.84 0a1 1 0 0 1 -.707-1.707l12.477-12.477a1 1 0 1 1 1.415 1.414l-12.478 12.477a1 1 0 0 1 -.707.293z"
+                    fill="#494c4e"
+                />
+            </svg>
+        </div>
+    </button>
+    <h2>abc</h2>
+</div>

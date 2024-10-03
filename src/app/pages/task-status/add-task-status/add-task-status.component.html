@@ -1,0 +1,62 @@
+<p-dialog
+    [(visible)]="show"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+    (onHide)="resetDialog()"
+>
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold text-center w-full">
+            {{ dialogTitle }}
+        </span>
+    </ng-template>
+    <div class="grid">
+        <div class="xs:col-12">
+            <app-input
+                label="Tên trạng thái công việc"
+                id="group-name"
+                [value]="taskName"
+                maxLength="255"
+                [required]="true"
+                [error]="errorTaskName"
+                (onChange)="handleTaskNameChange($event)"
+            ></app-input>
+        </div>
+        <div class="xs:col-12">
+            <app-text-area
+                id="description"
+                label="Mô tả"
+                [(ngModel)]="description"
+                [rows]="3"
+                maxLength="1000"
+            ></app-text-area>
+        </div>
+        <div class="xs:col-12">
+            <app-input-number
+                label="Thứ tự hiển thị"
+                placeholder="Nhập thứ tự hiển thị"
+                id="sort-order"
+                [value]="sortOrder"
+                (onChange)="handleSortOrderChange($event)"
+            ></app-input-number>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-center gap-4">
+            <app-button
+                iocVariant="close"
+                (onClick)="show = false"
+                [disabled]="dialogLoading"
+            ></app-button>
+            <app-button
+                (onClick)="
+                    dialogTitle === 'Thêm mới trạng thái công việc'
+                        ? handleAddTaskStatus()
+                        : handleUpdateTaskStatus()
+                "
+                [loading]="dialogLoading"
+                [label]="dialogButtonText"
+                icon="pi pi-check"
+            ></app-button>
+        </div>
+    </ng-template>
+</p-dialog>

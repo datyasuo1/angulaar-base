@@ -1,0 +1,13 @@
+<app-tree-select
+    [label]="showLabel ? label : ''"
+    [options]="departments"
+    [selectedOption]="department"
+    optionLabel="name"
+    [required]="required"
+    [autofocus]="autofocus"
+    [hasFilter]="hasFilter"
+    [error]="errorDepartment"
+    (onChange)="handleDepartmentChange($event)"
+    (onClear)="handleClearDepartment()"
+    [placeholder]="placeholder"
+></app-tree-select>

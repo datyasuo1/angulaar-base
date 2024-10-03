@@ -1,0 +1,19 @@
+<div class="flex flex-column gap-2">
+    @if (label?.length > 0) {
+        <label [for]="inputId" [ngClass]="{ required: required }">
+            {{ label }}
+        </label>
+    }
+    <ng-content></ng-content>
+</div>
+@if (error?.length > 0) {
+    <div class="p-error mt-1">
+        {{ error }}
+    </div>
+}
+
+@if (caption?.length > 0 && showCaption) {
+    <div class="mt-1" [style]="{ color: 'var(--text-color-secondary)' }">
+        {{ caption }}
+    </div>
+}

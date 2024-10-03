@@ -1,0 +1,138 @@
+.card {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--card-shadow);
+    border-radius: $borderRadius;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.p-toast {
+    &.p-toast-top-right,
+    &.p-toast-top-left,
+    &.p-toast-top-center {
+        top: 100px;
+    }
+}
+
+// .p-link:focus {
+//     box-shadow: none !important;
+// }
+
+.p-menubar {
+    .p-menuitem-link:focus {
+        box-shadow: none;
+    }
+}
+
+.p-menu {
+    .p-menuitem-link:focus {
+        box-shadow: none;
+    }
+}
+
+.p-column-filter-overlay {
+    min-width: 25rem !important;
+}
+
+.p-dialog-content {
+    overflow-y: visible !important;
+}
+
+.p-dialog {
+    display: unset !important;
+}
+
+.p-column-filter-buttonbar {
+    padding: 0px !important;
+    display: none;
+}
+
+.p-tree .p-tree-container .p-treenode {
+    padding: 0px !important;
+    padding-top: 0.5rem !important;
+}
+
+.p-tabview .p-tabview-panels {
+    padding: 0px !important;
+    padding-top: 1.25rem !important;
+}
+
+.p-menu .p-menuitem > .p-menuitem-content .p-menuitem-link {
+    padding: 0.75rem 1.25rem;
+}
+
+.p-menubar .p-menuitem > .p-menuitem-content .p-menuitem-link {
+    padding: 0.75rem 1rem;
+}
+
+.p-paginator .p-dropdown {
+    height: 2.5rem;
+    align-items: center;
+}
+
+.p-paginator .p-paginator-page-input {
+    height: 2.5rem !important;
+}
+
+.p-dialog .p-dialog-footer button {
+    min-width: 100px;
+}
+
+.p-overlay {
+    z-index: 1;
+}
+
+.p-multiselect-label {
+    // overflow: scroll;
+    text-overflow: unset;
+    white-space: unset;
+}
+
+.p-multiselect.p-multiselect-chip .p-multiselect-token {
+    margin: 4px;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    min-width: 2.357rem;
+    height: 2.357rem;
+}
+
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+    min-width: 2.357rem;
+    height: 2.357rem;
+}
+
+.p-menuitem-link-active {
+    color: var(--text-color);
+    background: var(--surface-c);
+}
+
+.p-multiselect-panel {
+    width: 100%;
+}
+
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.p-component-overlay {
+    z-index: 995;
+}
+
+.p-button.p-button-link {
+    padding: 0;
+}
+
+.p-button.p-button-link:not(:disabled):focus {
+    box-shadow: unset;
+}

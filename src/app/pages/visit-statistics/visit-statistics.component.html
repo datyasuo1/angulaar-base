@@ -1,0 +1,42 @@
+<div class="card">
+    <app-lazy-table
+        tableTitle="Thống kê số lượng truy cập"
+        [tableData]="data"
+        [rows]="rows"
+        [columns]="3"
+        [first]="first"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #caption>
+            <div class="flex justify-content-between flex-column md:flex-row">
+                <app-calendar
+                    [autofocus]="true"
+                    [(ngModel)]="rangeDates"
+                    selectionMode="range"
+                    placeholder="Từ ngày - đến ngày"
+                    [keepInvalid]="true"
+                    (ngModelChange)="handleCalendarChange()"
+                ></app-calendar>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 12rem" class="text-center">Thời gian</th>
+                <th style="min-width: 14rem" class="text-center">
+                    Số lượt truy cập
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-data let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td class="text-center">{{ data.date }}</td>
+                <td class="text-center">{{ data.number }}</td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>

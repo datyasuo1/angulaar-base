@@ -1,0 +1,14 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <p-editor
+        [(ngModel)]="text"
+        [style]="{ height: '320px' }"
+        (onTextChange)="handleTextChange($event)"
+        [ngClass]="error ? 'ng-invalid ng-dirty' : ''"
+    ></p-editor>
+</app-label>

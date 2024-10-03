@@ -1,0 +1,52 @@
+<app-card-layout cardTitle="Cập nhật loại dịch vụ">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    [autofocus]="true"
+                    label="Tên loại dịch vụ"
+                    [value]="serviceName"
+                    [required]="true"
+                    [error]="errorServiceName"
+                    maxLength="255"
+                    (onChange)="handleDataChange($event, 'serviceName')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-au-tree-select
+                    [(administrativeUnit)]="administrativeUnit"
+                    [codes]="auCodes"
+                    [errorAdministrativeUnit]="errorAdministrativeUnit"
+                    [required]="true"
+                    (onChange)="handleDataChange($event, 'administrativeUnit')"
+                ></app-au-tree-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-multi-select
+                    label="Loại tài nguyên phục vụ điều hành"
+                    styleClass="w-full"
+                    [options]="resourceTypes"
+                    [selectedOption]="resourceType"
+                    optionLabel="name"
+                    (onChange)="handleDataChange($event, 'resourceType')"
+                    placeholder="Chọn loại tài nguyên phục vụ điều hành"
+                >
+                </app-multi-select>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center gap-3">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleCloseUpdateField()"
+            ></app-button>
+            <app-button
+                iocVariant="update"
+                [loading]="loading"
+                (onClick)="handleUpdateField()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

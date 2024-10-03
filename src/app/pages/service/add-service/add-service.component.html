@@ -1,0 +1,133 @@
+<app-card-layout cardTitle="Thêm mới cảnh báo">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-4">
+                <div class="grid">
+                    <div class="col-12">
+                        <app-input
+                            [autoTrim]="true"
+                            [autofocus]="true"
+                            label="Tiêu đề"
+                            [value]="title"
+                            maxLength="255"
+                            [required]="true"
+                            [error]="errorTitle"
+                            (onChange)="handleDataChange($event, 'title')"
+                        ></app-input>
+                    </div>
+                    <div class="col-12">
+                        <app-text-area
+                            label="Nội dung cảnh báo"
+                            [(ngModel)]="warningContent"
+                            [error]="errorContent"
+                            [required]="true"
+                            [rows]="3"
+                            maxLength="1000"
+                            (ngModelChange)="errorContent = ''"
+                        ></app-text-area>
+                    </div>
+
+                    <div class="col-12 xl:col-6">
+                        <app-select
+                            label="Lĩnh vực"
+                            [options]="fields"
+                            [selectedOption]="field"
+                            [required]="true"
+                            [error]="errorField"
+                            (onChange)="handleFieldChange($event)"
+                            placeholder="Chọn lĩnh vực"
+                        ></app-select>
+                    </div>
+                    <div class="col-12 xl:col-6">
+                        <app-select
+                            label="Mức độ"
+                            [options]="levels"
+                            [selectedOption]="level"
+                            [required]="true"
+                            [error]="errorLevel"
+                            (onChange)="handleLevelChange($event)"
+                            placeholder="Chọn mức độ"
+                        ></app-select>
+                    </div>
+                    @if (selectedProcess?.masterProcessName?.length > 0) {
+                        <div class="col-12 xl:col-6">
+                            <app-input
+                                [autoTrim]="true"
+                                label="Quy trình"
+                                maxLength="255"
+                                [value]="
+                                    showProcessSelection &&
+                                    selectedProcess?.masterProcessName
+                                "
+                                [disabled]="true"
+                            ></app-input>
+                        </div>
+                    }
+                    @if (
+                        showProcessSelection &&
+                        !selectedProcess?.masterProcessName
+                    ) {
+                        <div class="col-12 xl:col-6">
+                            <app-select
+                                label="Quy trình"
+                                [options]="processes"
+                                [selectedOption]="process"
+                                [required]="true"
+                                [error]="errorProcess"
+                                (onChange)="handleDataChange($event, 'process')"
+                                placeholder="Chọn quy trình"
+                            ></app-select>
+                        </div>
+                    }
+                    <div class="col-12">
+                        <app-file
+                            label="Ảnh/ Video"
+                            accept=".3gp, .avi, .flv, .mov, .wmv, .mp4, .mkv, .png, .gif, .jpg, .jpeg"
+                            [multiple]="true"
+                            [files]="files"
+                            [autoUpload]="true"
+                            service="alarms"
+                            (onChange)="handleFileChange($event)"
+                        ></app-file>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-8">
+                <app-map
+                    label="Địa điểm"
+                    [useSearch]="true"
+                    (onAddressChange)="handleAddressChange($event)"
+                >
+                    <ng-template #content>
+                        @if (address?.length > 0) {
+                            <div class="w-full p-input-icon-right">
+                                <div>
+                                    <i class="ti ti-map-pin"></i>
+                                    {{ address }}
+                                </div>
+
+                                <i
+                                    class="ti ti-x cursor-pointer"
+                                    (click)="handleClearAddress()"
+                                ></i>
+                            </div>
+                        }
+                    </ng-template>
+                </app-map>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                iocVariant="create"
+                [loading]="loading"
+                (onClick)="handleAddAlert()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

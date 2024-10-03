@@ -1,0 +1,33 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <span
+        [ngClass]="{
+            'p-input-icon-left': iconClass.length > 0,
+            'p-input-icon-right': showClear && value
+        }"
+    >
+        @if (iconClass.length > 0) {
+            <i [class]="iconClass"></i>
+        }
+        <p-inputNumber
+            class="w-full"
+            [maxlength]="maxLength"
+            [(ngModel)]="value"
+            [placeholder]="placeholder"
+            [min]="min"
+            [max]="max"
+            [useGrouping]="useGrouping"
+            (onInput)="handleChange($event)"
+            [ngClass]="{ 'ng-invalid ng-dirty': error }"
+        >
+        </p-inputNumber>
+        @if (showClear && value) {
+            <i class="ti ti-x cursor-pointer" (click)="handleClear()"></i>
+        }
+    </span>
+</app-label>

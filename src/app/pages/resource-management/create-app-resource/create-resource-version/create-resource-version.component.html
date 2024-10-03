@@ -1,0 +1,167 @@
+<app-card-layout styleClass="border-none p-1">
+    <ng-template #body>
+        <div class="grid">
+            <div class="xs:col-12 md:col-12 py-2">
+                <app-input
+                    label="Tên phiên bản"
+                    id="resource-name"
+                    [value]="versionName"
+                    [required]="true"
+                    maxLength="100"
+                    [error]="errVersionName"
+                    placeholder="Nhập tên phiên bản"
+                    (onInput)="onInputName($event)"
+                ></app-input>
+            </div>
+            <div class="xs:col-12 md:col-12 py-2">
+                <app-text-area
+                    label="Mô tả"
+                    id="description"
+                    [(ngModel)]="description"
+                    [rows]="3"
+                    maxLength="1000"
+                    placeholder="Nhập mô tả"
+                >
+                </app-text-area>
+            </div>
+            <div class="xs:col-12 md:col-12 py-2">
+                <app-select
+                    label="Loại ứng dụng"
+                    id="type"
+                    [options]="listResourceCategory"
+                    [selectedOption]="selectedResourceCategory"
+                    [required]="true"
+                    [error]="errCategory"
+                    optionLabel="name"
+                    placeholder="Chọn Loại ứng dụng"
+                    (onChange)="onSelectCategory($event)"
+                    (onClear)="handleClearResourceCategory()"
+                ></app-select>
+            </div>
+
+            @if (showMobileOption) {
+                <div class="xs:col-12 md:col-12 py-2">
+                    <app-input
+                        label="Android package name"
+                        id="package-name"
+                        [value]="androidPackageName"
+                        maxLength="255"
+                        placeholder="Nhập địa chỉ url"
+                        (onInput)="onInputPackage($event)"
+                    ></app-input>
+                </div>
+                <div class="xs:col-12 md:col-12 py-2">
+                    <app-input
+                        label="IOS URL"
+                        id="ios-url"
+                        [value]="iosUrl"
+                        maxLength="255"
+                        placeholder="Nhập url"
+                        (onInput)="onInputIosUrl($event)"
+                    ></app-input>
+                </div>
+                <div class="xs:col-12 md:col-12 py-2">
+                    <app-input
+                        label="Link Appstore"
+                        id="appstore-url"
+                        [value]="linkAppStore"
+                        maxLength="255"
+                        placeholder="Nhập url"
+                        (onInput)="onInputLinkAppStore($event)"
+                    ></app-input>
+                </div>
+            }
+            @if (!showMobileOption) {
+                <div class="xs:col-12 md:col-12 py-2">
+                    <app-input
+                        label="URL"
+                        id="url"
+                        [value]="appUrl"
+                        [required]="true"
+                        maxLength="255"
+                        [error]="errAppUrl"
+                        placeholder="Nhập địa chỉ url"
+                        (onInput)="onInputUrl($event)"
+                    ></app-input>
+                </div>
+            }
+            @if (versionType === "web") {
+                <div class="xs:col-12 md:col-12 py-2">
+                    <app-label label="Tham số">
+                        <div
+                            class="flex justify-between"
+                            *ngFor="
+                                let control of paramFormControls.controls;
+                                let i = index
+                            "
+                        >
+                            <input
+                                class="w-12 mr-2"
+                                type="text"
+                                pInputText
+                                placeholder="Nhập tham số"
+                                maxlength="100"
+                                [formControl]="control"
+                            />
+                            @if (i > 0) {
+                                <app-button
+                                    iocVariant="idelete"
+                                    (onClick)="removeControl(i)"
+                                ></app-button>
+                            }
+                        </div>
+                    </app-label>
+                    <app-button
+                        icon="pi pi-plus"
+                        styleClass="p-0 mt-3"
+                        [link]="true"
+                        label="Thêm tham số"
+                        (onClick)="addControl()"
+                    ></app-button>
+                </div>
+            }
+            <div class="xs:col-12 md:col-12 py-2">
+                <app-select
+                    label="Trạng thái"
+                    id="status"
+                    [options]="listResourceStatus"
+                    [selectedOption]="selectedResourceStatus"
+                    [required]="true"
+                    [error]="errStatus"
+                    optionLabel="name"
+                    placeholder="Chọn Trạng thái"
+                    (onChange)="onSelectStatus($event)"
+                ></app-select>
+            </div>
+
+            <div class="xs:col-12 md:col-6">
+                <p-checkbox
+                    class="py-4"
+                    name="currentVer"
+                    label="Phiên bản hiện tại"
+                    [(ngModel)]="isCurrentVersion"
+                    [binary]="true"
+                    (onChange)="handleCheckCurrentVer($event)"
+                ></p-checkbox>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                [loading]="loading"
+                icon="pi pi-times"
+                label="Đóng"
+                styleClass="p-button-outlined"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [loading]="loading"
+                icon="pi pi-check"
+                [label]="versionToUpdate.id ? 'Cập nhật' : 'Thêm mới'"
+                (onClick)="handleCreateUpdateVersion()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

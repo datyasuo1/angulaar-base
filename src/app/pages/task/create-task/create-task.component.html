@@ -1,0 +1,199 @@
+<div>
+    <div class="grid mb-6">
+        @if (parentWorkFlow?.id) {
+            <div class="xs:col-12 md:col-12">
+                <app-input
+                    [disabled]="true"
+                    label="Công việc cha"
+                    [value]="parentWorkFlow.name"
+                    [required]="true"
+                    maxLength="255"
+                ></app-input>
+            </div>
+        }
+
+        <div class="xs:col-12 md:col-12">
+            <app-input
+                label="Tên công việc"
+                [value]="taskName"
+                [required]="true"
+                maxLength="100"
+                [error]="errorTaskName"
+                (onInput)="handleTaskNameChange($event)"
+                placeholder="Nhập tên công việc"
+            ></app-input>
+        </div>
+        <div class="xs:col-12 md:col-12">
+            <app-text-area
+                label="Nội dung công việc"
+                [required]="true"
+                [(ngModel)]="descriptionInfo"
+                [error]="errorDescriptionInfo"
+                [rows]="3"
+                maxLength="1000"
+                (input)="handleDescriptionInfoChange()"
+                class="w-full"
+                placeholder="Nhập nội dung công việc"
+            >
+            </app-text-area>
+        </div>
+
+        <div class="xs:col-12 md:col-6">
+            <app-select
+                label="Phân loại công việc"
+                [options]="workflowTypes"
+                optionLabel="name"
+                placeholder="Chọn loại công việc"
+                [required]="true"
+                [error]="errorWorkflowTypes"
+                (onChange)="handleWorkflowTypesChange($event)"
+            ></app-select>
+        </div>
+
+        <div class="xs:col-12 md:col-6">
+            <app-select
+                label="Nhóm công việc"
+                [options]="listTaskGroup"
+                optionLabel="name"
+                placeholder="Chọn nhóm công việc"
+                [required]="true"
+                [error]="errorTaskGroup"
+                (onChange)="handleTaskGroupChange($event)"
+            ></app-select>
+        </div>
+
+        <div class="xs:col-12 md:col-6">
+            <app-select
+                label="Mức độ công việc"
+                [options]="levelList"
+                [selectedOption]="selectedPriority"
+                optionLabel="name"
+                placeholder="Chọn mức độ"
+                (onChange)="handleSelectPriority($event)"
+            ></app-select>
+        </div>
+
+        <div class="xs:col-12 md:col-6">
+            <app-calendar
+                label="Thời hạn hoàn thành"
+                [ngModel]="timeDoneExpect"
+                selectionMode="single"
+                [readonlyInput]="true"
+                placeholder="Chọn thời hạn hoàn thành"
+                [showIcon]="true"
+                (ngModelChange)="handleSelectTimeDone($event)"
+                [required]="true"
+                [showTime]="true"
+                [error]="errorTimeDone"
+                [minDate]="timeDoneMinDate"
+                appendTo="body"
+            ></app-calendar>
+        </div>
+
+        <div class="xs:col-12 md:col-6">
+            <app-select
+                label="Nhóm xử lý"
+                [options]="listGroup"
+                [selectedOption]="selectedGroup"
+                optionLabel="name"
+                placeholder="Chọn nhóm xử lý"
+                [required]="true"
+                (onChange)="handleSelectGroup($event)"
+                [error]="errorSelectGroup"
+                (onClear)="handleClearGroup()"
+            ></app-select>
+        </div>
+
+        <div class="xs:col-12 md:col-6">
+            <app-select
+                label="Người xử lý"
+                [options]="listUser"
+                optionLabel="fullName"
+                placeholder="Chọn người xử lý"
+                [selectedOption]="selectedUser"
+                (onChange)="handleSelectUser($event)"
+                (onClear)="handleClearUser()"
+                [required]="true"
+                [error]="errorSelectUser"
+            ></app-select>
+        </div>
+
+        <div class="xs:col-12 md:col-12 text-right py-0">
+            <app-button
+                [link]="true"
+                label="Tự động phân cho người tạo"
+                (onClick)="handleAutoFill()"
+            ></app-button>
+        </div>
+
+        <div class="xs:col-12 md:col-6">
+            <app-select
+                label="Nhóm giám sát"
+                [options]="listMonitorGroup"
+                optionLabel="name"
+                placeholder="Chọn nhóm giám sát"
+                (onChange)="handleSelectMonitorGroup($event)"
+                (onClear)="handleClearMonitorGroup()"
+            ></app-select>
+        </div>
+
+        <div class="xs:col-12 md:col-6">
+            <app-select
+                label="Người giám sát"
+                [options]="listUserMonitoring"
+                optionLabel="fullName"
+                placeholder="Chọn người giám sát"
+                [selectedOption]="selectedMonitoringUser"
+                (onChange)="handleSelectMonitorUser($event)"
+            ></app-select>
+        </div>
+
+        <div class="xs:col-12 md:col-12 mt-1">
+            <p-checkbox
+                class="pt-2"
+                name="isReport"
+                [binary]="true"
+                label="Yêu cầu báo cáo kết quả thực hiện"
+                [(ngModel)]="isReport"
+            ></p-checkbox>
+        </div>
+
+        <div class="xs:col-12 md:col-12">
+            <div class="mt-3">
+                <app-file
+                    label="Tệp đính kèm"
+                    accept=".pdf, .doc, .docx, .jpg, .png, .jpeg"
+                    [file]="file"
+                    [getInternalError]="true"
+                    (onChange)="handleFileChange($event)"
+                ></app-file>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="flex justify-content-center fixed right-0 bottom-0 gap-4 py-3 action-btns"
+    >
+        <app-button
+            label="Đóng"
+            (onClick)="handleClose()"
+            styleClass="p-button-teriary"
+            [disabled]="isLoading"
+        ></app-button>
+        <app-button
+            [disabled]="isLoading"
+            [loading]="isCreatingTask"
+            (onClick)="onCreateTask()"
+            styleClass="p-button-outlined"
+            label="Thêm mới"
+        ></app-button>
+        <app-button
+            (onClick)="onAssignTask()"
+            [disabled]="isLoading"
+            [loading]="isAssigningTask"
+            label="Giao việc"
+        ></app-button>
+    </div>
+
+    <p-confirmDialog></p-confirmDialog>
+</div>

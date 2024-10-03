@@ -1,0 +1,160 @@
+<app-loading [loading]="isLoading"></app-loading>
+
+<app-card-layout
+    [cardTitle]="
+        (isUpdating ? 'Cập nhật' : 'Thêm mới') + ' máy chủ phần mềm triển khai'
+    "
+>
+    <ng-template #body>
+        <form [formGroup]="deployedSystemForm">
+            <div class="grid">
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input
+                        label="Tên phần mềm"
+                        [error]="
+                            isSubmitted &&
+                            getErrorMsg(deployedSystemForm, 'name')
+                        "
+                        maxLength="100"
+                        [required]="true"
+                        placeholder="Nhập tên phần mềm"
+                        [control]="getControl(deployedSystemForm, 'name')"
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input
+                        label="Domain hệ thống phần mềm"
+                        maxLength="255"
+                        [error]="
+                            isSubmitted &&
+                            getErrorMsg(deployedSystemForm, 'domain')
+                        "
+                        [required]="true"
+                        placeholder="Nhập domain hệ thống phần mềm"
+                        [control]="getControl(deployedSystemForm, 'domain')"
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input
+                        label="Địa chỉ IP"
+                        maxLength="50"
+                        [error]="
+                            isSubmitted &&
+                            getErrorMsg(deployedSystemForm, 'ipAddress')
+                        "
+                        [required]="true"
+                        placeholder="Nhập địa chỉ IP"
+                        [control]="getControl(deployedSystemForm, 'ipAddress')"
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input
+                        label="Link giám sát tài nguyên hệ thống"
+                        maxLength="255"
+                        [error]="
+                            isSubmitted &&
+                            getErrorMsg(deployedSystemForm, 'monitorAppLink')
+                        "
+                        [required]="true"
+                        placeholder="Nhập link giám sát tài nguyên hệ thống"
+                        [control]="
+                            getControl(deployedSystemForm, 'monitorAppLink')
+                        "
+                    ></app-reactive-input>
+                </div>
+
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input-number
+                        label="Số lượng máy chủ"
+                        [error]="
+                            getErrorMsg(deployedSystemForm, 'serverQuantity')
+                        "
+                        placeholder="Nhập số lượng máy chủ"
+                        [control]="
+                            getControl(deployedSystemForm, 'serverQuantity')
+                        "
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input-number
+                        label="Số lượng dịch vụ"
+                        [error]="
+                            getErrorMsg(deployedSystemForm, 'serviceQuantity')
+                        "
+                        placeholder="Nhập số lượng dịch vụ"
+                        [control]="
+                            getControl(deployedSystemForm, 'serviceQuantity')
+                        "
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input-number
+                        label="Số lượng vCPU"
+                        [error]="
+                            getErrorMsg(deployedSystemForm, 'vcpuquantity')
+                        "
+                        placeholder="Nhập số lượng vCPU"
+                        [control]="
+                            getControl(deployedSystemForm, 'vcpuquantity')
+                        "
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input-number
+                        label="Số lượng RAM"
+                        [error]="getErrorMsg(deployedSystemForm, 'ramQuantity')"
+                        placeholder="Nhập số lượng RAM"
+                        [control]="
+                            getControl(deployedSystemForm, 'ramQuantity')
+                        "
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input
+                        label="Đơn vị phát triển"
+                        maxLength="255"
+                        [error]="
+                            isSubmitted &&
+                            getErrorMsg(deployedSystemForm, 'devDepartment')
+                        "
+                        placeholder="Nhập đơn vị phát triển"
+                        [control]="
+                            getControl(deployedSystemForm, 'devDepartment')
+                        "
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-6">
+                    <app-reactive-input
+                        label="Đơn vị vận hành"
+                        maxLength="255"
+                        [error]="
+                            isSubmitted &&
+                            getErrorMsg(deployedSystemForm, 'operateDepartment')
+                        "
+                        placeholder="Nhập Đơn vị vận hành"
+                        [control]="
+                            getControl(deployedSystemForm, 'operateDepartment')
+                        "
+                    ></app-reactive-input>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center mt-4 gap-2">
+            <app-button
+                [disabled]="isLoading"
+                label="Đóng"
+                icon="pi pi-times"
+                styleClass="p-button-outlined"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [loading]="isLoading"
+                [label]="isUpdating ? 'Cập nhật' : 'Thêm mới'"
+                icon="pi pi-check"
+                (onClick)="handleSave()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

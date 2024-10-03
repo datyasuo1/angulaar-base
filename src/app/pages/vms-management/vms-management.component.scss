@@ -1,0 +1,22 @@
+::ng-deep .eye-button {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+::ng-deep .eye-button i {
+    font-size: 18px;
+    color: #999;
+}
+
+::ng-deep .eye-button i.fa-eye:hover {
+    color: #333;
+}
+
+::ng-deep .eye-button i.fa-eye-slash:hover {
+    color: #f44336;
+}

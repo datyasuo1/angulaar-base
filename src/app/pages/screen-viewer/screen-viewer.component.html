@@ -1,0 +1,10 @@
+@if (this.appId && this.appId.length > 0) {
+    <div>
+        <screen-renderer
+            [appId]="appId"
+            [baseUrl]="screenBuilderURL"
+            [input]="screenRendererInput"
+            event-trigger-name="screen-renderer-event"
+        ></screen-renderer>
+    </div>
+}

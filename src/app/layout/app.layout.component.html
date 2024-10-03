@@ -1,0 +1,60 @@
+<div class="layout-wrapper" [ngClass]="containerClass">
+    <app-topbar></app-topbar>
+    @if (this.layoutService.config.menu && !this.menuOpen) {
+        <button
+            type="button"
+            class="sidebar-button p-link"
+            (click)="handleOpenSidebar()"
+        >
+            <i class="ti ti-chevron-right" style="font-size: 1rem"></i>
+        </button>
+    }
+    @if (!isHomePage) {
+        <app-sidebar
+            [visible]="this.layoutService.config.menu && this.menuOpen"
+            (visibleChange)="handleVisibleChange($event)"
+        ></app-sidebar>
+    }
+    @if (useLayout) {
+        <div class="layout-main-container">
+            @if (!isHomePage) {
+                <div
+                    class="app-custom-card flex justify-content-between"
+                    [style]="{ width: '100%' }"
+                >
+                    <p-breadcrumb
+                        [model]="breadcrumbItems"
+                        [home]="{ icon: 'ti ti-home' }"
+                        class="mb-2 app-breadcrumb"
+                    ></p-breadcrumb>
+                    @if (showTaskFilter) {
+                        <div>
+                            <p-selectButton
+                                [options]="taskGroupOptions"
+                                [(ngModel)]="currentTaskGroupFilter"
+                                optionLabel="label"
+                                optionValue="value"
+                                (onChange)="handleGroupFilterChange($event)"
+                            ></p-selectButton>
+                        </div>
+                    }
+                </div>
+            }
+            <div class="layout-main">
+                <router-outlet></router-outlet>
+            </div>
+            <app-footer></app-footer>
+        </div>
+    }
+    @if (!useLayout) {
+        <div style="position: relative; top: 70px">
+            <router-outlet></router-outlet>
+        </div>
+    }
+    <app-config></app-config>
+</div>
+<div class="chat-container">
+    <app-chat styleClass="relative z-5 floating-chat1"></app-chat>
+</div>
+
+<app-contact-popup></app-contact-popup>

@@ -1,0 +1,18 @@
+:host {
+    ::ng-deep {
+        .p-paginator.p-component.ng-star-inserted {
+            background: transparent !important;
+        }
+        i {
+            display: none;
+        }
+        p-card:hover {
+            i {
+                display: block;
+            }
+        }
+    }
+}
+.title {
+    font-size: 24px;
+}

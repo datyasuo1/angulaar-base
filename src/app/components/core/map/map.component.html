@@ -1,0 +1,84 @@
+<app-label
+    [label]="label"
+    [error]="error"
+    [required]="required"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <ng-container [ngTemplateOutlet]="content"></ng-container>
+    <div class="relative">
+        @if (useSearch) {
+            <div class="p-mr-2 p-input w-full p-3 absolute z-3">
+                <div class="p-inputgroup">
+                    <p-autoComplete
+                        styleClass="w-full"
+                        inputId="autocomplete"
+                        [(ngModel)]="selectedPosition"
+                        [suggestions]="filteredPositions"
+                        (completeMethod)="searchPosition($event)"
+                        (onSelect)="handleSelectPosition($event)"
+                        placeholder="Nhập địa điểm tìm kiếm"
+                        [showClear]="true"
+                    >
+                    </p-autoComplete>
+                    <span class="p-inputgroup-addon cursor-pointer">
+                        <i class="ti ti-search"></i>
+                    </span>
+                </div>
+            </div>
+        }
+        @if (useDirection) {
+            <div
+                class="p-mr-2 p-input w-6 p-3 absolute z-3"
+                [style]="{ bottom: 0, left: 0 }"
+            >
+                <div class="p-inputgroup">
+                    <p-autoComplete
+                        styleClass="w-full"
+                        inputId="autocomplete"
+                        [(ngModel)]="selectedPositionStart"
+                        [suggestions]="filteredPositionsStart"
+                        (completeMethod)="searchPositionStart($event)"
+                        (onSelect)="handleSelectPositionStart($event)"
+                        placeholder="Nhập địa điểm bắt đầu"
+                        [showClear]="true"
+                    >
+                    </p-autoComplete>
+                    <span class="p-inputgroup-addon cursor-pointer">
+                        <i class="ti ti-search"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div
+                class="p-mr-2 p-input w-6 p-3 absolute z-3"
+                [style]="{ bottom: 0, right: 0 }"
+            >
+                <div class="p-inputgroup">
+                    <p-autoComplete
+                        styleClass="w-full"
+                        inputId="autocomplete"
+                        [(ngModel)]="selectedPositionEnd"
+                        [suggestions]="filteredPositionsEnd"
+                        (completeMethod)="searchPositionEnd($event)"
+                        (onSelect)="handleSelectPositionEnd($event)"
+                        placeholder="Nhập địa điểm kết thúc"
+                        [showClear]="true"
+                    >
+                    </p-autoComplete>
+                    <span class="p-inputgroup-addon cursor-pointer">
+                        <i class="ti ti-search"></i>
+                    </span>
+                </div>
+            </div>
+        }
+        <div
+            id="mapContainerDiv"
+            [ngStyle]="{
+                height: 'calc(90vh - 275px)',
+                width: '100%'
+            }"
+            style="position: relative"
+        ></div>
+    </div>
+</app-label>

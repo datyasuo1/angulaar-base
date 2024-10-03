@@ -1,0 +1,10 @@
+<app-tree-select
+    [label]="showLabel ? label : ''"
+    [selectedOption]="administrativeUnit"
+    [options]="administrativeUnits"
+    [placeholder]="placeholder"
+    [required]="required"
+    [hasFilter]="hasFilter"
+    [error]="errorAdministrativeUnit"
+    (onChange)="handleAUChange($event)"
+></app-tree-select>

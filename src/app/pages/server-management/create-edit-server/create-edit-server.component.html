@@ -1,0 +1,263 @@
+<app-loading [loading]="isLoading"></app-loading>
+<app-card-layout
+    [cardTitle]="(isUpdating ? 'Cập nhật' : 'Thêm mới') + ' thông tin máy chủ'"
+>
+    <ng-template #body>
+        <form [formGroup]="addServerForm">
+            <div class="grid">
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-4">
+                    <app-reactive-input
+                        label="Tên máy chủ"
+                        [error]="
+                            submitted && getErrorMsg(addServerForm, 'name')
+                        "
+                        [required]="true"
+                        placeholder="Nhập tên máy chủ"
+                        [control]="getControl(addServerForm, 'name')"
+                        [maxLength]="100"
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-4">
+                    <app-reactive-input
+                        label="Địa chỉ ip vật lý"
+                        [maxLength]="50"
+                        [error]="
+                            submitted &&
+                            getErrorMsg(addServerForm, 'ipAddressPhysical')
+                        "
+                        [required]="true"
+                        placeholder="Nhập địa chỉ IP vật lý"
+                        [control]="
+                            getControl(addServerForm, 'ipAddressPhysical')
+                        "
+                    ></app-reactive-input>
+                </div>
+                <div class="xs:col-12 md:col-6 lg:col-3 xl:col-4">
+                    <app-reactive-select
+                        label="Trạng thái"
+                        [options]="listServerStatus"
+                        optionLabel="name"
+                        placeholder="Chọn trạng thái"
+                        [required]="true"
+                        [error]="
+                            submitted && getErrorMsg(addServerForm, 'status')
+                        "
+                        [control]="getControl(addServerForm, 'status')"
+                    ></app-reactive-select>
+                </div>
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-4">
+                    <app-reactive-input-number
+                        label="Số vCPU"
+                        [error]="getErrorMsg(addServerForm, 'vcpu')"
+                        placeholder="Nhập số vCPU"
+                        [control]="getControl(addServerForm, 'vcpu')"
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-4">
+                    <app-reactive-input-number
+                        label="Số RAM"
+                        [error]="getErrorMsg(addServerForm, 'ram')"
+                        placeholder="Nhập số RAM"
+                        [control]="getControl(addServerForm, 'ram')"
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-4">
+                    <app-reactive-input-number
+                        label="Số SSD"
+                        [error]="getErrorMsg(addServerForm, 'ssd')"
+                        placeholder="Nhập số SSD"
+                        [control]="getControl(addServerForm, 'ssd')"
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-4">
+                    <app-reactive-input-number
+                        label="Số HDD"
+                        [error]="getErrorMsg(addServerForm, 'hdd')"
+                        placeholder="Nhập số HDD"
+                        [control]="getControl(addServerForm, 'hdd')"
+                    ></app-reactive-input-number>
+                </div>
+                <div class="xs:col-12 md-col-6 lg:col-3 xl:col-4">
+                    <app-reactive-input
+                        label="Link giám sát tài nguyên"
+                        [maxLength]="255"
+                        [error]="
+                            submitted &&
+                            getErrorMsg(addServerForm, 'monitorLink')
+                        "
+                        placeholder="Nhập link giám sát tài nguyên"
+                        [control]="getControl(addServerForm, 'monitorLink')"
+                    ></app-reactive-input>
+                </div>
+            </div>
+        </form>
+        @if (isUpdating) {
+            <ng-template #footer>
+                <div class="flex justify-content-center mt-4 gap-2">
+                    <app-button
+                        [loading]="isLoading"
+                        label="Đóng"
+                        styleClass="p-button-outlined"
+                        (onClick)="handleClose()"
+                        icon="pi pi-times"
+                    ></app-button>
+                    <app-button
+                        [loading]="isLoading"
+                        label="Cập nhật"
+                        icon="pi pi-check"
+                        (onClick)="handleSave()"
+                    ></app-button>
+                </div>
+            </ng-template>
+        }
+        <div class="xs:col-12 md:col-12 flex justify-content-between p-0 mt-5">
+            <h5>Các máy ảo ({{ listVirtualMachine.length }})</h5>
+            <app-button
+                (onClick)="
+                    handleAddUpdateVirtualMachine(null, DIALOG_ACTION.CREATE)
+                "
+                icon="pi pi-plus"
+                label="Thêm máy ảo"
+            >
+            </app-button>
+        </div>
+        <div class="mt-2">
+            <p-table
+                [value]="listVirtualMachine"
+                [rowHover]="true"
+                styleClass="p-datatable-gridlines p-datatable-striped mt-1"
+            >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">STT</th>
+                        <th>Tên máy ảo</th>
+                        <th>vCPU</th>
+                        <th>RAM</th>
+                        <th>SSD</th>
+                        <th>HDD</th>
+                        <th>Địa chỉ IP</th>
+                        <th>Link giám sát</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                    @if (isUpdating) {
+                        <tr>
+                            <th class="border-top-none"></th>
+                            <th class="border-top-none">
+                                <app-input
+                                    [value]="searchParams['name']"
+                                    placeholder="Nhập tên máy ảo"
+                                    (onChange)="handleSearch($event, 'name')"
+                                    iconClass="pi pi-search"
+                                    class="w-full"
+                                />
+                            </th>
+                            <th class="border-top-none"></th>
+                            <th class="border-top-none"></th>
+                            <th class="border-top-none"></th>
+                            <th class="border-top-none"></th>
+                            <th class="border-top-none">
+                                <app-input
+                                    [value]="searchParams['ipAddress']"
+                                    placeholder="Nhập địa chỉ IP"
+                                    (onChange)="
+                                        handleSearch($event, 'ipAddress')
+                                    "
+                                    iconClass="pi pi-search"
+                                    class="w-full"
+                                />
+                            </th>
+                            <th class="border-top-none">
+                                <app-input
+                                    [value]="searchParams['monitorLink']"
+                                    placeholder="Nhập link giám sát"
+                                    (onChange)="
+                                        handleSearch($event, 'monitorLink')
+                                    "
+                                    iconClass="pi pi-search"
+                                    class="w-full"
+                                />
+                            </th>
+                            <th class="border-top-none"></th>
+                            <th class="border-top-none"></th>
+                        </tr>
+                    }
+                </ng-template>
+                <ng-template
+                    pTemplate="body"
+                    let-machine
+                    let-rowIndex="rowIndex"
+                >
+                    <tr>
+                        <td class="text-center">{{ rowIndex + 1 }}</td>
+                        <td>{{ machine.name }}</td>
+                        <td>{{ machine.vCPU }}</td>
+                        <td>{{ machine.ram }}</td>
+                        <td>{{ machine.ssd }}</td>
+                        <td>
+                            {{ machine.hdd }}
+                        </td>
+                        <td>
+                            {{ machine.ipAddress }}
+                        </td>
+                        <td>
+                            <a
+                                class="link"
+                                target="_blank"
+                                href="{{ machine.monitorLink }}"
+                                >{{ machine.monitorLink }}</a
+                            >
+                        </td>
+                        <td class="text-center">
+                            <app-tag
+                                [value]="machine.statusName"
+                                [severity]="getTagSeverity(machine.status)"
+                            >
+                            </app-tag>
+                        </td>
+                        <td class="center-cell">
+                            <app-button
+                                iocVariant="iupdate"
+                                (onClick)="
+                                    handleAddUpdateVirtualMachine(
+                                        machine,
+                                        DIALOG_ACTION.UPDATE
+                                    )
+                                "
+                            ></app-button>
+
+                            <app-button
+                                iocVariant="idelete"
+                                (onClick)="handleDeleteVirtualMachine(machine)"
+                            ></app-button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td [attr.colspan]="3">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </ng-template>
+    @if (!isUpdating) {
+        <ng-template #footer>
+            <div class="flex justify-content-center mt-4 gap-2">
+                <app-button
+                    [loading]="isLoading"
+                    label="Đóng"
+                    icon="pi pi-times"
+                    styleClass="p-button-outlined"
+                    (onClick)="handleClose()"
+                ></app-button>
+                <app-button
+                    [loading]="isLoading"
+                    label="Thêm mới"
+                    icon="pi pi-check"
+                    (onClick)="handleSave()"
+                ></app-button>
+            </div>
+        </ng-template>
+    }
+</app-card-layout>

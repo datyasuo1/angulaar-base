@@ -1,0 +1,25 @@
+#canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+:host {
+    ::ng-deep .title-cam {
+        color: yellow;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 1rem;
+        width: 100%;
+        display: block;
+    }
+}
+.grid-view {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}

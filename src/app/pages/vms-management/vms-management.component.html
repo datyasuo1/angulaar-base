@@ -1,0 +1,241 @@
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách VMS"
+        [tableData]="data"
+        [rows]="rows"
+        [columns]="8"
+        [first]="first"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        [currentPage]="currentPage"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <app-button
+                iocVariant="create"
+                (onClick)="handleCreateVms()"
+                permissionCode="create-vms-management"
+            ></app-button>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 12rem">Tên</th>
+                <th style="min-width: 12rem">Loại VMS</th>
+                <th style="min-width: 12rem">Đường dẫn</th>
+                <th style="min-width: 12rem">Tên tài khoản</th>
+                <th style="min-width: 12rem">Đơn vị hành chính</th>
+                <th style="min-width: 12rem">Trạng thái</th>
+                <th style="min-width: 10rem" class="text-center">Thao tác</th>
+            </tr>
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [autofocus]="true"
+                        [value]="searchText"
+                        maxLength="255"
+                        placeholder="Tên VMS"
+                        (onChange)="handleInputChange($event)"
+                        iconClass="ti ti-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none">
+                    <app-select
+                        [selectedOption]="vmsType"
+                        [options]="vmsTypes"
+                        (onChange)="handleVMSTypeFindChange($event)"
+                        [hasFilter]="true"
+                    >
+                    </app-select>
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-au-tree-select
+                        [showLabel]="false"
+                        [hasFilter]="true"
+                        [administrativeUnit]="administrativeUnitF"
+                        (onChange)="handleAUFilterChange($event)"
+                    ></app-au-tree-select>
+                </th>
+                <th class="border-top-none">
+                    <app-select
+                        [selectedOption]="searchStatus"
+                        [options]="statusTypes"
+                        (onChange)="handleStatusChange($event)"
+                        placeholder="Trạng thái"
+                    >
+                    </app-select>
+                </th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-data let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ data?.name }}</td>
+                <td>{{ data?.vmsCategoryName }}</td>
+                <td>{{ data?.url }}</td>
+                <td>{{ data?.username }}</td>
+                <td>
+                    {{
+                        data?.wardName
+                            ? data?.wardName
+                            : data?.districtName
+                              ? data?.districtName
+                              : data?.provinceName
+                    }}
+                </td>
+                <td>
+                    @if (data?.status === "ACTIVE") {
+                        <i
+                            class="ti ti-circle-filled mr-1"
+                            style="font-size: 1rem; color: #28a745"
+                        ></i>
+                        Đang hoạt động
+                    } @else {
+                        <i
+                            class="ti ti-circle-filled mr-1"
+                            style="font-size: 1rem; color: #ee0033"
+                        ></i>
+                        Không hoạt động
+                    }
+                </td>
+                <td>
+                    <div
+                        class="flex gap-2 justify-content-center align-items-center"
+                    >
+                        <app-button
+                            iocVariant="iview"
+                            (onClick)="watchVmsManagement(data?.id)"
+                            permissionCode="detail-vms-management"
+                        ></app-button>
+                        <app-button
+                            iocVariant="iupdate"
+                            (onClick)="handleUpdateVms(data)"
+                            permissionCode="update-vms-management"
+                        ></app-button>
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="confirmDeleteVms(data)"
+                            permissionCode="delete-vms-management"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>
+
+<app-dialog [(visible)]="showDialog" (onHide)="resetDialog()">
+    <ng-template #header>
+        <span class="text-xl font-bold text-center w-full">
+            {{ dialogTitle }}
+        </span>
+    </ng-template>
+    <ng-template #content>
+        <div class="grid">
+            <div class="col-12">
+                <app-input
+                    [autoTrim]="true"
+                    [autofocus]="true"
+                    label="Tên VMS"
+                    [value]="vmsName"
+                    maxLength="255"
+                    [required]="true"
+                    [error]="errorVMSName"
+                    (onChange)="handleVMSNameChange($event)"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-select
+                    label="Loại VMS"
+                    [options]="vmsTypes"
+                    [selectedOption]="selectedVmsType"
+                    [required]="true"
+                    [error]="errorVmsType"
+                    (onChange)="handleVmsTypeChange($event)"
+                    placeholder="Chọn loại VMS"
+                ></app-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-au-tree-select
+                    [(administrativeUnit)]="administrativeUnit"
+                    [codes]="auCodes"
+                    [errorAdministrativeUnit]="errorAdministrativeUnit"
+                    [required]="true"
+                    (onChange)="handleAUChange($event)"
+                ></app-au-tree-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    label="Đường dẫn"
+                    [value]="link"
+                    maxLength="255"
+                    [required]="true"
+                    [error]="errorLink"
+                    (onChange)="handleLinkChange($event)"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-select
+                    label="Trạng thái"
+                    [options]="statusTypes"
+                    [selectedOption]="selectedStatusType"
+                    [error]="errorStatusType"
+                    (onChange)="handleStatusTypeChange($event)"
+                    placeholder="Chọn trạng thái"
+                ></app-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    label="Tên tài khoản"
+                    [value]="accountName"
+                    maxLength="255"
+                    [error]="errorAccountName"
+                    (onChange)="handleAccountNameChange($event)"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-password
+                    label="Mật khẩu"
+                    maxLength="255"
+                    [(ngModel)]="password"
+                    [toggleMask]="true"
+                ></app-password>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="flex align-items-center gap-1">
+                    <p-checkbox
+                        value="Dùng chung"
+                        inputId="share"
+                        [(ngModel)]="isPublic"
+                        [binary]="true"
+                    ></p-checkbox>
+                    <label for="share">Dùng chung</label>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="showDialog = false"
+            ></app-button>
+            <app-button
+                [iocVariant]="
+                    dialogTitle === 'Cập nhật VMS' ? 'update' : 'create'
+                "
+                (onClick)="handleVmsForm()"
+                [loading]="dialogLoading"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-dialog>

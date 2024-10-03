@@ -1,0 +1,168 @@
+<app-card-layout cardTitle="Xem chi tiết tài nguyên">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-4">
+                <div class="grid">
+                    <div class="col-12">
+                        <app-label label="Loại tài nguyên">
+                            <b>{{ data?.resourceTypeName | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Tên tài nguyên">
+                            <b>{{ data?.name | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Số điện thoại">
+                            <b>{{ data?.phone | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12 xl:col-6">
+                        <app-label label="Kinh độ">
+                            <b>{{ data?.lat | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12 xl:col-6">
+                        <app-label label="Vĩ độ">
+                            <b>{{ data?.lng | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Địa chỉ">
+                            <b>{{ data?.address | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Đơn vị hành chính">
+                            <b>{{
+                                (data?.wardName
+                                    ? data?.wardName
+                                    : data?.districtName
+                                      ? data?.districtName
+                                      : data?.provinceName
+                                ) | dataValidator
+                            }}</b>
+                        </app-label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-8">
+                <app-map label="Địa điểm" [viewOnly]="true">
+                    <ng-template #content>
+                        @if (data?.address?.length > 0) {
+                            <div class="w-full p-input-icon-right">
+                                <div>
+                                    <i class="ti ti-map-pin"></i>
+                                    {{ data?.address }}
+                                </div>
+
+                                <i
+                                    class="ti ti-x cursor-pointer"
+                                    (click)="handleClearAddress()"
+                                ></i>
+                            </div>
+                        }
+                    </ng-template>
+                </app-map>
+            </div>
+            <div class="col-12">
+                @if (commonProperties.length > 0) {
+                    <app-label label="Thuộc tính dùng chung">
+                        <p-table
+                            [value]="commonProperties"
+                            styleClass="p-datatable-gridlines p-datatable-striped"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Tên thuộc tính</th>
+                                    <th>Loại giá trị</th>
+                                    <th class="text-center">Trường bắt buộc</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template
+                                pTemplate="body"
+                                let-data
+                                let-rowIndex="rowIndex"
+                            >
+                                <tr>
+                                    <td>
+                                        {{ data?.name }}
+                                    </td>
+                                    <td>
+                                        {{ data?.valueType?.value }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ data?.required ? "Có" : "Không" }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td [attr.colspan]="3">
+                                        Không có dữ liệu.
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </app-label>
+                }
+            </div>
+            <div class="col-12">
+                @if (specialityProperties.length > 0) {
+                    <app-label label="Thuộc tính dùng riêng">
+                        <p-table
+                            [value]="specialityProperties"
+                            styleClass="p-datatable-gridlines p-datatable-striped"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="min-width: 25rem">
+                                        Tên thuộc tính
+                                    </th>
+                                    <th style="min-width: 25rem">
+                                        Loại giá trị
+                                    </th>
+                                    <th style="min-width: 25rem">Giá trị</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template
+                                pTemplate="body"
+                                let-data
+                                let-rowIndex="rowIndex"
+                            >
+                                <tr>
+                                    <td>
+                                        {{ data?.name }}
+                                    </td>
+                                    <td>
+                                        {{ data?.type?.value }}
+                                    </td>
+                                    <td>
+                                        {{ data?.value }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td [attr.colspan]="3">
+                                        Không có dữ liệu.
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </app-label>
+                }
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center mt-4">
+            <app-button
+                iocVariant="close"
+                [autofocus]="true"
+                (onClick)="handleCloseOneResource()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

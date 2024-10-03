@@ -1,0 +1,10 @@
+<app-multi-select
+    [label]="showLabel ? label : ''"
+    [options]="roles"
+    [selectedOption]="role"
+    optionLabel="name"
+    [required]="required"
+    [error]="errorRole"
+    (onChange)="handleRoleChange($event)"
+    [placeholder]="placeholder"
+></app-multi-select>

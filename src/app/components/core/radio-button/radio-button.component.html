@@ -1,0 +1,10 @@
+<div class="flex align-items-center">
+    <p-radioButton
+        [name]="name"
+        [value]="value"
+        [label]="label"
+        [id]="inputId"
+        [(ngModel)]="selectedValue"
+        (onClick)="handleClick($event)"
+    ></p-radioButton>
+</div>

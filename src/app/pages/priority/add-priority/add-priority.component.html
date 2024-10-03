@@ -1,0 +1,68 @@
+<app-dialog [(visible)]="show" (onHide)="resetDialog()">
+    <ng-template #header>
+        <span class="text-xl font-bold text-center w-full">
+            {{ dialogTitle }}
+        </span>
+    </ng-template>
+    <ng-template #content>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    [autofocus]="true"
+                    label="Tên độ ưu tiên"
+                    [value]="priorityName"
+                    [required]="true"
+                    maxLength="255"
+                    [error]="errorPriorityName"
+                    (onChange)="handleDataChange($event, 'priorityName')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-input-number
+                    label="Giá trị"
+                    [value]="value"
+                    [required]="true"
+                    [maxLength]="10"
+                    [error]="errorValue"
+                    (onChange)="handleDataChange($event, 'value')"
+                ></app-input-number>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <app-file
+                    label="Icon đại diện"
+                    accept=".jpg, .jpeg, .png, .svg"
+                    [file]="file"
+                    [autoUpload]="true"
+                    service="alarm-priorities"
+                    (onChange)="handleFileChange($event)"
+                ></app-file>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-color-picker
+                    label="Màu đại diện"
+                    [(ngModel)]="color"
+                    [required]="true"
+                    [error]="errorColor"
+                    (onColorChange)="errorColor = ''"
+                ></app-color-picker>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                [iocVariant]="
+                    dialogTitle === 'Thêm mới độ ưu tiên' ? 'create' : 'update'
+                "
+                (onClick)="handlePriorityForm()"
+                [loading]="dialogLoading"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-dialog>

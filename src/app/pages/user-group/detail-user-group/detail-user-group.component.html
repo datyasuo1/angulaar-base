@@ -1,0 +1,65 @@
+<app-card-layout cardTitle="Chi tiết nhóm người dùng">
+    <ng-template #body>
+        <p-tabView>
+            <p-tabPanel header="Thông tin chung">
+                <ng-template pTemplate="content">
+                    <div class="grid">
+                        <div class="col-12 md:col-6">
+                            <app-label label="Tên nhóm người dùng">
+                                <b>{{ userGroupData?.name | dataValidator }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Phòng ban">
+                                <b>
+                                    {{
+                                        userGroupData?.agencyName
+                                            | dataValidator
+                                    }}
+                                </b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Nhóm cha">
+                                <b>{{
+                                    userGroupData?.parentName | dataValidator
+                                }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Vai trò">
+                                <b>{{
+                                    userGroupData?.roleName | dataValidator
+                                }}</b>
+                            </app-label>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <app-label label="Mô tả">
+                                <b>
+                                    {{
+                                        userGroupData?.description
+                                            | dataValidator
+                                    }}
+                                </b>
+                            </app-label>
+                        </div>
+                    </div>
+                    <div
+                        class="flex justify-content-center align-items-center gap-2 mt-4"
+                    >
+                        <app-button
+                            iocVariant="close"
+                            [autofocus]="true"
+                            (onClick)="handleClose()"
+                        ></app-button>
+                    </div>
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="Thành viên nhóm">
+                <ng-template pTemplate="content">
+                    <app-group-group [viewOnly]="true"></app-group-group>
+                </ng-template>
+            </p-tabPanel>
+        </p-tabView>
+    </ng-template>
+</app-card-layout>

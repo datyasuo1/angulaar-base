@@ -1,0 +1,147 @@
+<app-card-layout cardTitle="Thêm mới người dùng">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    [autofocus]="true"
+                    label="Tên đăng nhập"
+                    [value]="username"
+                    maxLength="50"
+                    [required]="true"
+                    [error]="errorUsername"
+                    (onChange)="handleDataChange($event, 'username')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    label="Họ và tên"
+                    [value]="fullname"
+                    maxLength="255"
+                    [required]="true"
+                    [error]="errorFullname"
+                    (onChange)="handleDataChange($event, 'fullname')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    label="Số điện thoại"
+                    type="number"
+                    [value]="phoneNumber"
+                    maxLength="10"
+                    [required]="true"
+                    [error]="errorPhoneNumber"
+                    (onChange)="handleDataChange($event, 'phoneNumber')"
+                >
+                </app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    label="Email"
+                    [value]="email"
+                    maxLength="100"
+                    [required]="true"
+                    [error]="errorEmail"
+                    (onChange)="handleDataChange($event, 'email')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    label="Số CCCD"
+                    [value]="cccd"
+                    type="number"
+                    maxLength="12"
+                    [required]="true"
+                    [error]="errorCccd"
+                    (onChange)="handleDataChange($event, 'cccd')"
+                >
+                </app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-calendar
+                    label="Ngày sinh"
+                    [(ngModel)]="date"
+                    placeholder="Chọn ngày sinh"
+                    [keepInvalid]="true"
+                ></app-calendar>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-select
+                    label="Giới tính"
+                    [options]="gentles"
+                    [selectedOption]="gentle"
+                    optionLabel="label"
+                    (onChange)="handleDataChange($event, 'gentle')"
+                    placeholder="Chọn giới tính"
+                ></app-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-input
+                    [autoTrim]="true"
+                    label="Địa chỉ"
+                    [value]="address"
+                    maxLength="255"
+                    [error]="errorAddress"
+                    (onChange)="handleDataChange($event, 'address')"
+                ></app-input>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-department-tree-select
+                    [department]="department"
+                    [errorDepartment]="errorDepartment"
+                    [required]="true"
+                    (onChange)="handleDataChange($event, 'department')"
+                >
+                </app-department-tree-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-role-multi-select
+                    [role]="role"
+                    [required]="true"
+                    [errorRole]="errorRole"
+                    (onChange)="handleDataChange($event, 'role')"
+                ></app-role-multi-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-password
+                    label="Mật khẩu"
+                    [required]="true"
+                    [(ngModel)]="password"
+                    [error]="errorPassword"
+                    [toggleMask]="true"
+                    caption="Mật khẩu phải từ 8-20 ký tự, bao gồm chữ hoa, chữ
+                            thường, số và ký tự đặc biệt"
+                    [showCaption]="!errorPassword"
+                    (ngModelChange)="errorPassword = ''"
+                ></app-password>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-password
+                    label="Xác nhận mật khẩu"
+                    [required]="true"
+                    [(ngModel)]="cPassword"
+                    [error]="errorCPassword"
+                    [toggleMask]="true"
+                    (ngModelChange)="errorCPassword = ''"
+                ></app-password>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center mt-4 gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleClose()"
+            ></app-button>
+            <app-button
+                iocVariant="create"
+                [loading]="loading"
+                (onClick)="handleCreateUser()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

@@ -1,0 +1,25 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <p-tree
+        pAutoFocus
+        [autofocus]="autofocus"
+        [value]="value"
+        selectionMode="checkbox"
+        class="w-full"
+        [(selection)]="selection"
+        [filter]="filter"
+        (selectionChange)="handleSelectChange($event)"
+        (onNodeDrop)="handleNodeDropChange()"
+        [loading]="loading"
+        [emptyMessage]="emptyMessage"
+        [draggableNodes]="draggableNodes"
+        [droppableNodes]="droppableNodes"
+        draggableScope="self"
+        droppableScope="self"
+    ></p-tree>
+</app-label>

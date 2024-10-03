@@ -1,0 +1,85 @@
+<div>
+    <app-select
+        label="Nhóm công việc "
+        id="level"
+        [options]="listTaskGroup"
+        [selectedOption]="selectedTaskGroup"
+        optionLabel="name"
+        placeholder="Chọn nhóm công việc"
+        (onChange)="handleTaskGroupChange($event)"
+    ></app-select>
+</div>
+<div class="mt-4">
+    <app-select
+        label="Phân loại công việc"
+        id="level"
+        [options]="listWorkflowType"
+        [selectedOption]="selectedWorkflowType"
+        optionLabel="name"
+        placeholder="Chọn loại công việc"
+        (onChange)="handleWorkflowTypesChange($event)"
+    ></app-select>
+</div>
+<div class="mt-4">
+    <app-select
+        label="Mức độ"
+        id="priority"
+        [options]="listPriority"
+        [selectedOption]="selectedPriority"
+        optionLabel="name"
+        placeholder="Chọn mức độ"
+        (onChange)="handlePriorityChange($event)"
+    ></app-select>
+</div>
+<div class="mt-4">
+    <app-calendar
+        label="Thời gian tạo công việc"
+        [ngModel]="createTimeRangeDates"
+        selectionMode="range"
+        [readonlyInput]="true"
+        placeholder="Từ ngày - đến ngày"
+        [showIcon]="true"
+        [keepInvalid]="true"
+        (ngModelChange)="handleSelectCreateDate($event)"
+    ></app-calendar>
+</div>
+<div class="mt-4">
+    <app-calendar
+        label="Thời gian hoàn thành dự kiến"
+        [ngModel]="doneTimeRangeDates"
+        selectionMode="range"
+        [readonlyInput]="true"
+        placeholder="Từ ngày - đến ngày"
+        [showIcon]="true"
+        [keepInvalid]="true"
+        [showClear]="doneTimeRangeDates?.length > 0"
+        (ngModelChange)="handleSelectDoneDate($event)"
+    ></app-calendar>
+</div>
+<div class="mt-4">
+    <app-select
+        [showClear]="selectedAssignUser?.id"
+        label="Cán bộ xử lý"
+        [options]="listUser"
+        [selectedOption]="selectedAssignUser"
+        optionLabel="fullName"
+        placeholder="Chọn cán bộ xử lý"
+        (onChange)="handleAssignUserChange($event)"
+        (onClear)="handleClearAssignUser()"
+    ></app-select>
+</div>
+<div class="flex justify-content-end mt-4 gap-2">
+    <app-button
+        label="Xóa bộ lọc"
+        class="w-full"
+        styleClass="w-full surface-card"
+        [outlined]="true"
+        (onClick)="clearFilter()"
+    ></app-button>
+    <app-button
+        label="Lọc"
+        class="w-full"
+        styleClass="w-full"
+        (onClick)="handleFilter()"
+    ></app-button>
+</div>

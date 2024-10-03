@@ -1,0 +1,131 @@
+<div *ngIf="listApplications.length > 0" class="my-6">
+    <h1 class="font-bold uppercase mb-4 text-2xl text-center">
+        {{ groupName }}
+    </h1>
+    <div class="flex gap-8 justify-content-center">
+        <p-card
+            style="background-color: #181f27"
+            class="max-h-22rem border-round-md"
+            *ngFor="let item of listApplications"
+        >
+            <div
+                (click)="createLog(item)"
+                class="bg-card flex flex-column py-7 max-w-22rem relative cursor-pointer"
+                style="min-width: 22rem"
+            >
+                <!-- <img class="border-round-xs w-8 m-auto" [src]="item.attachFileWeb && item.attachFileWeb != 'string' ? item.attachFileWeb : 'assets/images/default-card.png' " alt=""> -->
+                <img
+                    class="border-round-xs w-8 m-auto max-w-13rem max-h-13rem"
+                    (click)="navigate(item)"
+                    [src]="
+                        item.attachFileWeb && item.attachFileWeb != 'string'
+                            ? getPath(item)
+                            : 'assets/images/default-card.png'
+                    "
+                    alt=""
+                />
+                <!-- <img class="border-round-xs w-8 m-auto" [src]="item.attachFileWeb ? item.attachFileWeb : 'assets/images/default-card.png' " alt=""> -->
+                <p
+                    (click)="navigate(item)"
+                    class="text-center pt-4 font-semibold"
+                >
+                    {{ item.name }}
+                </p>
+                <i
+                    (click)="showToastInfo(item)"
+                    class="pi pi-info-circle absolute top-0 right-0 p-2"
+                ></i>
+            </div>
+        </p-card>
+    </div>
+    <br />
+    @if (totalRecords > 0) {
+        <app-paginator
+            class="relative home-paginator pt-4"
+            (onPageChange)="handlePageChange($event)"
+            [first]="first"
+            [rows]="rows"
+            [totalRecords]="totalRecords"
+            [rowsPerPageOptions]="[1, 2, 3, 4]"
+        >
+        </app-paginator>
+    }
+</div>
+
+<p-dialog [modal]="true" [(visible)]="visibleInfo" [style]="{ width: '50vw' }">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold text-center w-full">
+            Thông tin ứng dụng</span
+        >
+    </ng-template>
+    <div [innerHTML]="selectedApp ? selectedApp.description : ''"></div>
+    @if (selectedApp) {
+        <div *ngIf="selectedApp.webVersions.length == 1">
+            <p>
+                Phiên bản hiện tại:
+                <span class="font-bold">{{
+                    selectedApp ? selectedApp.versionName : ""
+                }}</span>
+            </p>
+            <p>
+                Mô tả phiên bản:
+                <span>{{ selectedApp.webVersions[0].description }}</span>
+            </p>
+            <p>
+                Ngày cập nhật:
+                <span class="font-bold">{{
+                    selectedApp.updatedDate | dateTimeConverter: "DATE"
+                }}</span>
+            </p>
+        </div>
+        <div class="mt-2" *ngIf="selectedApp.webVersions.length > 1">
+            <p>
+                Phiên bản hiện tại:
+                <span class="font-bold">{{
+                    selectedApp ? selectedApp.versionName : ""
+                }}</span>
+            </p>
+            <p>
+                Mô tả phiên bản:
+                <span>{{ selectedApp.webVersions[0].description }}</span>
+            </p>
+            <p>
+                Ngày cập nhật:
+                <span class="font-bold">{{
+                    selectedApp.updatedDate | dateTimeConverter: "DATE"
+                }}</span>
+            </p>
+            <p>Các phiên bản cũ hơn:</p>
+            <div class="flex justify-content-center">
+                <p-accordion
+                    class="w-full"
+                    expandIcon="pi pi-chevron-down"
+                    collapseIcon="pi pi-chevron-up"
+                    [multiple]="true"
+                >
+                    <p-accordionTab
+                        styleClass="mb-2"
+                        *ngFor="let item of selectedApp.webVersions | slice: 1"
+                        [header]="item.name"
+                    >
+                        <p>
+                            Mô tả phiên bản: <span>{{ item.description }}</span>
+                        </p>
+                        <p>
+                            Ngày cập nhật:
+                            <span class="font-bold">{{
+                                item.updatedDate | dateTimeConverter: "DATE"
+                            }}</span>
+                        </p>
+                    </p-accordionTab>
+                </p-accordion>
+            </div>
+        </div>
+    }
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-center">
+            <p-button label="Đóng" (click)="visibleInfo = false"></p-button>
+        </div>
+    </ng-template>
+</p-dialog>

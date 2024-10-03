@@ -1,0 +1,181 @@
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách người dùng"
+        [tableData]="data"
+        [rows]="rows"
+        [columns]="10"
+        [first]="first"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        dataKey="id"
+        [headerSchema]="tableHeaderSchema"
+        (onSort)="handleSortTable($event)"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <div class="flex gap-2">
+                <app-button
+                    label="Tải lên"
+                    styleClass="p-button-outlined"
+                    icon="ti ti-upload"
+                    (onClick)="handleImport()"
+                ></app-button>
+                <app-button
+                    iocVariant="create"
+                    (onClick)="handleAdd()"
+                ></app-button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [autofocus]="true"
+                        [value]="searchText"
+                        maxLength="255"
+                        placeholder="Nhập tên tài khoản"
+                        (onChange)="handleInputChange($event)"
+                        iconClass="ti ti-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-department-tree-select
+                        [department]="selectedDepartment"
+                        [showLabel]="false"
+                        [hasFilter]="true"
+                        (onChange)="handleDepartmentChange($event)"
+                    ></app-department-tree-select>
+                </th>
+                <th class="border-top-none">
+                    <app-role-multi-select
+                        [role]="role"
+                        [showLabel]="false"
+                        (onChange)="handleRoleChange($event)"
+                    ></app-role-multi-select>
+                </th>
+                <th class="border-top-none">
+                    <app-select
+                        [selectedOption]="searchStatus"
+                        [options]="statusTypes"
+                        (onChange)="handleStatusChange($event)"
+                        [hasFilter]="true"
+                    >
+                    </app-select>
+                </th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-data let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ data?.username }}</td>
+                <td
+                    style="
+                        min-width: 14rem;
+                        max-width: 20rem;
+                        overflow-wrap: break-word;
+                    "
+                >
+                    {{ data.fullName }}
+                </td>
+                <td>{{ data.email }}</td>
+                <td>{{ data.mainPhone }}</td>
+                <td>{{ data.agencyName }}</td>
+                <td>{{ getRoles(data.iocRoles) }}</td>
+                <td>{{ data.isActive ? "Đang hoạt động" : "Đang bị khoá" }}</td>
+                <td>
+                    <div
+                        class="flex gap-2 justify-content-center align-items-center"
+                    >
+                        <app-button
+                            iocVariant="iview"
+                            (onClick)="handleViewDetail(data)"
+                        ></app-button>
+                        <app-button
+                            iocVariant="iupdate"
+                            (onClick)="handleUpdate(data)"
+                        ></app-button>
+                        @if (data.id !== 27) {
+                            @if (data.isActive) {
+                                <app-button
+                                    iocVariant="icon"
+                                    icon="ti ti-lock"
+                                    (onClick)="handleLockAccount(data)"
+                                    tooltip="Khoá tài khoản"
+                                ></app-button>
+                            } @else {
+                                <app-button
+                                    iocVariant="icon"
+                                    icon="ti ti-lock-open"
+                                    (onClick)="handleUnlockAccount(data)"
+                                    tooltip="Mở khoá tài khoản"
+                                ></app-button>
+                            }
+                        }
+                        <app-button
+                            iocVariant="icon"
+                            icon="ti ti-history"
+                            (onClick)="handleViewHistory(data)"
+                            tooltip="Xem lịch sử"
+                        ></app-button>
+                        @if (data.id !== 27) {
+                            <app-button
+                                iocVariant="idelete"
+                                (onClick)="handleConfirmDelete(data)"
+                            ></app-button>
+                        }
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>
+<app-dialog [(visible)]="showDialog" (onHide)="resetDialog()">
+    <ng-template #header>
+        <span class="text-xl font-bold text-center w-full">
+            Tải lên danh sách người dùng
+        </span>
+    </ng-template>
+    <ng-template #content>
+        <div class="grid">
+            <div class="col-12">
+                <app-file
+                    [autofocus]="true"
+                    label="Tệp tin Excel"
+                    accept=".xlsx, .xlsm"
+                    [file]="file"
+                    [error]="errorFile"
+                    (onChange)="handleFileChange($event)"
+                ></app-file>
+            </div>
+        </div>
+        <div class="flex justify-content-end">
+            <app-button
+                label="Tải file Danh sách người dùng mẫu"
+                [link]="true"
+                icon="ti ti-download"
+                (onClick)="handleDownloadTemplate()"
+            >
+            </app-button>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="showDialog = false"
+            ></app-button>
+            <app-button
+                label="Tải lên"
+                icon="ti ti-upload"
+                [loading]="dialogLoading"
+                (onClick)="handleImportUser()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-dialog>

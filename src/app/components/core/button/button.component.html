@@ -1,0 +1,21 @@
+@if (hasPermission) {
+    <p-button
+        pAutoFocus
+        [autofocus]="autofocus"
+        [icon]="icon"
+        [loading]="loading"
+        [severity]="severity"
+        [label]="label"
+        [styleClass]="styleClass"
+        [disabled]="disabled"
+        [size]="size"
+        [pTooltip]="tooltip"
+        [tooltipPosition]="tooltipPosition"
+        [link]="link"
+        [style]="style"
+        [outlined]="outlined"
+        (onClick)="handleClick($event)"
+    >
+        <ng-content></ng-content>
+    </p-button>
+}

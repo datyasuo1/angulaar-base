@@ -1,0 +1,43 @@
+:host {
+    ::ng-deep {
+        .p-breadcrumb {
+            padding: 0.2rem;
+            background-color: transparent;
+            border-radius: unset;
+            border: unset;
+            ul {
+                li {
+                    .p-menuitem-link:focus {
+                        box-shadow: unset;
+                    }
+                }
+            }
+        }
+        .app-custom-card {
+            margin-bottom: 0px !important;
+        }
+
+        router-outlet + * {
+            position: relative;
+            animation: from-top 1s;
+        }
+    }
+}
+
+@keyframes from-top {
+    from {
+        opacity: 0;
+        top: -20px;
+    }
+    to {
+        opacity: 1;
+        top: 0px;
+    }
+}
+
+.app-sidebar-header {
+    position: relative;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    align-items: center;
+}

@@ -1,0 +1,151 @@
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách cấu hình tự động"
+        [tableData]="data"
+        [rows]="rows"
+        [columns]="8"
+        [first]="first"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+        ><ng-template #buttons>
+            <app-button
+                iocVariant="create"
+                permissionCode="create-auto-configuration"
+                (onClick)="handleCreate()"
+            ></app-button>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 12rem">Quy trình</th>
+                <th style="min-width: 10rem">Loại cảnh báo</th>
+                <th style="min-width: 10rem">Mức độ</th>
+                <th style="min-width: 8rem">Trạng thái</th>
+                <th style="min-width: 8rem" class="text-center">Thao tác</th>
+            </tr>
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [autofocus]="true"
+                        [value]="searchText"
+                        maxLength="255"
+                        placeholder="Nhập tên quy trình"
+                        (onChange)="handleInputChange($event)"
+                        iconClass="ti ti-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-data let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ data.masterProcessName }}</td>
+                <td>{{ data.fieldName }}</td>
+                <td>{{ data.priorityName }}</td>
+                <td>
+                    @if (data.status) {
+                        <i
+                            class="ti ti-circle-filled mr-1"
+                            style="font-size: 1rem; color: #28a745"
+                        ></i>
+                        Đang hoạt động
+                    }
+                    @if (!data.status) {
+                        <i
+                            class="ti ti-circle-filled mr-1"
+                            style="font-size: 1rem"
+                        ></i>
+                        Không hoạt động
+                    }
+                </td>
+                <td>
+                    <div
+                        class="flex gap-2 justify-content-center align-items-center"
+                    >
+                        <app-button
+                            iocVariant="iupdate"
+                            permissionCode="update-auto-configuration"
+                            (onClick)="handleUpdate(data)"
+                        ></app-button>
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="confirmDelete(data)"
+                            permissionCode="delete-auto-configuration"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>
+
+<app-dialog [(visible)]="showDialog" (onHide)="resetDialog()">
+    <ng-template #header>
+        <span class="text-xl font-bold text-center w-full">{{
+            dialogTitle
+        }}</span>
+    </ng-template>
+    <ng-template #content>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <app-select
+                    [autofocus]="true"
+                    label="Loại cảnh báo"
+                    [options]="warningTypes"
+                    [selectedOption]="selectedWarningType"
+                    [required]="true"
+                    [error]="errorWarningType"
+                    (onChange)="handleWarningTypeChange($event)"
+                    placeholder="Lựa chọn"
+                ></app-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-select
+                    label="Mức độ"
+                    [options]="levels"
+                    [selectedOption]="selectedLevel"
+                    [required]="true"
+                    [error]="errorLevel"
+                    (onChange)="handleLevelChange($event)"
+                    placeholder="Lựa chọn"
+                ></app-select>
+            </div>
+            <div class="col-12 md:col-6">
+                <app-select
+                    label="Quy trình"
+                    [options]="processes"
+                    [selectedOption]="selectedProcess"
+                    [required]="true"
+                    [error]="errorProcess"
+                    (onChange)="handleProcessChange($event)"
+                    placeholder="Lựa chọn"
+                ></app-select>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            <app-button
+                iocVariant="close"
+                (onClick)="showDialog = false"
+            ></app-button>
+            <app-button
+                [iocVariant]="
+                    dialogTitle === 'Cập nhật cấu hình tự động'
+                        ? 'update'
+                        : 'create'
+                "
+                [loading]="dialogLoading"
+                (onClick)="handleDialogButtonClick()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-dialog>

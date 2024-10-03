@@ -1,0 +1,268 @@
+<section id="filter-task" class="px-3">
+    <p-tabView
+        styleClass="tabview-custom"
+        (activeIndexChange)="onTabIndexChange($event)"
+        [scrollable]="true"
+    >
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <div class="text-nowrap">
+                    <span>Tất cả</span>
+                    <app-tag
+                        class="pl-1"
+                        [value]="totalRecords || 0"
+                        [rounded]="true"
+                        severity="secondary"
+                    ></app-tag>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+        <ng-container *ngFor="let statusWorkflow of listWorkflowStatus">
+            @if (statusWorkflow.id) {
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <div class="text-nowrap">
+                            <span>{{ statusWorkflow.name }}</span>
+                            <app-tag
+                                class="pl-1"
+                                [value]="statusWorkflow.count"
+                                [rounded]="true"
+                                severity="secondary"
+                            ></app-tag>
+                        </div>
+                    </ng-template>
+                </p-tabPanel>
+            }
+        </ng-container>
+
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <div class="text-nowrap">
+                    <span>Giám sát</span>
+                    <app-tag
+                        class="pl-1"
+                        [value]="totalMonitorCount || 0"
+                        [rounded]="true"
+                        severity="secondary"
+                    ></app-tag>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+    </p-tabView>
+</section>
+<section id="task-manage" class="flex">
+    <section id="task-list" class="xs:col-12 sm:col-6 lg:col-3 pb-0 pt-0">
+        <div class="flex align-items-center">
+            <div class="xs:col-12 sm:col-4 lg:col-8 p-0 search-task">
+                <app-input
+                    id="title-content"
+                    [value]="searchText"
+                    maxLength="255"
+                    placeholder="Nhập mã, tên, nội dung công việc..."
+                    (onInput)="handleSearchContentChange($event)"
+                    (onEnter)="handleSearchEnter()"
+                    (onChange)="handleSearchContentChange($event)"
+                    iconClass="pi pi-search"
+                    class="w-full"
+                ></app-input>
+            </div>
+            <div class="lg:col-4 flex whitespace-nowrap">
+                <div>
+                    <app-button
+                        label="Tìm kiếm"
+                        (onClick)="handleSearch()"
+                        [outlined]="true"
+                    ></app-button>
+                </div>
+                <div>
+                    <app-button
+                        class="pl-2"
+                        icon="pi pi-sliders-h"
+                        [outlined]="true"
+                        (onClick)="onFilterClick()"
+                    ></app-button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2">
+            <div class="xs:col-12 sm:col-3 lg:col-12 p-0 add-btn">
+                <app-button
+                    class="w-100"
+                    label="Thêm mới công việc"
+                    icon="pi pi-plus"
+                    (onClick)="onAddClick()"
+                ></app-button>
+            </div>
+        </div>
+        <div>
+            <div class="mt-1 task-list">
+                <p-listbox
+                    [options]="taskList"
+                    [(ngModel)]="selectedTask"
+                    optionLabel="name"
+                    emptyMessage="Không có dữ liệu"
+                >
+                    <ng-template let-item pTemplate="item">
+                        <div
+                            class="w-full px-4 py-3 text-base"
+                            (click)="handleViewTaskDetail(item)"
+                        >
+                            <div class="grid">
+                                <div class="xs:col-12 lg:col-10">
+                                    <span
+                                        class="text-blue-300 task-code font-semibold"
+                                    >
+                                        #{{ item.code }}
+                                    </span>
+                                    <span
+                                        class="text-white mt-3 max-line-clamp-2 font-semibold"
+                                        >{{ item.name }}</span
+                                    >
+                                </div>
+                                <div class="xs:col-12 lg:col-2">
+                                    <div
+                                        class="flex xs:justify-content-start lg:justify-content-end"
+                                    >
+                                        <span class="text-nowrap">{{
+                                            item.parentId | taskType
+                                        }}</span>
+                                    </div>
+                                    <div class="mt-2 text-right">
+                                        <img [src]="item.iconPath" width="20" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-content-between">
+                                <div class="flex pt-1 workflowTypeName text-sm">
+                                    <span class="max-line-clamp-2">{{
+                                        item.workflowTypeName
+                                    }}</span>
+                                    &nbsp;&bull;&nbsp;
+                                    <span class="pr-2">
+                                        {{
+                                            item.createdAt
+                                                | dateTimeConverter: "DATE_TIME"
+                                        }}
+                                    </span>
+                                </div>
+                                <app-tag
+                                    [value]="item.workflowStatusName"
+                                    [severity]="
+                                        getTagServerity(item.workflowStatusId)
+                                    "
+                                >
+                                </app-tag>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-listbox>
+                <div class="mt-3">
+                    @if (taskList.length > 0) {
+                        <div class="paginator-count px-3 py-2">
+                            Hiển thị {{ first + 1 }}-{{
+                                first + rows < totalRecords
+                                    ? first + rows
+                                    : totalRecords
+                            }}
+                            / {{ totalRecords }} bản ghi
+                        </div>
+                        <div
+                            class="h-full flex align-items-end justify-content-center"
+                        >
+                            <app-paginator
+                                style="width: 100%"
+                                (onPageChange)="handlePageChange($event)"
+                                [first]="first"
+                                [rows]="rows"
+                                [totalRecords]="totalRecords"
+                                [rowsPerPageOptions]="[
+                                    10, 20, 30, 50, 75, 100, 200,
+                                ]"
+                            >
+                            </app-paginator>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="task-detail" class="xs:col-12 sm:col-6 lg:col-9 pt-0">
+        <div class="task-detail-wrapper relative">
+            @if (isLoadingDetail) {
+                <app-loading [loading]="isLoadingDetail"></app-loading>
+            }
+
+            @if (
+                this.screenRendererInput.id &&
+                this.appId &&
+                this.screenRendererInput.id.length > 0 &&
+                this.appId.length > 0 &&
+                selectedTask
+            ) {
+                <screen-renderer
+                    [appId]="appId"
+                    [baseUrl]="screenBuilderURL"
+                    [input]="screenRendererInput | json"
+                    (moduleEventTriggered)="onScreenRendererEvent($event)"
+                ></screen-renderer>
+            }
+        </div>
+    </section>
+
+    <p-sidebar
+        [(visible)]="filterVisible"
+        position="right"
+        styleClass="w-30rem"
+    >
+        <ng-template pTemplate="header">
+            <div class="p-0">
+                <span> BỘ LỌC </span>
+            </div>
+        </ng-template>
+
+        <app-task-filter
+            [listWorkflowType]="workflowTypes"
+            [listPriority]="priorityList"
+            [listTaskGroup]="listTaskGroup"
+            (onFilter)="handleTaskFilter($event)"
+        ></app-task-filter>
+    </p-sidebar>
+
+    @if (createTaskVisible) {
+        <p-sidebar
+            [(visible)]="createTaskVisible"
+            styleClass="w-6"
+            position="right"
+            [showCloseIcon]="false"
+        >
+            <ng-template pTemplate="header">
+                <div class="flex justify-content-between w-full">
+                    <div class="pt-2">
+                        {{
+                            parentWorkFlow?.id
+                                ? "THÊM MỚI CÔNG VIỆC CON"
+                                : "THÊM MỚI CÔNG VIỆC"
+                        }}
+                    </div>
+                    <div>
+                        <app-button
+                            iocVariant="icon"
+                            icon="ti ti-x"
+                            (onClick)="handleSidebarClosed()"
+                        ></app-button>
+                    </div>
+                </div>
+            </ng-template>
+            <app-add-workflow
+                [workflowTypes]="workflowTypes"
+                [levelList]="priorityList"
+                [parentWorkFlow]="parentWorkFlow"
+                (onClose)="onCloseCreateTask()"
+                (onSave)="onSaveCreateTask()"
+                (alreadyInput)="onInputValue($event)"
+            >
+            </app-add-workflow>
+        </p-sidebar>
+    }
+</section>

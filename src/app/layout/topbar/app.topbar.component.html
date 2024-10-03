@@ -1,0 +1,227 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img
+            src="assets/images/logo/{{
+                layoutService.config.colorScheme === 'light'
+                    ? 'LOGO 787 HPG 1'
+                    : 'LOGO 787 HPG 1'
+            }}.svg"
+            alt="logo"
+        />
+        <span class="logo-title"> CQS </span>
+        <div class="logo-title" [style]="{ width: '35.75px' }"></div>
+    </a>
+
+    @if (!this.layoutService.config.menu) {
+        <p-menubar
+            #menubar
+            id="top-menu-bar"
+            class="app-menubar"
+            [model]="navItems"
+            (onFocus)="handleFocus($event)"
+        >
+            @if (!this.layoutService.config.menu) {
+                <div [style]="{ width: '56px' }"></div>
+            }
+        </p-menubar>
+    }
+
+    <div
+        #topbarmenu
+        class="layout-topbar-menu"
+        [ngClass]="{
+            'layout-topbar-menu-mobile-active':
+                layoutService.state.profileSidebarVisible,
+        }"
+    >
+        <p-menu
+            #bellMenu
+            [popup]="true"
+            [model]="notificationItems"
+            styleClass="custom-menu-item"
+            (onShow)="handleShowNotifications()"
+            (onHide)="handleHideNotifications()"
+        >
+            <ng-template pTemplate="item" let-item>
+                @if (item.header) {
+                    <div
+                        class="flex justify-content-between align-items-center"
+                    >
+                        <div class="custom-label-top p-3">
+                            {{ item.content }}
+                        </div>
+                        @if (totalUnreadElements > 0) {
+                            <p-button
+                                styleClass="m-3"
+                                [style]="{ color: 'var(--text-color)' }"
+                                icon="ti ti-check"
+                                [rounded]="true"
+                                [text]="true"
+                                pTooltip="Đánh dấu đã đọc tất cả"
+                                tooltipPosition="top"
+                                (onClick)="handleReadAll($event)"
+                            ></p-button>
+                        }
+                    </div>
+                }
+
+                @if (item.body) {
+                    <div
+                        class="p-menuitem-link p-3"
+                        (mouseenter)="onMouseEnter(item)"
+                        (mouseleave)="onMouseLeave(item)"
+                        (click)="handleNotiItemClick($event, item)"
+                    >
+                        <span
+                            [class]="item.icon"
+                            [ngStyle]="{
+                                color: !item.read
+                                    ? 'var(--primary-500)'
+                                    : 'unset',
+                            }"
+                        ></span>
+                        <div class="custom-label">
+                            <span
+                                [ngStyle]="{
+                                    color: !item.read
+                                        ? 'var(--primary-500)'
+                                        : 'unset',
+                                }"
+                                class="custom-label-content"
+                                >{{ item.content }}
+                            </span>
+                            <div
+                                [ngStyle]="{
+                                    color: !item.read
+                                        ? 'var(--primary-500)'
+                                        : 'unset',
+                                }"
+                                class="custom-label-time"
+                            >
+                                {{
+                                    item.createdAt
+                                        | dateTimeConverter: "FROM_NOW"
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (item.loading) {
+                    <div class="skeleton-box p-3">
+                        <div class="skeleton-content">
+                            <div class="icon-skeleton-center">
+                                <div class="bg-skeleton-rounded">
+                                    <div class="skeleton"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="bg-skeleton-message">
+                                    <div class="skeleton noti-message"></div>
+                                </div>
+                                <div class="bg-skeleton-time">
+                                    <div class="skeleton noti-time"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </ng-template>
+        </p-menu>
+
+        <p-autoComplete
+            [(ngModel)]="featureSearch"
+            [suggestions]="data"
+            placeholder="Nhập tên chức năng"
+            (completeMethod)="handleInputChange($event)"
+            (onSelect)="handleSelectFunction($event)"
+        >
+        </p-autoComplete>
+        <button
+            class="p-link layout-topbar-button mr-2"
+            (click)="bellMenu.toggle($event)"
+        >
+            @if (calBadgeValue() !== "") {
+                <i
+                    class="ti ti-bell text-white"
+                    severity="danger"
+                    pBadge
+                    [value]="calBadgeValue()"
+                ></i>
+            }
+            @if (calBadgeValue() === "") {
+                <i class="ti ti-bell text-white"></i>
+            }
+        </button>
+
+        <p-menu
+            #userMenu
+            [popup]="true"
+            [model]="menuItems"
+            styleClass="custom-menu-item-2"
+        ></p-menu>
+        <button
+            class="p-link layout-topbar-button user-btn mr-2"
+            (click)="userMenu.toggle($event)"
+        >
+            <i class="ti ti-user"></i>
+        </button>
+    </div>
+</div>
+<p-dialog
+    [(visible)]="show"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+    (onHide)="resetDialog()"
+>
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold text-center w-full">{{
+            dialogTitle
+        }}</span>
+    </ng-template>
+    <div class="grid">
+        <div class="xs:col-12 md:col-12">
+            <p>Đánh giá mức độ hài lòng <span class="text-red-400">*</span></p>
+            <p class="font-italic">
+                Bạn có hài lòng với các chức năng trên ứng dụng?
+            </p>
+            <p-rating
+                class="flex justify-content-center"
+                [(ngModel)]="ratingCounts"
+                [cancel]="false"
+                (onRate)="onRatingChange()"
+            >
+            </p-rating>
+            @if (errorRating) {
+                <div class="text-red-600">
+                    {{ errorRating }}
+                </div>
+            }
+        </div>
+        <div class="xs:col-12 md:col-12">
+            <app-text-area
+                label="Nội dung góp ý"
+                id="description"
+                placeholder="Nhập nội dung góp ý"
+                [(ngModel)]="descriptionInfo"
+                [error]="errorDescriptionInfo"
+                [rows]="3"
+                maxLength="1000"
+            >
+            </app-text-area>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-center">
+            <app-button
+                label="Đóng"
+                (onClick)="show = false"
+                styleClass="p-button-outlined"
+            ></app-button>
+            <app-button
+                (onClick)="createFeedback()"
+                [loading]="dialogLoading"
+                label="Góp ý"
+            ></app-button>
+        </div>
+    </ng-template>
+</p-dialog>

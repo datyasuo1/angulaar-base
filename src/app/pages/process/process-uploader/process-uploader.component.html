@@ -1,0 +1,37 @@
+<app-card-layout cardTitle="Tải luồng quy trình">
+    <ng-template #body>
+        <div class="flex justify-content-center">
+            <div class="align-self-center w-9">
+                <h5 class="text-center">Bạn sắp tải lên quy trình</h5>
+                <p class="m-0 text-center">
+                    Sau khi tải lên, bạn có thể phân quyền lại người dùng và
+                    nhóm vào quy trình. Biến môi trường và gói sẽ không được tải
+                    lên, do đó bạn phải cấu hình các tính năng này theo cách thủ
+                    công.
+                </p>
+
+                <app-file
+                    [autofocus]="true"
+                    label=""
+                    accept=".json"
+                    [file]="file"
+                    [error]="errorFile"
+                    (onChange)="handleFileChange($event)"
+                ></app-file>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2 mt-4">
+            <app-button
+                iocVariant="close"
+                (onClick)="handleCancel()"
+            ></app-button>
+            <app-button
+                label="Lưu lại"
+                [loading]="loading"
+                (onClick)="handleSave()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>

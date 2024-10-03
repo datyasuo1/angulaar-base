@@ -1,0 +1,298 @@
+@if (fieldInfo?.hasAlert || fieldInfo?.dashboardScreenId?.length > 0) {
+    <p-tabView styleClass="p-2">
+        @if (fieldInfo?.hasAlert) {
+            <p-tabPanel header="Cảnh báo">
+                <ng-template pTemplate="content">
+                    <div class="p-2">
+                        <div
+                            class="flex gap-2 w-full"
+                            cdkTrapFocus
+                            [cdkTrapFocusAutoCapture]="true"
+                        >
+                            <app-input
+                                [autofocus]="true"
+                                [value]="contentTitle"
+                                maxLength="255"
+                                placeholder="Nhập tiêu đề, nội dung..."
+                                (onChange)="handleContentChange($event)"
+                                iconClass="ti ti-search"
+                                [style]="{ flex: 1, maxWidth: '20rem' }"
+                            ></app-input>
+                            <app-button
+                                label="Tìm kiếm"
+                                icon="ti ti-search"
+                                (onClick)="handleSearch()"
+                            ></app-button>
+                            <app-button
+                                label="Bộ lọc"
+                                icon="ti ti-filter"
+                                (onClick)="filterVisible = true"
+                            ></app-button>
+                            <div class="ml-auto flex gap-2">
+                                <app-button
+                                    iocVariant="create"
+                                    permissionCode="create-public-service"
+                                    (onClick)="handleAddService()"
+                                ></app-button>
+                                <app-button
+                                    label="Xuất danh sách"
+                                    icon="ti ti-download"
+                                    permissionCode="download-public-service"
+                                    (onClick)="exportReport()"
+                                ></app-button>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 justify-content-start mt-3">
+                            @for (s of statusProcessList; track s) {
+                                <div
+                                    [style]="{
+                                        borderBottom: s.chosen
+                                            ? '1px solid var(--primary-400)'
+                                            : 'unset',
+                                        color: s.chosen
+                                            ? 'var(--primary-400)'
+                                            : 'unset',
+                                    }"
+                                    class="py-1 px-0 cursor-pointer select-none"
+                                    (click)="handleTabClick(s)"
+                                >
+                                    {{ s.status }}
+                                </div>
+                            }
+                        </div>
+                        <p-divider type="solid"></p-divider>
+                        <div
+                            class="xs:block xl:flex justify-content-between"
+                            [style]="{ height: 'calc(100vh - 255px)' }"
+                        >
+                            <p-listbox
+                                class="app-custom-listbox"
+                                [options]="warningList"
+                                [(ngModel)]="selectedWarning"
+                                [listStyle]="{
+                                    maxHeight: 'unset',
+                                    height: '100%',
+                                }"
+                                optionLabel="name"
+                                emptyMessage="Không có dữ liệu"
+                            >
+                                <ng-template let-item pTemplate="item">
+                                    <div
+                                        class="w-full app-border-bottom py-2"
+                                        (click)="handleItemClick(item)"
+                                    >
+                                        <div
+                                            class="flex justify-content-between align-items-center"
+                                        >
+                                            <span>
+                                                {{
+                                                    item.createdAt
+                                                        | dateTimeConverter
+                                                            : "DATE_TIME"
+                                                }}
+                                            </span>
+                                            <img
+                                                [src]="
+                                                    item?.icon
+                                                        | objToLink
+                                                            : item?.mediaHost
+                                                "
+                                                alt="Image"
+                                                width="15"
+                                                height="15"
+                                            />
+                                        </div>
+                                        <div
+                                            class="text-overflow-ellipsis overflow-hidden font-medium app-custom-title my-2"
+                                        >
+                                            {{ item.title }}
+                                        </div>
+                                        @if (item.address) {
+                                            <div class="mt-1 mb-2">
+                                                {{ item.address }}
+                                            </div>
+                                        }
+                                        <div
+                                            class="flex justify-content-between align-items-center mt-3"
+                                        >
+                                            <div [style]="{ color: '#D89614' }">
+                                                #{{ item.fieldName }}
+                                            </div>
+                                            <div
+                                                [ngClass]="
+                                                    'tag-style font-medium'
+                                                "
+                                                [style]="{
+                                                    color: item.statusColorCode,
+                                                    border:
+                                                        '1px solid' +
+                                                        item.statusColorCode,
+                                                    background: 'transparent',
+                                                }"
+                                            >
+                                                {{ item.statusName }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="footer">
+                                    @if (warningList.length > 0) {
+                                        <app-paginator
+                                            (onPageChange)="
+                                                handlePageChange($event)
+                                            "
+                                            [first]="first"
+                                            [rows]="rows"
+                                            [totalRecords]="totalRecords"
+                                            [rowsPerPageOptions]="[5, 10, 15]"
+                                            [pageLinkSize]="3"
+                                        >
+                                        </app-paginator>
+                                    }
+                                    @if (warningList.length == 0) {
+                                        <div style="height: 56.5px"></div>
+                                    }
+                                </ng-template>
+                            </p-listbox>
+                            <p-divider
+                                class="xs:hidden xl:block"
+                                layout="vertical"
+                            ></p-divider>
+
+                            <div
+                                [ngClass]="{
+                                    'xs:mt-3 lg:mt-0 w-full relative overflow-x-hidden ': true,
+                                    'overflow-y-scroll': !loading,
+                                    'overflow-y-hidden': loading,
+                                }"
+                            >
+                                <app-loading [loading]="loading"></app-loading>
+                                @if (
+                                    this.screenRendererInput.id && this.appId
+                                ) {
+                                    <screen-renderer
+                                        [appId]="appId"
+                                        [baseUrl]="screenBuilderURL"
+                                        [input]="screenRendererInput | json"
+                                        (moduleEventTriggered)="
+                                            onScreenRendererEvent($event)
+                                        "
+                                    ></screen-renderer>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-tabPanel>
+        }
+        @if (fieldInfo?.dashboardScreenId?.length > 0) {
+            <p-tabPanel header="Dashboard - Lowcoder">
+                <ng-template pTemplate="content">
+                    <app-dashboard-lowcoder
+                        [appId]="fieldInfo.dashboardScreenId"
+                    ></app-dashboard-lowcoder>
+                </ng-template>
+            </p-tabPanel>
+        }
+    </p-tabView>
+
+    <p-sidebar
+        [(visible)]="filterVisible"
+        position="right"
+        [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
+        styleClass="layout-config-sidebar w-20rem"
+        [blockScroll]="true"
+        styleClass="xs:w-11 sm:w-7 md:w-6 lg:w-5 xl:w-3"
+    >
+        <div class="grid">
+            <div class="xs:col-12">
+                <app-tree-select
+                    label="Trạng thái"
+                    [selectedOption]="selectedStatusProcess"
+                    [options]="statusProcessList"
+                    (onChange)="handleTagClick($event)"
+                    (onClear)="handleTagClear()"
+                    optionLabel="status"
+                ></app-tree-select>
+            </div>
+            <div class="xs:col-12">
+                <app-select
+                    label="Mức độ"
+                    [options]="levelList"
+                    [selectedOption]="selectedLevel"
+                    (onChange)="handleLevelChange($event)"
+                    (onClear)="handleLevelClear()"
+                ></app-select>
+            </div>
+            <div class="xs:col-12">
+                <app-calendar
+                    label="Thời gian tạo"
+                    [(ngModel)]="rangeDates"
+                    selectionMode="range"
+                    placeholder="Từ ngày - đến ngày"
+                    [keepInvalid]="true"
+                ></app-calendar>
+            </div>
+            <div class="xs:col-12">
+                <app-department-tree-select
+                    [department]="department"
+                    placeholder=""
+                    [hasAllValue]="true"
+                    [required]="true"
+                    (onChange)="handleDepartmentChange($event)"
+                ></app-department-tree-select>
+            </div>
+            <div class="xs:col-6">
+                <app-button
+                    styleClass="p-button-outlined w-full"
+                    label="Xoá bộ lọc"
+                    (onClick)="handleClearFilter()"
+                ></app-button>
+            </div>
+            <div class="xs:col-6">
+                <app-button
+                    styleClass="w-full"
+                    label="Lọc"
+                    (onClick)="handleFilter()"
+                ></app-button>
+            </div>
+        </div>
+    </p-sidebar>
+    @if (roomStatus !== 2) {
+        <div
+            class="bg-white floating-chat enter"
+            (click)="handleFloatingChatClick()"
+        >
+            @if (roomStatus === 0) {
+                <i class="ti ti-plus" style="font-size: 1.5rem"></i>
+            } @else if (roomStatus === 1) {
+                <i class="ti ti-brand-messenger" style="font-size: 1.5rem"></i>
+            }
+        </div>
+    }
+
+    <app-dialog
+        [(visible)]="showDialog"
+        styleClass="md:w-11 lg:w-10 xl:w-9 xxl:w-8"
+    >
+        <ng-template #header><div></div></ng-template>
+        <ng-template #content>
+            <div [style]="{ height: '70vh' }">
+                <iframe
+                    [src]="
+                        chatURL +
+                            '/group/' +
+                            discussName +
+                            '?layout=embedded&resumeToken=' +
+                            chatToken | safe
+                    "
+                    width="100%"
+                    height="100%"
+                    frameborder="0"
+                    scrolling="auto"
+                ></iframe>
+            </div>
+        </ng-template>
+        <ng-template #footer></ng-template>
+    </app-dialog>
+}

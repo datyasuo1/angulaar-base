@@ -1,0 +1,105 @@
+<p-tabView>
+    <p-tabPanel header="Web">
+        <div class="card">
+            <div>
+                <h6 class="title">
+                    Lịch sử truy cập ứng dụng trên web ({{ totalWebRecord }})
+                </h6>
+            </div>
+            <div class="w-3">
+                <app-calendar
+                    label="Khoảng thời gian"
+                    [(ngModel)]="filterWebDateRange"
+                    selectionMode="range"
+                    [readonlyInput]="true"
+                    placeholder="Từ ngày - đến ngày"
+                    [showIcon]="true"
+                    [keepInvalid]="true"
+                    (ngModelChange)="handleSelectWebDate($event)"
+                ></app-calendar>
+            </div>
+
+            <app-lazy-table
+                [tableData]="listWebAppAccessLog"
+                [rows]="webTableRows"
+                [columns]="4"
+                [first]="webFirst"
+                [totalRecords]="totalWebRecord"
+                [loading]="isLoading"
+                dataKey="id"
+                (onLazyLoad)="loadTableWeb($event)"
+            >
+                <ng-template #header>
+                    <tr>
+                        <th style="min-width: 3rem" class="text-center">STT</th>
+                        <th>Thời gian truy cập</th>
+                        <th>Ứng dụng truy cập</th>
+                        <th>Nhóm ứng dụng</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-log let-rowIndex="rowIndex">
+                    <tr>
+                        <td class="text-center">{{ rowIndex + 1 }}</td>
+                        <td>
+                            {{ log.accessDate | date: "dd/MM/yyyy HH:mm" }}
+                        </td>
+                        <td>{{ log.appName }}</td>
+                        <td>{{ log.groupAppName }}</td>
+                    </tr>
+                </ng-template>
+            </app-lazy-table>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Thiết bị di động">
+        <div class="card">
+            <div>
+                <h6 class="title">
+                    Lịch sử truy cập ứng dụng trên thiết bị di động ({{
+                        totalMobileRecord
+                    }})
+                </h6>
+            </div>
+            <div class="w-3">
+                <app-calendar
+                    label="Khoảng thời gian"
+                    [(ngModel)]="filterMobileDateRange"
+                    selectionMode="range"
+                    [readonlyInput]="true"
+                    placeholder="Từ ngày - đến ngày"
+                    [showIcon]="true"
+                    [keepInvalid]="true"
+                    (ngModelChange)="handleSelectMobileDate($event)"
+                ></app-calendar>
+            </div>
+            <app-lazy-table
+                [tableData]="listMobileAppAccessLog"
+                [rows]="mobileTableRows"
+                [columns]="4"
+                [first]="mobileFirst"
+                [totalRecords]="totalMobileRecord"
+                [loading]="isLoading"
+                dataKey="id"
+                (onLazyLoad)="loadTableMobile($event)"
+            >
+                <ng-template #header>
+                    <tr>
+                        <th style="min-width: 3rem" class="text-center">STT</th>
+                        <th>Thời gian truy cập</th>
+                        <th>Ứng dụng truy cập</th>
+                        <th>Nhóm ứng dụng</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-log let-rowIndex="rowIndex">
+                    <tr>
+                        <td class="text-center">{{ rowIndex + 1 }}</td>
+                        <td>
+                            {{ log.accessDate | date: "dd/MM/yyyy HH:mm" }}
+                        </td>
+                        <td>{{ log.appName }}</td>
+                        <td>{{ log.groupAppName }}</td>
+                    </tr>
+                </ng-template>
+            </app-lazy-table>
+        </div>
+    </p-tabPanel>
+</p-tabView>

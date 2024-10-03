@@ -1,0 +1,15 @@
+<div class="flex">
+    <p-checkbox
+        [formControl]="control"
+        [ngClass]="error ? 'ng-invalid ng-dirty' : ''"
+        [binary]="binary"
+        [value]="value"
+    />
+    <app-label
+        [label]="label"
+        [required]="required"
+        [error]="error"
+        class="ml-2 mt-1"
+    >
+    </app-label>
+</div>

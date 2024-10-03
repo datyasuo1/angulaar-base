@@ -1,0 +1,11 @@
+:host {
+    ::ng-deep {
+        .p-menu {
+            width: 100%;
+            border: transparent;
+        }
+        .card:last-child {
+            margin-bottom: 2rem;
+        }
+    }
+}

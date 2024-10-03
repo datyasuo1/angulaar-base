@@ -1,0 +1,46 @@
+<div class="contact" style="text-align: right">
+    <div class="fab-wrapper">
+        <input id="fabCheckbox" type="checkbox" class="fab-checkbox" />
+        <label class="fab" for="fabCheckbox">
+            <!-- <i class="icon-cps-fab-menu"></i> -->
+            <!-- <i class="icon-cps-close"></i> -->
+            <img
+                (click)="close = !close"
+                *ngIf="!close"
+                src="assets/images/contact.png"
+                alt=""
+            />
+            <img
+                (click)="close = !close"
+                *ngIf="close"
+                src="assets/images/close.png"
+                alt=""
+            />
+        </label>
+        <div *ngIf="close" class="fab-wheel">
+            <a
+                class="fab-action fab-action-1"
+                href="https://zalo.me/3933364074151297969"
+                rel="nofollow"
+                target="_blank"
+            >
+                <span class="fab-title">Trao đổi qua Zalo</span>
+                <div class="fab-button fab-button-3">
+                    <img src="assets/images/zalo.png" alt="Image" />
+                </div>
+            </a>
+            <a
+                class="fab-action fab-action-3"
+                href="mailto:cskh_vts@viettel.com.vn"
+                rel="nofollow"
+            >
+                <span class="fab-title">Trao đổi qua mail</span>
+                <div class="fab-button fab-button-3">
+                    <img src="assets/images/mail.png" alt="Image" />
+                </div>
+            </a>
+        </div>
+
+        <div *ngIf="close" class="devvn_bg"></div>
+    </div>
+</div>

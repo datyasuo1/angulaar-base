@@ -1,0 +1,27 @@
+<app-label
+    [label]="label"
+    [required]="required"
+    [error]="error"
+    [caption]="caption"
+    [showCaption]="showCaption"
+>
+    <p-treeSelect
+        pAutoFocus
+        [autofocus]="autofocus"
+        containerStyleClass="w-full"
+        [(ngModel)]="selectedOption"
+        [options]="convertedOptions"
+        [placeholder]="placeholder"
+        (ngModelChange)="handleChange($event)"
+        (onClear)="handleClear()"
+        (onNodeUnselect)="handleClear()"
+        [filter]="filter"
+        [resetFilterOnHide]="resetFilterOnHide"
+        [showClear]="showClear"
+        [filterMode]="filterMode"
+        [emptyMessage]="emptyMessage"
+        [disabled]="disabled"
+        [appendTo]="appendTo"
+        [ngClass]="{ 'ng-invalid ng-dirty': error }"
+    ></p-treeSelect>
+</app-label>

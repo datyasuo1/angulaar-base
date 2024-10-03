@@ -1,0 +1,116 @@
+<div class="grid">
+    <div class="col-12 md:col-6">
+        <app-input
+            [autoTrim]="true"
+            label="Tên đăng nhập"
+            [value]="username"
+            maxLength="50"
+            [required]="true"
+            [disabled]="true"
+        ></app-input>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-input
+            [autoTrim]="true"
+            [autofocus]="true"
+            label="Họ và tên"
+            [value]="fullName"
+            [required]="true"
+            [error]="errorFullName"
+            maxLength="255"
+            (onChange)="handleDataChange($event, 'fullName')"
+        ></app-input>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-input
+            [autoTrim]="true"
+            label="Số điện thoại"
+            [value]="phoneNumber"
+            [required]="true"
+            [error]="errorPhoneNumber"
+            maxLength="10"
+            (onChange)="handleDataChange($event, 'phoneNumber')"
+        >
+        </app-input>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-input
+            [autoTrim]="true"
+            label="Email"
+            [value]="email"
+            maxLength="100"
+            [required]="true"
+            [error]="errorEmail"
+            (onChange)="handleDataChange($event, 'email')"
+        ></app-input>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-input
+            [autoTrim]="true"
+            label="Số CCCD"
+            [value]="cccd"
+            type="number"
+            maxLength="12"
+            [required]="true"
+            [error]="errorCccd"
+            (onChange)="handleDataChange($event, 'cccd')"
+        >
+        </app-input>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-calendar
+            label="Ngày sinh"
+            [(ngModel)]="date"
+            placeholder="Chọn ngày sinh"
+            [keepInvalid]="true"
+        ></app-calendar>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-select
+            label="Giới tính"
+            [options]="gentles"
+            [selectedOption]="gentle"
+            optionLabel="label"
+            (onChange)="handleDataChange($event, 'gentle')"
+            placeholder="Chọn giới tính"
+        ></app-select>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-input
+            [autoTrim]="true"
+            label="Địa chỉ"
+            [value]="address"
+            maxLength="255"
+            [error]="errorAddress"
+            (onChange)="handleDataChange($event, 'address')"
+        ></app-input>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-department-tree-select
+            [(department)]="department"
+            [selectedDepartmentId]="selectedDepartmentId"
+            [required]="true"
+            [errorDepartment]="errorDepartment"
+            (onChange)="handleDataChange($event, 'department')"
+        ></app-department-tree-select>
+    </div>
+    <div class="col-12 md:col-6">
+        <app-role-multi-select
+            [(role)]="role"
+            [selectedRoleIds]="roleIds"
+            [required]="true"
+            [autoGetData]="false"
+            [errorRole]="errorRole"
+            (onChange)="handleDataChange($event, 'role')"
+        >
+        </app-role-multi-select>
+    </div>
+</div>
+<div class="flex justify-content-center align-items-center gap-2 mt-4">
+    <app-button iocVariant="close" (onClick)="handleClose()"></app-button>
+    <app-button
+        iocVariant="update"
+        [loading]="loading"
+        (onClick)="handleUpdate()"
+    ></app-button>
+</div>

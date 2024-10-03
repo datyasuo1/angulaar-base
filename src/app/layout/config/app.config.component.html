@@ -1,0 +1,121 @@
+<button class="layout-config-button p-link" (click)="onConfigButtonClick()">
+    <i class="ti ti-settings pi-spin" style="font-size: 1rem"></i>
+</button>
+
+<p-sidebar
+    [autoZIndex]="false"
+    [(visible)]="visible"
+    position="right"
+    [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
+    styleClass="layout-config-sidebar w-20rem"
+>
+    <h5>Kích thước</h5>
+    <div class="flex align-items-center">
+        <app-button
+            icon="ti ti-minus"
+            (onClick)="decrementScale()"
+            styleClass="p-button-text p-button-rounded w-2rem h-2rem mr-2"
+            [disabled]="scale === scales[0]"
+        ></app-button>
+        <div class="flex gap-2 align-items-center">
+            @for (s of scales; track s) {
+                <i
+                    class="ti ti-circle-filled text-300"
+                    [ngClass]="{ 'text-primary-500': s === scale }"
+                ></i>
+            }
+        </div>
+        <app-button
+            icon="ti ti-plus"
+            (onClick)="incrementScale()"
+            styleClass="p-button-text p-button-rounded w-2rem h-2rem ml-2"
+            [disabled]="scale === scales[scales.length - 1]"
+        ></app-button>
+    </div>
+
+    @if (!minimal) {
+        <h5>Ngôn ngữ</h5>
+        <div class="flex gap-4 my-4">
+            <app-radio-button
+                name="language"
+                value="vi"
+                label="Tiếng Việt"
+                [(ngModel)]="language"
+            ></app-radio-button>
+            <app-radio-button
+                name="language"
+                value="en"
+                label="Tiếng Anh"
+                [(ngModel)]="language"
+            ></app-radio-button>
+        </div>
+    }
+
+    @if (!minimal) {
+        <div
+            class="w-full flex justify-content-between"
+            [style]="{ marginTop: '1rem' }"
+        >
+            <h5>Thanh bên</h5>
+            <p-inputSwitch [(ngModel)]="menu"></p-inputSwitch>
+        </div>
+    }
+
+    @if (!minimal) {
+        <div
+            class="w-full flex justify-content-between"
+            [style]="{ marginTop: '1rem' }"
+        >
+            <h5>Chế độ tối</h5>
+            <p-inputSwitch [(ngModel)]="colorScheme"></p-inputSwitch>
+        </div>
+        <div [style]="{ marginTop: '1rem' }">
+            @if (this.layoutService.config.colorScheme === "light") {
+                <div class="grid">
+                    @for (item of themeList; track item) {
+                        <div class="col-3" [hidden]="!(item.mode === 'light')">
+                            <button
+                                [ngClass]="{
+                                    'p-link w-3rem h-3rem custom-button ': true,
+                                    'chosen-theme': item.active
+                                }"
+                                (click)="changeTheme(item.theme, item.mode)"
+                                [pTooltip]="item.alt"
+                                tooltipPosition="top"
+                            >
+                                <img
+                                    [src]="item.src"
+                                    class="w-full h-full"
+                                    [alt]="item.alt"
+                                />
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+            @if (this.layoutService.config.colorScheme === "dark") {
+                <div class="grid">
+                    @for (item of themeList; track item) {
+                        <div class="col-3" [hidden]="!(item.mode === 'dark')">
+                            <button
+                                [ngClass]="{
+                                    'p-link w-3rem h-3rem custom-button ': true,
+                                    'chosen-theme': item.active
+                                }"
+                                (click)="changeTheme(item.theme, item.mode)"
+                                [pTooltip]="item.alt"
+                                tooltipPosition="top"
+                            >
+                                <img
+                                    [src]="item.src"
+                                    class="w-full h-full"
+                                    [alt]="item.alt"
+                                />
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</p-sidebar>

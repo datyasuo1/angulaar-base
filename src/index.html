@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>CQS</title>
+        <base href="/" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="assets/images/logo/LOGO 787 HPG 1.svg"
+        />
+        <!-- Pace -->
+        <script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/pace-js@latest/pace-theme-default.min.css"
+        />
+
+        <!-- Viettel Map -->
+        <script src="https://maps.viettel.vn/files/sdk/vtmap-gl-js/v1.2.1/vtmap-gl.js"></script>
+        <link
+            href="https://maps.viettel.vn/files/sdk/vtmap-gl-js/v1.2.1/vtmap-gl.css"
+            rel="stylesheet"
+        />
+
+        <!-- Map Directions -->
+        <script src="https://files-maps.viettel.vn/sdk/vtmap-gl-directions/v4.1.0/vtmap-gl-directions.js"></script>
+        <link
+            href="https://files-maps.viettel.vn/sdk/vtmap-gl-directions/v4.1.0/vtmap-gl-directions.css"
+            rel="stylesheet"
+        />
+
+        <!-- Video Wall -->
+        <meta
+            http-equiv="origin-trial"
+            content="AtLZkwXgPSM5EfLIbr6jvEkFQ2WYnP9IsJl8S3TxGtc02b904HZlBspEhEVggci5n1R2S9YwTRo8IbCVp9JjswYAAACAeyJvcmlnaW4iOiJodHRwczovL2lvYy12My54cmNvbW11bml0eS5vcmc6NDQzIiwiZmVhdHVyZSI6IlVucmVzdHJpY3RlZFNoYXJlZEFycmF5QnVmZmVyIiwiZXhwaXJ5IjoxNzA5ODU1OTk5LCJpc1N1YmRvbWFpbiI6dHJ1ZX0="
+        />
+        <meta
+            http-equiv="origin-trial"
+            content="An5Nj9j1lEuoRBANFRbJIaQMW6tXQcAzxBZ5xGZcKxnRmNDAwJPzV1Ho9jNTzMFlmREUSMcvop6qMHV7ptva6AMAAABgeyJvcmlnaW4iOiJodHRwOi8vbG9jYWxob3N0OjQyMDAiLCJmZWF0dXJlIjoiVW5yZXN0cmljdGVkU2hhcmVkQXJyYXlCdWZmZXIiLCJleHBpcnkiOjE3MDk4NTU5OTl9"
+        />
+
+        <!-- Tabler Icon -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons-react/dist/index.umd.min.js"></script>
+
+        <!-- Environment -->
+        <script src="assets/env.js"></script>
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
+        <script type="importmap">
+            {
+                "imports": {
+                    "react": "https://esm.sh/react@18.2.0",
+                    "react-dom": "https://esm.sh/react-dom@18.2.0"
+                }
+            }
+        </script>
+        <script>
+            window.process = {
+                env: {
+                    NODE_ENV: "production",
+                },
+            };
+        </script>
+        <script
+            async
+            type="module"
+            src="https://cdn.jsdelivr.net/npm/@vietdanh1899/lowcoder-sdk@2.4.11/dist/lowcoder-sdk.min.js"
+        ></script>
+        <style>
+            @layer lowcoder-sdk, primeng, primereact;
+            @import url("https://cdn.jsdelivr.net/npm/@vietdanh1899/lowcoder-sdk@2.4.11/dist/style.css")
+            layer(lowcoder-sdk);
+        </style>
+    </head>
+
+    <body>
+        <app-root></app-root>
+    </body>
+</html>

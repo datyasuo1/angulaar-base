@@ -1,0 +1,94 @@
+<div class="grid">
+    <div class="col-12 md:col-4">
+        <div class="grid">
+            <div class="col-12">
+                <app-input
+                    [autoTrim]="true"
+                    [autofocus]="true"
+                    label="Tiêu đề"
+                    [value]="kpiConfigurationTitle"
+                    [required]="true"
+                    [error]="errorKpiConfigurationTitle"
+                    maxLength="255"
+                    (onChange)="
+                        handleDataChange($event, 'kpiConfigurationTitle')
+                    "
+                ></app-input>
+            </div>
+            <div class="col-12 xl:col-6">
+                <app-select
+                    label="Lĩnh vực"
+                    [selectedOption]="field"
+                    [options]="fields"
+                    placeholder="Chọn lĩnh vực"
+                    [required]="true"
+                    [error]="errorField"
+                    (onChange)="handleDataChange($event, 'field')"
+                ></app-select>
+            </div>
+            <div class="col-12 xl:col-6">
+                <app-select
+                    label="Mức độ"
+                    [selectedOption]="level"
+                    [options]="levels"
+                    placeholder="Chọn mức độ"
+                    [required]="true"
+                    [error]="errorLevel"
+                    (onChange)="handleDataChange($event, 'level')"
+                ></app-select>
+            </div>
+            <div class="col-12">
+                <app-text-area
+                    label="Nội dung"
+                    [(ngModel)]="description"
+                    [rows]="3"
+                    [required]="true"
+                    [error]="errorContent"
+                    maxLength="1000"
+                ></app-text-area>
+            </div>
+            <div class="col-12">
+                <app-file
+                    label="Ảnh giới thiệu"
+                    [file]="file"
+                    accept=".jpg, .jpeg, .png, .heic, .avi, .flv, .mwv, .mov, .pdf, .doc, .docx, .mp4"
+                    (onChange)="handleFileChange($event)"
+                ></app-file>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-8">
+        <app-map
+            label="Địa điểm"
+            [useSearch]="true"
+            (onAddressChange)="handleAddressChange($event)"
+        >
+            <ng-template #content>
+                @if (address?.length > 0) {
+                    <div class="w-full p-input-icon-right">
+                        <div>
+                            <i class="ti ti-map-pin"></i>
+                            {{ address }}
+                        </div>
+
+                        <i
+                            class="ti ti-x cursor-pointer"
+                            (click)="handleClearAddress()"
+                        ></i>
+                    </div>
+                }
+            </ng-template>
+        </app-map>
+    </div>
+</div>
+<div class="flex justify-content-center mt-4 gap-2">
+    <app-button iocVariant="close" (onClick)="handleClose()"></app-button>
+    <app-button label="Quay lại" (onClick)="movePage()"></app-button>
+    @if (pageType !== "watch") {
+        <app-button
+            [loading]="loading"
+            [iocVariant]="pageType"
+            (onClick)="handleAddOrUpdate()"
+        ></app-button>
+    }
+</div>

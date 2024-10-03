@@ -1,0 +1,112 @@
+<app-loading [loading]="isLoading"></app-loading>
+
+<div class="card">
+    <app-lazy-table
+        tableTitle="Danh sách máy chủ phần mềm triển khai"
+        [tableData]="listSystem"
+        [rows]="rows"
+        [columns]="6"
+        [first]="first"
+        [totalRecords]="totalRecord"
+        [loading]="isLoading"
+        dataKey="id"
+        (onLazyLoad)="loadTable($event)"
+    >
+        <ng-template #buttons>
+            <div class="flex gap-2">
+                <app-button
+                    label="Thêm máy chủ"
+                    icon="pi pi-plus"
+                    (onClick)="handleAddSystem()"
+                ></app-button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 3rem" class="text-center">STT</th>
+                <th style="min-width: 20rem">Tên phần mềm</th>
+                <th>Link hệ thống</th>
+                <th>Địa chỉ IP</th>
+                <th>Link giám sát tài nguyên hệ thống</th>
+                <th style="min-width: 6rem" class="center-cell">Thao tác</th>
+            </tr>
+
+            <tr>
+                <th class="border-top-none"></th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['name']"
+                        maxLength="255"
+                        placeholder="Nhập tên phần mềm"
+                        (onChange)="handleSearch($event, 'name')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['domain']"
+                        maxLength="255"
+                        placeholder="Nhập link hệ thống"
+                        (onChange)="handleSearch($event, 'domain')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    />
+                </th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['ipAddress']"
+                        maxLength="255"
+                        placeholder="Nhập địa chỉ IP"
+                        (onChange)="handleSearch($event, 'ipAddress')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    ></app-input>
+                </th>
+                <th class="border-top-none">
+                    <app-input
+                        [value]="searchParams['monitorAppLink']"
+                        maxLength="255"
+                        placeholder="Nhập link giám sát"
+                        (onChange)="handleSearch($event, 'monitorAppLink')"
+                        iconClass="pi pi-search"
+                        class="w-full"
+                    ></app-input>
+                </th>
+                <th class="border-top-none"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-system let-rowIndex="rowIndex">
+            <tr>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>{{ system.name }}</td>
+                <td>
+                    <a class="link" [href]="system.domain" target="_blank">{{
+                        system.domain
+                    }}</a>
+                </td>
+                <td>{{ system.ipAddress }}</td>
+                <td>
+                    <a
+                        class="link"
+                        [href]="system.monitorAppLink"
+                        target="_blank"
+                        >{{ system.monitorAppLink }}</a
+                    >
+                </td>
+                <td>
+                    <div class="action-buttons center-cell mr-2">
+                        <app-button
+                            iocVariant="iupdate"
+                            (onClick)="handleUpdateSystem(system)"
+                        ></app-button>
+                        <app-button
+                            iocVariant="idelete"
+                            (onClick)="handleRemoveSystem(system)"
+                        ></app-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </app-lazy-table>
+</div>

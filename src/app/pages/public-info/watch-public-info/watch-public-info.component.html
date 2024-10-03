@@ -1,0 +1,78 @@
+<app-card-layout cardTitle="Xem chi tiết thông tin công cộng">
+    <ng-template #body>
+        <div class="grid">
+            <div class="col-12 md:col-4">
+                <div class="grid">
+                    <div class="col-12">
+                        <app-label label="Tên thông tin công cộng">
+                            <b>{{ data?.name | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Loại thông tin công cộng">
+                            <b>{{
+                                data?.publicInfoTypeName | dataValidator
+                            }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Đơn vị hành chính">
+                            <b>{{
+                                (data?.wardName
+                                    ? data?.wardName
+                                    : data?.districtName
+                                      ? data?.districtName
+                                      : data?.provinceName
+                                ) | dataValidator
+                            }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Địa điểm bắt đầu">
+                            <b>{{ data?.startAddress | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12">
+                        <app-label label="Địa điểm kết thúc">
+                            <b>{{ data?.endAddress | dataValidator }}</b>
+                        </app-label>
+                    </div>
+                    <div class="col-12 xl:col-6">
+                        <app-label label="Thời gian bắt đầu">
+                            <b>
+                                {{
+                                    data?.startTime
+                                        | dateTimeConverter: "DATE_TIME"
+                                        | dataValidator
+                                }}</b
+                            >
+                        </app-label>
+                    </div>
+                    <div class="col-12 xl:col-6">
+                        <app-label label="Thời gian kết thúc">
+                            <b>
+                                {{
+                                    data?.endTime
+                                        | dateTimeConverter: "DATE_TIME"
+                                        | dataValidator
+                                }}
+                            </b>
+                        </app-label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-8">
+                <app-map label="Bản đồ" [viewOnly]="true"></app-map>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #footer>
+        <div class="flex justify-content-center align-items-center">
+            <app-button
+                iocVariant="close"
+                [autofocus]="true"
+                (onClick)="handleCloseOnePublicInfo()"
+            ></app-button>
+        </div>
+    </ng-template>
+</app-card-layout>
